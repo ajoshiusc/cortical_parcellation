@@ -8,7 +8,7 @@ from mayavi import mlab
 #import h5py
 import os
 import scipy.sparse as sp
-from sklearn.cluster import SpectralClustering
+from sklearn.cluster import SpectralClustering,KMeans
 import matplotlib.pylab as plt
 p_dir = 'E:\\HCP-fMRI-NLM'
 lst = os.listdir(p_dir)
@@ -24,8 +24,8 @@ msk = scipy.io.loadmat(fname1)  # h5py.File(fname1);
 dfs_left = readdfs(os.path.join(p_dir, 'reference', ref + '.aparc.a2009s.32k_fs.reduce3.left.dfs'))
 dfs_left_sm = readdfs(os.path.join(p_dir, 'reference', ref + '.aparc.a2009s.32k_fs.reduce3.very_smooth.left.dfs'))
 count1 = 0
-rho_rho=[]
-for sub in lst:
+rho_rho=[];rho_all=[]
+for sub in ['751348']: #; lst:
     try:
         data = scipy.io.loadmat(os.path.join(p_dir, sub, sub + '.rfMRI_REST1_RL.reduce3.ftdata.NLM_11N_hvar_25.mat'))
     except:
@@ -45,49 +45,31 @@ for sub in lst:
     rho = np.corrcoef(d, d_corr)
     rho=rho[range(d.shape[0]),d.shape[0]+1:]
     rho[~np.isfinite(rho)] = 0
+    rho_all.append(rho)
     rho_rho.append(np.corrcoef(rho))
     count1+=1
     print(count1),
-    if count1 >10 :
-        break
+    #if count1 >10 :
+    #    break
+
+A = np.mean(np.array(rho_rho),0)
+#A=np.mean(np.array(rho_all),0)
+print(A.shape)
 
 
-A = sp.block_diag(rho_rho)
-print(A)
-
-A.shape
-nNodes=rho.shape[0]
-nSub=len(rho_rho)
-A=A.tolil()
-for jj in range(nSub):
-    for kk in range(nSub):
-        if jj == kk:
-            continue
-        A[(jj*nNodes+np.arange(nNodes)),(kk*nNodes+np.arange(nNodes))]=10
-
-
-plt.spy(A,precision=0.01, markersize=1)
-plt.show()
-print(A)
-
-for nClusters in [2, 5, 10, 30,50,200]:
-    SC=SpectralClustering(n_clusters=nClusters,affinity='precomputed',assign_labels='discretize')
+for nClusters in [2,4,6,8,10,12]:
+    SC=SpectralClustering(n_clusters=nClusters,affinity='precomputed',assign_labels='discretize')#,random_state=3425
     labs=SC.fit_predict(A)
-    print(labs)
-    print(labs.shape, nNodes)
-    labs22=labs[:nNodes]
-    print(labs22.shape)
+    print(labs.shape)
 
-    for kk in range(nSub):
-        r=dfs_left_sm;r.labels=r.labels*0;r.labels[msk_small_region]=labs[kk*nNodes+np.arange(nNodes)]+1
-        mesh = mlab.triangular_mesh(r.vertices[:,0], r.vertices[:,1], r.vertices[:,2], r.faces, representation='surface',
-                                opacity=1,scalars=np.float64(r.labels))
-        #mlab.pipeline.surface(mesh)
-
-        mlab.gcf().scene.parallel_projection = True
-        mlab.view(azimuth=0, elevation=-90)
-        mlab.savefig(filename = str(nClusters)+str(kk)+'labels1_1.png')
-        mlab.view(azimuth=0, elevation=90)
-        mlab.savefig(filename = str(nClusters)+str(kk)+'labels2_1.png')
-        mlab.close()
+    r = dfs_left_sm;r.labels = r.labels*0;r.labels[msk_small_region] = labs
+    mesh = mlab.triangular_mesh(r.vertices[:,0], r.vertices[:,1], r.vertices[:,2], r.faces, representation='surface',
+                            opacity=1,scalars=np.float64(r.labels))
+    #mlab.pipeline.surface(mesh)
+    mlab.gcf().scene.parallel_projection = True
+    mlab.view(azimuth=0, elevation=-90)
+    mlab.savefig(filename = str(nClusters)+'mean'+'labels1_1.png')
+    mlab.view(azimuth=0, elevation=90)
+    mlab.savefig(filename = str(nClusters)+'mean'+'labels2_1.png')
+    mlab.close()
 
