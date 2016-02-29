@@ -63,14 +63,13 @@ for jj in range(nSub):
     for kk in range(nSub):
         if jj == kk:
             continue
-        A[(jj*nNodes+np.arange(nNodes)),(kk*nNodes+np.arange(nNodes))]=10
+        A[(jj*nNodes+np.arange(nNodes)),(kk*nNodes+np.arange(nNodes))]=1
 
 
 plt.spy(A,precision=0.01, markersize=1)
 plt.show()
-print(A)
 
-for nClusters in [2, 5, 10, 30,50,200]:
+for nClusters in [2,4,6,8,10,12]:
     SC=SpectralClustering(n_clusters=nClusters,affinity='precomputed',assign_labels='discretize')
     labs=SC.fit_predict(A)
     print(labs)
@@ -86,8 +85,8 @@ for nClusters in [2, 5, 10, 30,50,200]:
 
         mlab.gcf().scene.parallel_projection = True
         mlab.view(azimuth=0, elevation=-90)
-        mlab.savefig(filename = str(nClusters)+str(kk)+'labels1_1.png')
-        mlab.view(azimuth=0, elevation=90)
-        mlab.savefig(filename = str(nClusters)+str(kk)+'labels2_1.png')
+        mlab.savefig(filename = 'c'+str(nClusters)+'s'+str(kk)+'labels1_1.png')
+ #       mlab.view(azimuth=0, elevation=90)
+ #       mlab.savefig(filename = str(nClusters)+str(kk)+'labels2_1.png')
         mlab.close()
 

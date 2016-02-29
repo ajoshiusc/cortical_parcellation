@@ -1,15 +1,12 @@
 # ||AUM||
-from dfsio import readdfs, writedfs
 import scipy.io
 import numpy as np
-import csv
-from dfsio import readdfs, writedfs
+from dfsio import readdfs
 from mayavi import mlab
 #import h5py
 import os
-import scipy.sparse as sp
-from sklearn.cluster import SpectralClustering,KMeans
-import matplotlib.pylab as plt
+from sklearn.cluster import SpectralClustering
+from scipy.stats import trim_mean
 p_dir = 'E:\\HCP-fMRI-NLM'
 lst = os.listdir(p_dir)
 r_factor = 3
@@ -25,7 +22,7 @@ dfs_left = readdfs(os.path.join(p_dir, 'reference', ref + '.aparc.a2009s.32k_fs.
 dfs_left_sm = readdfs(os.path.join(p_dir, 'reference', ref + '.aparc.a2009s.32k_fs.reduce3.very_smooth.left.dfs'))
 count1 = 0
 rho_rho=[];rho_all=[]
-for sub in ['751348']: #; lst:
+for sub in lst: # ['751348']: #; lst:
     try:
         data = scipy.io.loadmat(os.path.join(p_dir, sub, sub + '.rfMRI_REST1_RL.reduce3.ftdata.NLM_11N_hvar_25.mat'))
     except:
@@ -52,7 +49,7 @@ for sub in ['751348']: #; lst:
     #if count1 >10 :
     #    break
 
-A = np.mean(np.array(rho_rho),0)
+A=trim_mean(np.array(rho_rho),.1)#np.mean(np.array(rho_rho),0)
 #A=np.mean(np.array(rho_all),0)
 print(A.shape)
 
