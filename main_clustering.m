@@ -48,7 +48,7 @@ n_eigs = 753;
 [NcutEigenvectors, NcutEigenvalues] = ncut(rho_rho, n_eigs);
 
 
-n_class = [2,4,6,8,10,12];%[2 5 10 30 50 200];
+n_class = [2,4,6,8,10,12,50,200];%[2 5 10 30 50 200];
 lbl = cell(length(n_class), 1);
 for n = 1:length(n_class)
     % compute discretize Ncut vectors
