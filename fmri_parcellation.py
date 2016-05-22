@@ -13,6 +13,7 @@ import os
 # from scipy.stats import trim_mean
 from sklearn.cluster import SpectralClustering, AgglomerativeClustering
 import networkx as nx
+from sklearn.mixture import GMM
 
 
 def parcellate_motor(sub, nClusters, savepng=0, session=1, algo=0):
@@ -53,7 +54,7 @@ reduce3.ftdata.NLM_11N_hvar_25.mat'))
     if algo == 0:
         SC = SpectralClustering(n_clusters=nClusters, affinity='precomputed')
         labels = SC.fit_predict(B)
-    else:
+    elif algo == 1:
         g = nx.Graph()
         g.add_edges_from(dfs_left.faces[:, (0, 1)])
         g.add_edges_from(dfs_left.faces[:, (1, 2)])
@@ -66,6 +67,12 @@ reduce3.ftdata.NLM_11N_hvar_25.mat'))
         SC = AgglomerativeClustering(n_clusters=nClusters,
                                      connectivity=AdjS)
         labels = SC.fit_predict(B)
+    elif algo == 2:
+        GM = GMM(n_components=nClusters,covariance_type='full',n_iter=100)
+        GM.fit(rho)        
+        labels = GM.predict(rho)
+        
+        
 
     if savepng > 0:
         r = dfs_left_sm

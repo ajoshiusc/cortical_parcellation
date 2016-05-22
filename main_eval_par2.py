@@ -22,11 +22,11 @@ for nClusters in range(30):
         if os.path.isfile(os.path.join(p_dir, sub, sub +
                                        '.rfMRI_REST1_RL.reduce3.ftdata.NLM_11N\
 _hvar_25.mat')):
-            labs1 = parcellate_motor(sub, nClusters+1, 0, 1, 1)
+            labs1 = parcellate_motor(sub, nClusters+1, 0, 1, 0)
         if os.path.isfile(os.path.join(p_dir, sub, sub +
                                        '.rfMRI_REST2_RL.reduce3.ftdata.NLM_11N\
 _hvar_25.mat')):
-            labs2 = parcellate_motor(sub, nClusters+1, 0, 2, 1)
+            labs2 = parcellate_motor(sub, nClusters+1, 0, 2, 0)
             count1 += 1
             if count1 == 1:
                 labs_all_1 = sp.array(labs1)
