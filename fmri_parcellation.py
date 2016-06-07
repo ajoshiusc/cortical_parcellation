@@ -16,7 +16,7 @@ import networkx as nx
 from sklearn.mixture import GMM
 
 
-def parcellate_motor(sub, nClusters, savepng=0, session=1, algo=0):
+def parcellate_region(roilist, sub, nClusters, savepng=0, session=1, algo=0):
     p_dir = 'E:\\HCP-fMRI-NLM'
     r_factor = 3
     ref_dir = os.path.join(p_dir, 'reference')
@@ -39,8 +39,9 @@ reduce3.ftdata.NLM_11N_hvar_25.mat'))
     temp = temp - m[:, None]
     s = np.std(temp, 1) + 1e-16
     temp = temp / s[:, None]
-    msk_small_region = (dfs_left.labels == 46) | (dfs_left.labels == 28) \
-        | (dfs_left.labels == 29)  # % motor
+    msk_small_region = np.in1d(dfs_left.labels,roilist)
+#    (dfs_left.labels == 46) | (dfs_left.labels == 28) \
+ #       | (dfs_left.labels == 29)  # % motor
     d = temp[msk_small_region, :]
     d_corr = temp[~msk_small_region, :]
     rho = np.corrcoef(d, d_corr)
@@ -77,13 +78,13 @@ reduce3.ftdata.NLM_11N_hvar_25.mat'))
     if savepng > 0:
         r = dfs_left_sm
         r.labels = np.zeros([r.vertices.shape[0]])
-        r.labels[msk_small_region] = labels
+        r.labels[msk_small_region] = labels+1
         mlab.triangular_mesh(r.vertices[:, 0], r.vertices[:, 1], r.vertices[:,
                              2], r.faces, representation='surface',
                              opacity=1, scalars=np.float64(r.labels))
         mlab.gcf().scene.parallel_projection = True
-        mlab.view(azimuth=0, elevation=-90)
-        mlab.savefig(filename='clusters_' + str(nClusters) + 'subject_' +
+        mlab.view(azimuth=0, elevation=90)
+        mlab.savefig(filename='clusters_' + str(nClusters) + '_rois_' + str(roilist) + 'subject_' +
                      sub + 'session' + str(session) + '_labels.png')
         mlab.close()
 
