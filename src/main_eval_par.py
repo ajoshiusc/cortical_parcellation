@@ -22,7 +22,7 @@ std_R = sp.zeros(6)
 
 #%% Across session study
 R_all = []
-for nClusters in [2]: #range(6):
+for nClusters in [3]: #range(6):
     labs_all_1 = []
     labs_all_2 = []
     vert_all_1 = []
@@ -69,15 +69,15 @@ _hvar_25.mat')):
 
 
 
-    for i in range(0,all_subjects.shape[0]/4):
-        label_matrix=choose_best(all_subjects[i*4:i*4+2],all_subjects[0:2])
+    for i in range(0,all_subjects.shape[0]/6):
+        label_matrix=choose_best(all_subjects[i*6:i*6+3],all_subjects[0:3])
         labs_all_1[i]=replot(labs_all_1[i],labs2.vertices,labs2.faces,label_matrix,labs_all_1[0])
 
 
 
 
 
-    avgplot(labs_all_1.transpose(),all_subjects.shape[0]/4,labs2.vertices,labs2.faces)
+    avgplot(labs_all_1.transpose(),all_subjects.shape[0]/6,labs2.vertices,labs2.faces)
 
 
     R = sp.zeros(count1)

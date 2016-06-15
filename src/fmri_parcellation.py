@@ -7,7 +7,7 @@ Created on Tue Mar 01 14:51:12 2016
 import time
 import scipy as sp
 from separate_cluster import separate
-from centroid import  search, find_location_smallmask
+from centroid import  search, find_location_smallmask, spatial_map
 from dfsio import readdfs
 import scipy.io
 import numpy as np
@@ -49,7 +49,7 @@ reduce3.ftdata.NLM_11N_hvar_25.mat'))
     d = temp[msk_small_region, :]
     d_corr = temp[~msk_small_region, :]
     rho_1 = np.corrcoef(d, d_corr)
-    rho = rho_1[range(d.shape[0]), d.shape[0] + 1:]
+    rho = rho_1[range(d.shape[0]), d.shape[0] :]
     rho[~np.isfinite(rho)] = 0
     B = np.corrcoef(rho)
     B[~np.isfinite(B)] = 0
@@ -86,21 +86,39 @@ reduce3.ftdata.NLM_11N_hvar_25.mat'))
         mlab.triangular_mesh(r.vertices[:, 0], r.vertices[:, 1], r.vertices[:,
                              2], r.faces, representation='surface',
                              opacity=1, scalars=np.float64(r.labels))
-        #cent_1,cent_2,cent_3=separate(labels,r,r.vertices)
-        cent_1, cent_2 = separate(labels, r, r.vertices)
+
+        cent_1,cent_2,cent_3=separate(labels,r,r.vertices)
+        #cent_1, cent_2 = separate(labels, r, r.vertices)
         #cent_1, cent_2, cent_3 ,cent_4,cent_5 = separate(labels, r, r.vertices)
         mlab.points3d(cent_1[0],cent_1[1],cent_1[2],cent_1[2])
         mlab.points3d(cent_2[0], cent_2[1], cent_2[2])
 
         #change
-        #mlab.points3d(cent_3[0], cent_3[1], cent_3[2])
+        mlab.points3d(cent_3[0], cent_3[1], cent_3[2])
+
+        mlab.gcf().scene.parallel_projection = True
+        mlab.view(azimuth=0, elevation=90)
+        mlab.draw()
+        mlab.savefig(filename='clusters_' + str(nClusters) + '_rois_' + str(roilist) + 'subject_' +
+                              sub + 'session' + str(session) + '_labels.png')
+        mlab.close()
+
         correspondence_point=find_location_smallmask(r.vertices,cent_1,msk_small_region)
         correspondence_vector_1=(rho[correspondence_point])
+        #spatial_map(correspondence_vector_1,r,msk_small_region,cent_1)
+
+
         correspondence_point = find_location_smallmask(r.vertices, cent_2, msk_small_region)
         correspondence_vector_2 = (rho[correspondence_point])
+        #spatial_map(correspondence_vector_2, r, msk_small_region,cent_2)
+
+
         #change
-        '''correspondence_point = find_location_smallmask(r.vertices, cent_3, msk_small_region)
-        correspondence_vector_3 = (rho[correspondence_point])'''
+        correspondence_point = find_location_smallmask(r.vertices, cent_3, msk_small_region)
+        correspondence_vector_3 = (rho[correspondence_point])
+        #spatial_map(correspondence_vector_3, r, msk_small_region,cent_3)
+
+
 
         #change
         '''correspondence_point = find_location_smallmask(r.vertices, cent_4, msk_small_region)
@@ -111,16 +129,12 @@ reduce3.ftdata.NLM_11N_hvar_25.mat'))
         correspondence_vector=sp.array(correspondence_vector_1)
         correspondence_vector=sp.vstack([correspondence_vector,[correspondence_vector_2]])
         #change
-        #correspondence_vector=sp.vstack([correspondence_vector,[correspondence_vector_3]])
+        correspondence_vector=sp.vstack([correspondence_vector,[correspondence_vector_3]])
 
          #change
         '''correspondence_vector=sp.vstack([correspondence_vector,[correspondence_vector_4]])
         correspondence_vector=sp.vstack([correspondence_vector,[correspondence_vector_5]])'''
-        mlab.gcf().scene.parallel_projection = True
-        mlab.view(azimuth=0, elevation=90)
-        mlab.draw()
-        mlab.savefig(filename='clusters_' + str(nClusters) + '_rois_' + str(roilist) + 'subject_' +
-                     sub + 'session' + str(session) + '_labels.png')
-        mlab.close()
+        #mlab.close()
+
 
     return (r,correspondence_vector)
