@@ -7,7 +7,7 @@ from scipy import stats
 def modified_find_centroid(c):
     sx = sy = sL = sz = 0
     index=-1
-    min=100000000
+    min=np.Inf
     for i in range(c.shape[0]):  # counts from 0 to len(points)-1
        x0, y0, z0 = c[i]  # in Python points[-1] is last element of points
        sL=0
@@ -55,24 +55,32 @@ def choose_best(subject,reference_subject):
             #sum += np.sum(subject[k] - reference_subject[j[k]])
         if min > sum:
             min = sum
-            save = j
-    print sum , save
+            save = np.array(j)
+    #print save
+    '''print
+    print
+    print('--------------------dis-similarity Matrix-------------------')
     for i in range(save.shape[0]):
-        for j in range(0,i+1):
-            sum += np.sum(np.abs(subject[i]-reference_subject[j])**2)
-            sys.stdout.write(sum)
+        for j in range(save.shape[0]):
+           # print j,subject[i],reference_subject[save[j]]
+            sum = np.sqrt(np.sum(np.abs(subject[i]-reference_subject[save[j]])**2))/100
+            sys.stdout.write(str(sum))
             sys.stdout.flush()
             sys.stdout.write('     ')
             sys.stdout.flush()
-        print()
+        print
+    print
+    print'''
     return save
 
-def replot(r_labels,r_vertices,r_faces,label_matrix,reference_label):
-    mlab.triangular_mesh(r_vertices[:, 0], r_vertices[:, 1], r_vertices[:, 2], r_faces, representation='surface',
+def replot(r_labels,r_vertices,r_faces,label_matrix,reference_label,centroid):
+    mlab.triangular_mesh(r_vertices[:, 0], r_vertices[:, 1], r_vertices[:, 2], r_faces,
+                         representation='surface',
                          opacity=1, scalars=np.float64(r_labels))
     mlab.gcf().scene.parallel_projection = True
     mlab.view(azimuth=0, elevation=90)
     mlab.colorbar(orientation='horizontal')
+    mlab.close()
     for i in range(r_labels.shape[0]):
         if r_labels[i] == 1:
             r_labels[i]=label_matrix[0]+1
@@ -80,22 +88,25 @@ def replot(r_labels,r_vertices,r_faces,label_matrix,reference_label):
             r_labels[i] = label_matrix[1]+1
         elif r_labels[i] == 3:
             r_labels[i] = label_matrix[2]+1
-    mlab.triangular_mesh(r_vertices[:, 0], r_vertices[:, 1], r_vertices[:,2], r_faces, representation='surface',opacity=1, scalars=np.float64(r_labels))
+    mlab.triangular_mesh(r_vertices[:, 0], r_vertices[:, 1], r_vertices[:, 2], r_faces,
+                                 representation='surface',
+                                 opacity=1, scalars=np.float64(r_labels))
     mlab.gcf().scene.parallel_projection = True
     mlab.view(azimuth=0, elevation=90)
     mlab.colorbar(orientation='horizontal')
+    mlab.close()
     return r_labels
 
-def avgplot(r_labels,nSubjects,r_vertices,r_faces):
+def avgplot(r_labels,nSubjects,r_vertices,r_faces,nCluster):
     labels = np.zeros(r_labels.shape[0],dtype=float)
     for i in range(r_labels.shape[0]):
         labels[i] = np.sum(r_labels[i])/nSubjects
-        #print(r_labels[i],labels[i])
     mlab.triangular_mesh(r_vertices[:, 0], r_vertices[:, 1], r_vertices[:, 2], r_faces, representation='surface',
                          opacity=1, scalars=np.float64(labels))
     mlab.gcf().scene.parallel_projection = True
     mlab.view(azimuth=0, elevation=90)
     mlab.colorbar(orientation='horizontal')
+    mlab.close()
     labels = np.zeros(r_labels.shape[0], dtype=float)
     for i in range(r_labels.shape[0]):
         mode,count=stats.mode(r_labels[i])
@@ -106,18 +117,42 @@ def avgplot(r_labels,nSubjects,r_vertices,r_faces):
     mlab.gcf().scene.parallel_projection = True
     mlab.view(azimuth=0, elevation=90)
     mlab.colorbar(orientation='horizontal')
-    #mlab.close()
+    mlab.close()
 
-def spatial_map(vector,r,msk_small_region,cent):
-    r.labels = np.zeros([r.vertices.shape[0]])
-    r.labels[~msk_small_region] = vector
-    mlab.triangular_mesh(r.vertices[:, 0], r.vertices[:, 1], r.vertices[:,
-                                                             2], r.faces, representation='surface',
-                         opacity=1, scalars=np.float64(r.labels))
-    mlab.points3d(cent[0], cent[1], cent[2])
+def spatial_map(vector,r_vertices,r_faces,msk_small_region):
+    r_labels = np.zeros([r_vertices.shape[0]])
+    r_labels[~msk_small_region] = vector
+    mlab.triangular_mesh(r_vertices[:, 0], r_vertices[:, 1], r_vertices[:,
+                                                             2], r_faces, representation='surface',
+                         opacity=1, scalars=np.float64(r_labels))
+    #mlab.points3d(cent[0], cent[1], cent[2])
     mlab.gcf().scene.parallel_projection = True
     mlab.view(azimuth=0, elevation=90)
     mlab.draw()
     #mlab.show()
     mlab.colorbar(orientation='horizontal')
     mlab.close()
+
+
+
+
+def change_labels(labels,order):
+    for i in range(labels.shape[0]):
+        if labels[i] == 1:
+            labels[i] = order[0]+1
+        elif labels[i] == 2:
+            labels[i] = order[1] + 1
+        elif labels[i] == 3:
+            labels[i] = order[2] + 1
+    return labels
+
+
+def our_colormap(nSubjects,nCluster):
+    colormap_matrix=np.array( [[0 for x in range(0,nCluster)] for y in range(nSubjects*3)] ,dtype=float)
+    for i in range(nSubjects*3):
+        colormap_matrix[i][i/40]=i/40.0
+    return colormap_matrix
+
+def change_corr_vector(subject,label_matrix):
+    print subject[label_matrix[0]], subject[label_matrix[1]], subject[label_matrix[2]]
+    return subject[label_matrix[0]],subject[label_matrix[1]],subject[label_matrix[2]]

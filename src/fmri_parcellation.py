@@ -7,7 +7,7 @@ Created on Tue Mar 01 14:51:12 2016
 import time
 import scipy as sp
 from separate_cluster import separate
-from centroid import  search, find_location_smallmask, spatial_map
+from centroid import  search, find_location_smallmask, spatial_map, change_labels
 from dfsio import readdfs
 import scipy.io
 import numpy as np
@@ -83,58 +83,54 @@ reduce3.ftdata.NLM_11N_hvar_25.mat'))
         r = dfs_left_sm
         r.labels = np.zeros([r.vertices.shape[0]])
         r.labels[msk_small_region] = labels+1
-        mlab.triangular_mesh(r.vertices[:, 0], r.vertices[:, 1], r.vertices[:,
-                             2], r.faces, representation='surface',
+
+        cent=separate(labels,r,r.vertices)
+        cent_copy=cent
+
+        manual_order=[0,0,0,0]
+        save=[0,0,0]
+
+        '''mlab.triangular_mesh(r.vertices[:, 0], r.vertices[:, 1], r.vertices[:, 2], r.faces,
+                             representation='surface',
+                             opacity=1, scalars=np.float64(r.labels))
+        mlab.gcf().scene.parallel_projection = True
+        mlab.view(azimuth=0, elevation=90)
+        mlab.colorbar(orientation='horizontal')
+        for i in range(0, 3):
+            mlab.points3d(cent[i][0], cent[i][1], cent[i][2])
+        mlab.close()'''
+
+        for i in range(0,nClusters):
+            choose_vector=np.argmin(cent.transpose(),axis=1)
+            save[i]=cent[choose_vector[1]][1]
+            correspondence_point=find_location_smallmask(r.vertices,cent[choose_vector[1]],msk_small_region)
+            cent[choose_vector[1]][1]=np.Inf
+            manual_order[i]=choose_vector[1]
+            if i == 0:
+                correspondence_vector=sp.array(rho[correspondence_point])
+            else:
+                correspondence_vector=sp.vstack([correspondence_vector,[rho[correspondence_point]]])
+
+        r.labels = change_labels(r.labels,manual_order)
+
+        for i in range(0,nClusters):
+            cent[i][1]=save[i]
+
+        '''mlab.triangular_mesh(r.vertices[:, 0], r.vertices[:, 1], r.vertices[:,
+                                                                 2], r.faces, representation='surface',
                              opacity=1, scalars=np.float64(r.labels))
 
-        cent_1,cent_2,cent_3=separate(labels,r,r.vertices)
-        #cent_1, cent_2 = separate(labels, r, r.vertices)
-        #cent_1, cent_2, cent_3 ,cent_4,cent_5 = separate(labels, r, r.vertices)
-        mlab.points3d(cent_1[0],cent_1[1],cent_1[2],cent_1[2])
-        mlab.points3d(cent_2[0], cent_2[1], cent_2[2])
-
-        #change
-        mlab.points3d(cent_3[0], cent_3[1], cent_3[2])
+        for i in range(0,nClusters):
+            cent[i][1]=save[i]
+            mlab.points3d(cent[i][0], cent[i][1], cent[i][2])
 
         mlab.gcf().scene.parallel_projection = True
         mlab.view(azimuth=0, elevation=90)
+        mlab.colorbar(orientation='horizontal')
         mlab.draw()
         mlab.savefig(filename='clusters_' + str(nClusters) + '_rois_' + str(roilist) + 'subject_' +
                               sub + 'session' + str(session) + '_labels.png')
-        mlab.close()
+        mlab.close()'''
 
-        correspondence_point=find_location_smallmask(r.vertices,cent_1,msk_small_region)
-        correspondence_vector_1=(rho[correspondence_point])
-        #spatial_map(correspondence_vector_1,r,msk_small_region,cent_1)
-
-
-        correspondence_point = find_location_smallmask(r.vertices, cent_2, msk_small_region)
-        correspondence_vector_2 = (rho[correspondence_point])
-        #spatial_map(correspondence_vector_2, r, msk_small_region,cent_2)
-
-
-        #change
-        correspondence_point = find_location_smallmask(r.vertices, cent_3, msk_small_region)
-        correspondence_vector_3 = (rho[correspondence_point])
-        #spatial_map(correspondence_vector_3, r, msk_small_region,cent_3)
-
-
-
-        #change
-        '''correspondence_point = find_location_smallmask(r.vertices, cent_4, msk_small_region)
-        correspondence_vector_4 = (rho[correspondence_point])
-        correspondence_point = find_location_smallmask(r.vertices, cent_5, msk_small_region)
-        correspondence_vector_5 = (rho[correspondence_point])'''
-
-        correspondence_vector=sp.array(correspondence_vector_1)
-        correspondence_vector=sp.vstack([correspondence_vector,[correspondence_vector_2]])
-        #change
-        correspondence_vector=sp.vstack([correspondence_vector,[correspondence_vector_3]])
-
-         #change
-        '''correspondence_vector=sp.vstack([correspondence_vector,[correspondence_vector_4]])
-        correspondence_vector=sp.vstack([correspondence_vector,[correspondence_vector_5]])'''
-        #mlab.close()
-
-
-    return (r,correspondence_vector)
+    #return (r,correspondence_vector,msk_small_region)
+    return (r, correspondence_vector, msk_small_region)
