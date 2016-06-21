@@ -30,6 +30,12 @@ def separate(labels, r,temp):
                 c3 = sp.array(r.vertices[i])
             else:
                 c3 = sp.vstack([c3, r.vertices[i]])
+        elif r.labels[i] == 4:
+            count_4 = count_4 + 1
+            if count_4 == 1:
+                c4 = sp.array(r.vertices[i])
+            else:
+                c4 = sp.vstack([c4, r.vertices[i]])
     centroid_1=sp.array(modified_find_centroid(c1))
     centroid_2=sp.array(modified_find_centroid(c2))
     centroid_3=sp.array(modified_find_centroid(c3))

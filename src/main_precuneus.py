@@ -35,6 +35,7 @@ for nClusters in [3]: #range(6):
     session=[]
     for sub in lst:
         count_break +=1
+        print count_break
         if os.path.isfile(os.path.join(p_dir, sub, sub +
                                        '.rfMRI_REST1_RL.reduce3.ftdata.NLM_11N\
 _hvar_25.mat')):

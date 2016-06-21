@@ -24,13 +24,10 @@ labs_all_2=np.array( [[0 for x in range(labs_all_1.shape[1])] for y in range(0,n
 
 for i in range(0, all_subjects.shape[0] / 3):
     label_matrix = choose_best(all_subjects[i * 3:i * 3 + 3], all_subjects[0:3])
-    #print label_matrix
-    #print all_subjects[i * 3],all_subjects[i * 3+1],all_subjects[i * 3+2]
     c_all_subjects=np.array(all_subjects[i*3:i*3+3])
     all_subjects[i * 3] = c_all_subjects[label_matrix[0]]
     all_subjects[(i * 3)+1] = c_all_subjects[label_matrix[1]]
     all_subjects[(i * 3)+2] = c_all_subjects[label_matrix[2]]
-    #print all_subjects[i * 3], all_subjects[i * 3 + 1], all_subjects[i * 3 + 2]
     labs_all_2[i] = replot(labs_all_1[i], vertices, faces, label_matrix, labs_all_1[0],all_subjects[i*3:i*3+3])
 
 

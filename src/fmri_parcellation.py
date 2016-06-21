@@ -7,7 +7,7 @@ Created on Tue Mar 01 14:51:12 2016
 import time
 import scipy as sp
 from separate_cluster import separate
-from centroid import  search, find_location_smallmask, spatial_map, change_labels
+from centroid import  search, find_location_smallmask, spatial_map, change_labels, change_order
 from dfsio import readdfs
 import scipy.io
 import numpy as np
@@ -39,17 +39,13 @@ reduce3.ftdata.NLM_11N_hvar_25.mat'))
     LR_flag = np.squeeze(LR_flag) > 0
     data = data['ftdata_NLM']
     temp = data[LR_flag, :]
-    m = np.mean(temp, 1)
-    temp = temp - m[:, None]
-    s = np.std(temp, 1) + 1e-16
-    temp = temp / s[:, None]
     msk_small_region = np.in1d(dfs_left.labels,roilist)
 #    (dfs_left.labels == 46) | (dfs_left.labels == 28) \
  #       | (dfs_left.labels == 29)  # % motor
     d = temp[msk_small_region, :]
     d_corr = temp[~msk_small_region, :]
-    rho_1 = np.corrcoef(d, d_corr)
-    rho = rho_1[range(d.shape[0]), d.shape[0] :]
+    rho = np.corrcoef(d, d_corr)
+    rho = rho[range(d.shape[0]), d.shape[0] :]
     rho[~np.isfinite(rho)] = 0
     B = np.corrcoef(rho)
     B[~np.isfinite(B)] = 0
@@ -71,10 +67,10 @@ reduce3.ftdata.NLM_11N_hvar_25.mat'))
         np.fill_diagonal(AdjS, 1)
         SC = AgglomerativeClustering(n_clusters=nClusters,
                                      connectivity=AdjS)
-        labels = SC.fit_predict(B)
+        labels = SC.fit_predict(rho)
     elif algo == 2:
         GM = GMM(n_components=nClusters,covariance_type='full',n_iter=100)
-        GM.fit(rho)        
+        GM.fit(rho)
         labels = GM.predict(rho)
         
         
@@ -85,44 +81,35 @@ reduce3.ftdata.NLM_11N_hvar_25.mat'))
         r.labels[msk_small_region] = labels+1
 
         cent=separate(labels,r,r.vertices)
-        cent_copy=cent
 
         manual_order=[0,0,0,0]
-        save=[0,0,0]
-
-        '''mlab.triangular_mesh(r.vertices[:, 0], r.vertices[:, 1], r.vertices[:, 2], r.faces,
-                             representation='surface',
-                             opacity=1, scalars=np.float64(r.labels))
-        mlab.gcf().scene.parallel_projection = True
-        mlab.view(azimuth=0, elevation=90)
-        mlab.colorbar(orientation='horizontal')
-        for i in range(0, 3):
-            mlab.points3d(cent[i][0], cent[i][1], cent[i][2])
-        mlab.close()'''
+        save=[0,0,0,0]
 
         for i in range(0,nClusters):
-            choose_vector=np.argmin(cent.transpose(),axis=1)
+            choose_vector=np.argmax(cent.transpose(),axis=1)
             save[i]=cent[choose_vector[1]][1]
             correspondence_point=find_location_smallmask(r.vertices,cent[choose_vector[1]],msk_small_region)
-            cent[choose_vector[1]][1]=np.Inf
+            cent[choose_vector[1]][1]=-np.Inf
             manual_order[i]=choose_vector[1]
             if i == 0:
                 correspondence_vector=sp.array(rho[correspondence_point])
             else:
                 correspondence_vector=sp.vstack([correspondence_vector,[rho[correspondence_point]]])
 
+        manual_order=change_order(manual_order)
         r.labels = change_labels(r.labels,manual_order)
 
+        new_cent=separate(r.labels,r,temp)
+
         for i in range(0,nClusters):
-            cent[i][1]=save[i]
+            cent[manual_order[i]][1]=save[i]
 
         '''mlab.triangular_mesh(r.vertices[:, 0], r.vertices[:, 1], r.vertices[:,
                                                                  2], r.faces, representation='surface',
                              opacity=1, scalars=np.float64(r.labels))
 
         for i in range(0,nClusters):
-            cent[i][1]=save[i]
-            mlab.points3d(cent[i][0], cent[i][1], cent[i][2])
+            mlab.points3d(new_cent[i][0], new_cent[i][1], new_cent[i][2])
 
         mlab.gcf().scene.parallel_projection = True
         mlab.view(azimuth=0, elevation=90)
