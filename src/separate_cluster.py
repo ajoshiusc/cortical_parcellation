@@ -1,5 +1,5 @@
 import scipy as sp
-
+import numpy as np
 from centroid import  modified_find_centroid
 
 
@@ -9,7 +9,7 @@ def separate(labels, r,temp):
     c2 = []
     c3 = []
     c4=[]
-    c4=[]
+    c4=np.array([])
     all_centroid=[]
     for i in range(r.labels.shape[0]):
         if r.labels[i] == 1:
@@ -39,7 +39,11 @@ def separate(labels, r,temp):
     centroid_1=sp.array(modified_find_centroid(c1))
     centroid_2=sp.array(modified_find_centroid(c2))
     centroid_3=sp.array(modified_find_centroid(c3))
+    #if c4.size !=0:
+        #centroid_4 = sp.array(modified_find_centroid(c4))
     all_centroid=sp.array(centroid_1)
     all_centroid=sp.vstack([all_centroid,centroid_2])
     all_centroid = sp.vstack([all_centroid, centroid_3])
+    #if c4.size != 0:
+        #all_centroid = sp.vstack([all_centroid, centroid_4])
     return (all_centroid)

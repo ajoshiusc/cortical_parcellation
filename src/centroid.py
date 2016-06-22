@@ -51,7 +51,7 @@ def choose_best(subject,reference_subject):
     for j in list(itertools.permutations([0, 1,2], 3)):
         sum=0
         #change
-        for k in range(0,3):
+        for k in range(0, 3):
             sum += np.sum(np.abs(subject[k]-reference_subject[j[k]])**2)
             #sum += np.sum(subject[k] - reference_subject[j[k]])
             #print  sum, j
@@ -62,15 +62,6 @@ def choose_best(subject,reference_subject):
     return save
 
 def replot(r_labels,r_vertices,r_faces,label_matrix,reference_label,centroid):
-    '''mlab.triangular_mesh(r_vertices[:, 0], r_vertices[:, 1], r_vertices[:, 2], r_faces,
-                         representation='surface',
-                         opacity=1, scalars=np.float64(r_labels))
-    mlab.gcf().scene.parallel_projection = True
-    mlab.view(azimuth=0, elevation=90)
-    mlab.colorbar(orientation='horizontal')
-    for i in range(0,3):
-        mlab.points3d(centroid[i][0],centroid[i][1],centroid[i][2])
-    #mlab.close()'''
     for i in range(r_labels.shape[0]):
         if r_labels[i] == 1:
             r_labels[i]=label_matrix[0]+1
@@ -80,15 +71,6 @@ def replot(r_labels,r_vertices,r_faces,label_matrix,reference_label,centroid):
             r_labels[i] = label_matrix[2]+1
         elif r_labels[i] == 4:
             r_labels[i] = label_matrix[3] + 1
-    '''mlab.triangular_mesh(r_vertices[:, 0], r_vertices[:, 1], r_vertices[:, 2], r_faces,
-                                 representation='surface',
-                                 opacity=1, scalars=np.float64(r_labels))
-    mlab.gcf().scene.parallel_projection = True
-    mlab.view(azimuth=0, elevation=90)
-    mlab.colorbar(orientation='horizontal')
-    for i in range(0, 3):
-        mlab.points3d(centroid[i][0], centroid[i][1], centroid[i][2])
-    #mlab.close()'''
     return r_labels
 
 def avgplot(r_labels,nSubjects,r_vertices,r_faces,nCluster):
@@ -105,9 +87,8 @@ def avgplot(r_labels,nSubjects,r_vertices,r_faces,nCluster):
     for i in range(r_labels.shape[0]):
         mode,count=stats.mode(r_labels[i])
         labels[i] = mode[0]
-        #print(r_labels[i], labels[i])
     mlab.triangular_mesh(r_vertices[:, 0], r_vertices[:, 1], r_vertices[:, 2], r_faces, representation='surface',
-                         opacity=1, scalars=np.float64(labels))
+                             opacity=1, scalars=np.float64(labels))
     mlab.gcf().scene.parallel_projection = True
     mlab.view(azimuth=0, elevation=90)
     mlab.colorbar(orientation='horizontal')
@@ -144,12 +125,11 @@ def change_labels(labels,order):
     return labels
 
 
-def change_order(order):
+def change_order(order,nCluster):
     save=np.array([0,0,0,0])
-    for i in range(0,3):
+    for i in range(0,nCluster):
         save[order[i]]=i
     return save
 
 def change_corr_vector(subject,label_matrix):
-    print subject[label_matrix[0]], subject[label_matrix[1]], subject[label_matrix[2]]
     return subject[label_matrix[0]],subject[label_matrix[1]],subject[label_matrix[2]]

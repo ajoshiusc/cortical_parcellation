@@ -43,6 +43,9 @@ reduce3.ftdata.NLM_11N_hvar_25.mat'))
 #    (dfs_left.labels == 46) | (dfs_left.labels == 28) \
  #       | (dfs_left.labels == 29)  # % motor
     d = temp[msk_small_region, :]
+    '''rho=np.corrcoef(d)
+    rho[~np.isfinite(rho)]=0
+    rho=np.abs(rho)'''
     d_corr = temp[~msk_small_region, :]
     rho = np.corrcoef(d, d_corr)
     rho = rho[range(d.shape[0]), d.shape[0] :]
@@ -92,13 +95,16 @@ reduce3.ftdata.NLM_11N_hvar_25.mat'))
             cent[choose_vector[1]][1]=-np.Inf
             manual_order[i]=choose_vector[1]
             if i == 0:
+                #change
                 correspondence_vector=sp.array(rho[correspondence_point])
             else:
+                #change
                 correspondence_vector=sp.vstack([correspondence_vector,[rho[correspondence_point]]])
 
-        manual_order=change_order(manual_order)
+        manual_order=change_order(manual_order,nClusters)
         r.labels = change_labels(r.labels,manual_order)
 
+        new_cent=np.array([])
         new_cent=separate(r.labels,r,temp)
 
         for i in range(0,nClusters):
@@ -120,4 +126,4 @@ reduce3.ftdata.NLM_11N_hvar_25.mat'))
         mlab.close()'''
 
     #return (r,correspondence_vector,msk_small_region)
-    return (r, correspondence_vector, msk_small_region)
+    return (r, correspondence_vector, msk_small_region,new_cent)
