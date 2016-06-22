@@ -39,25 +39,31 @@ reduce3.ftdata.NLM_11N_hvar_25.mat'))
     LR_flag = np.squeeze(LR_flag) > 0
     data = data['ftdata_NLM']
     temp = data[LR_flag, :]
+    m = np.mean(temp, 1)
+    temp = temp - m[:, None]
+    s = np.std(temp, 1) + 1e-16
+    temp = temp / s[:, None]
     msk_small_region = np.in1d(dfs_left.labels,roilist)
 #    (dfs_left.labels == 46) | (dfs_left.labels == 28) \
  #       | (dfs_left.labels == 29)  # % motor
     d = temp[msk_small_region, :]
-    '''rho=np.corrcoef(d)
+    rho=np.corrcoef(d)
     rho[~np.isfinite(rho)]=0
-    rho=np.abs(rho)'''
-    d_corr = temp[~msk_small_region, :]
+    rho=np.abs(rho)
+    '''d_corr = temp[~msk_small_region, :]
     rho = np.corrcoef(d, d_corr)
     rho = rho[range(d.shape[0]), d.shape[0] :]
     rho[~np.isfinite(rho)] = 0
     B = np.corrcoef(rho)
     B[~np.isfinite(B)] = 0
-    B = np.abs(B)
+    B = np.abs(B)'''
+
 
     # SC = DBSCAN()
     if algo == 0:
-        SC = SpectralClustering(n_clusters=nClusters, affinity='precomputed')
-        labels = SC.fit_predict(B)
+        SC = SpectralClustering(n_clusters=nClusters,affinity='precomputed')
+        labels = SC.fit_predict(rho)
+        #affinity_matrix=SC.fit(np.abs(d))
     elif algo == 1:
         g = nx.Graph()
         g.add_edges_from(dfs_left.faces[:, (0, 1)])
@@ -82,6 +88,7 @@ reduce3.ftdata.NLM_11N_hvar_25.mat'))
         r = dfs_left_sm
         r.labels = np.zeros([r.vertices.shape[0]])
         r.labels[msk_small_region] = labels+1
+        #print (labels+1)
 
         cent=separate(labels,r,r.vertices)
 
@@ -97,9 +104,11 @@ reduce3.ftdata.NLM_11N_hvar_25.mat'))
             if i == 0:
                 #change
                 correspondence_vector=sp.array(rho[correspondence_point])
+                #print np.mean(d[correspondence_point])
             else:
                 #change
                 correspondence_vector=sp.vstack([correspondence_vector,[rho[correspondence_point]]])
+                #print np.mean(d[correspondence_point])
 
         manual_order=change_order(manual_order,nClusters)
         r.labels = change_labels(r.labels,manual_order)
@@ -114,7 +123,7 @@ reduce3.ftdata.NLM_11N_hvar_25.mat'))
                                                                  2], r.faces, representation='surface',
                              opacity=1, scalars=np.float64(r.labels))
 
-        for i in range(0,nClusters):
+        for i in range(1,2):
             mlab.points3d(new_cent[i][0], new_cent[i][1], new_cent[i][2])
 
         mlab.gcf().scene.parallel_projection = True
@@ -123,7 +132,7 @@ reduce3.ftdata.NLM_11N_hvar_25.mat'))
         mlab.draw()
         mlab.savefig(filename='clusters_' + str(nClusters) + '_rois_' + str(roilist) + 'subject_' +
                               sub + 'session' + str(session) + '_labels.png')
-        mlab.close()'''
+        #mlab.close()'''
 
     #return (r,correspondence_vector,msk_small_region)
     return (r, correspondence_vector, msk_small_region,new_cent)

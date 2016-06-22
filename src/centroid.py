@@ -30,6 +30,7 @@ def search(vertices,centroid):
 
 def find_location_smallmask(vertices,centroid,mask):
     index = search(vertices, centroid)
+    #print vertices[index]
     #remember to reconsider here about the range
     count=0
     for i in range(index):
@@ -71,6 +72,13 @@ def replot(r_labels,r_vertices,r_faces,label_matrix,reference_label,centroid):
             r_labels[i] = label_matrix[2]+1
         elif r_labels[i] == 4:
             r_labels[i] = label_matrix[3] + 1
+    mlab.triangular_mesh(r_vertices[:, 0], r_vertices[:, 1], r_vertices[:, 2], r_faces,
+                                 representation='surface',
+                                 opacity=1, scalars=np.float64(r_labels))
+    mlab.gcf().scene.parallel_projection = True
+    mlab.view(azimuth=0, elevation=90)
+    mlab.colorbar(orientation='horizontal')
+    #mlab.close()
     return r_labels
 
 def avgplot(r_labels,nSubjects,r_vertices,r_faces,nCluster):
@@ -112,7 +120,7 @@ def spatial_map(vector,r_vertices,r_faces,msk_small_region):
 
 
 def change_labels(labels,order):
-    print labels
+    #print labels
     for i in range(labels.shape[0]):
         if labels[i] == 1:
             labels[i] = order[0]+1

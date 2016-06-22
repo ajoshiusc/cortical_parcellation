@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 
 from separate_cluster import separate
 nSubjects = 40
-nCluster=4
+nCluster=3
 labs_all_1 = []
 vert_all_1 = np.array([])
 faces = np.array([])
