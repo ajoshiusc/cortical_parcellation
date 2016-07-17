@@ -1,5 +1,5 @@
 clc;clear all;close all;
-load('C:\Users\ajoshi\Downloads\transfer.mat');
+load('C:\Users\ajoshi\Downloads\intensity_file_temporal_8.mat');
 
 % for jj=[1,3]
 %     figure;patch('faces',faces+1,'vertices',vertices,'facevertexcdata',labels(jj,:)','facecolor','interp','edgecolor','none');material dull;view(90,0);axis equal;camlight;
