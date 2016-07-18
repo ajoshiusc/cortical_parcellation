@@ -19,8 +19,8 @@ R_all = []
 roilist = []
 for i in range(0,76):
     roilist.append(i)
-for nClusters in range(1,3):
-    for i in range(0,2):
+for nClusters in [3]:
+    for i in range(1,2):
         for j in range(0,2):
             labs_all_1 = []
             vert_all_1 = []
@@ -37,7 +37,7 @@ for nClusters in range(1,3):
                 print count_break
                 if os.path.isfile(os.path.join(p_dir, sub, sub + fadd_1 + str(session_type[j]) + sdir[i] + fadd_2)):
                     # (46,28,29) motor 243 is precuneus
-                    labs1, correlation_within_precuneus_vector, correlation_with_rest_vector, mask, centroid = parcellate_region((46,28,29), sub, nClusters, sdir[i], scan_type[i],
+                    labs1, correlation_within_precuneus_vector, correlation_with_rest_vector, mask, centroid = parcellate_region((33,34,35,74), sub, nClusters, sdir[i], scan_type[i],
                                                                            1, session_type[j], 0,0)
                     count1 += 1
                     if count1 == 1:
@@ -58,5 +58,5 @@ for nClusters in range(1,3):
 
             # sp.savez_compressed('clustering_results_sessions_region_pc', R_all=R_all)
             data_file = 'data_file'+str(nClusters)
-            sp.savez(data_file  + str(i*2+j)+'motor.npz', correlation_within_precuneus=correlation_within_precuneus,correlation_with_rest=correlation_with_rest, labels=labs_all_1, vertices=labs1.vertices,
+            sp.savez(data_file  + str(i*2+j)+'precuneus_sine.npz', correlation_within_precuneus=correlation_within_precuneus,correlation_with_rest=correlation_with_rest, labels=labs_all_1, vertices=labs1.vertices,
                          faces=labs1.faces, mask=mask, centroid=all_centroid)

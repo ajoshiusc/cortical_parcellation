@@ -5,7 +5,7 @@ import numpy as np
 
 session_num=4
 nSubjects = 40
-for nCluster in range(1,3):
+for nCluster in [3]:
     data_file='data_file'+str(nCluster)
     all_subjects = np.array([])
     labs_all = np.array([])
@@ -13,19 +13,19 @@ for nCluster in range(1,3):
     all_temp=np.array([])
     for i in range(session_num):
         if i == 0:
-            all_subjects=sp.array([np.load(data_file+str(i)+'motor.npz')['correlation_within_precuneus']])
-            labs_all=sp.array([np.load(data_file+str(i)+'motor.npz')['labels']])
-            all_centroid = sp.array([np.load(data_file + str(i) + 'motor.npz')['centroid']])
+            all_subjects=sp.array([np.load(data_file+str(i)+'precuneus_sine.npz')['correlation_within_precuneus']])
+            labs_all=sp.array([np.load(data_file+str(i)+'precuneus_sine.npz')['labels']])
+            all_centroid = sp.array([np.load(data_file + str(i) + 'precuneus_sine.npz')['centroid']])
             #all_temp=sp.array([np.load(data_file + str(i) + 'logistic_labels.npz')['labels']])
         else:
-            all_subjects = sp.vstack([all_subjects,[np.load(data_file + str(i) + 'motor.npz')['correlation_within_precuneus']]])
-            labs_all = sp.vstack([labs_all,[np.load(data_file + str(i) + 'motor.npz')['labels']]])
-            all_centroid = sp.vstack([all_centroid,[np.load(data_file + str(i) + 'motor.npz')['centroid']]])
+            all_subjects = sp.vstack([all_subjects,[np.load(data_file + str(i) + 'precuneus_sine.npz')['correlation_within_precuneus']]])
+            labs_all = sp.vstack([labs_all,[np.load(data_file + str(i) + 'precuneus_sine.npz')['labels']]])
+            all_centroid = sp.vstack([all_centroid,[np.load(data_file + str(i) + 'precuneus_sine.npz')['centroid']]])
             #all_temp = sp.vstack([all_temp, [np.load(data_file + str(i) + 'logistic_labels.npz')['labels']]])
 
-    vertices=np.load(data_file+str(0)+'motor.npz')['vertices']
-    faces=np.load(data_file+str(0)+'motor.npz')['faces']
-    mask=np.load(data_file+str(0)+'motor.npz')['mask']
+    vertices=np.load(data_file+str(0)+'precuneus_sine.npz')['vertices']
+    faces=np.load(data_file+str(0)+'precuneus_sine.npz')['faces']
+    mask=np.load(data_file+str(0)+'precuneus_sine.npz')['mask']
 
     #print all_centroid
     sum=0

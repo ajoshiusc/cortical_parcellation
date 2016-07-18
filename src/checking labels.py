@@ -37,24 +37,21 @@ a2009s.32k_fs.reduce3.very_smooth.' + 'left' + '.dfs'))
     rho[~np.isfinite(rho)]=0
     if algo == 0:
         SC = SpectralClustering(n_clusters=nClusters, affinity='precomputed')
-        labels = SC.fit_predict(rho)
+        labels = SC.fit_predict(np.abs(rho))
 
     if savepng > 0:
         r = dfs_left_sm
         r.labels = np.zeros([r.vertices.shape[0]])
-        r.labels[msk_small_region] = labels + 1
+        r.labels[msk_small_region] = labels+1
 
         mlab.triangular_mesh(r.vertices[:, 0], r.vertices[:, 1], r.vertices[:,
                                                                  2], r.faces, representation='surface',
                              opacity=1, scalars=np.float64(r.labels))
 
         mlab.gcf().scene.parallel_projection = True
-        mlab.view(azimuth=0, elevation=90)
+        mlab.view(azimuth=0, elevation=-90)
         mlab.colorbar(orientation='horizontal')
         mlab.show()
-
-
-
 
 
 p_dir = '/home/ajoshi/HCP_data'
@@ -69,9 +66,14 @@ fadd_1='.rfMRI_REST'
 fadd_2='.reduce3.ftdata.NLM_11N_hvar_25.mat'
 
 roilist = []
-'''for i in range(19,20):
-    roilist.append(i)'''
-roilist=np.array([6,7,8,9,10,68])
+'''for i in range(43,76):
+    roilist.append(i)
+roilist=np.array(roilist)
+#visual =(2,22,11,58,59,20,43,19,45)
+# roilist=np.array([(6,7,8,9,10)])
+# roilist=np.array([(6,7,8,9,10)])'''
+roilist=np.array([29,69,70])
+
 #nClusters=num_of_cluster()
 nClusters=1
 count_break=0
@@ -79,6 +81,6 @@ count_break=0
 for sub in lst:
     if os.path.isfile(os.path.join(p_dir, sub, sub + fadd_1 + str(session_type[0]) + sdir[1] + fadd_2)):
             # (46,28,29) motor 243 is precuneus
-        own_def(roilist, sub, nClusters, sdir[1], scan_type[0],1, session_type[0], 0, 0)
+        own_def(roilist, sub, nClusters, sdir[1], scan_type[0], 1, session_type[0], 0, 0)
         if count_break == 0:
             break

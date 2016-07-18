@@ -23,9 +23,9 @@ def parcellate_region(roilist, sub, nClusters, scan,scan_type,savepng=0, session
     fn1 = ref + '.reduce' + str(r_factor) + '.LR_mask.mat'
     fname1 = os.path.join(ref_dir, fn1)
     msk = scipy.io.loadmat(fname1)  # h5py.File(fname1);
-    dfs_left = readdfs(os.path.join(p_dir, 'reference', ref + '.aparc.a2009s.32k_fs.reduce3.'+'left'+'.dfs'))
+    dfs_left = readdfs(os.path.join(p_dir, 'reference', ref + '.aparc.a2009s.32k_fs.reduce3.'+scan_type+'.dfs'))
     dfs_left_sm = readdfs(os.path.join(p_dir, 'reference', ref + '.aparc.\
-a2009s.32k_fs.reduce3.very_smooth.'+'left'+'.dfs'))
+a2009s.32k_fs.reduce3.very_smooth.'+scan_type+'.dfs'))
     data = scipy.io.loadmat(os.path.join(p_dir, sub, sub + '.rfMRI_REST'+str(session)+scan+'.reduce3.ftdata.NLM_11N_hvar_25.mat'))
 
     LR_flag = msk['LR_flag']
@@ -48,14 +48,10 @@ a2009s.32k_fs.reduce3.very_smooth.'+'left'+'.dfs'))
     rho_1 = rho_1[range(d.shape[0]), d.shape[0] :]
     rho_1[~np.isfinite(rho_1)] = 0
     if type_cor==1:
-        #f_rho=np.arctanh(rho_1)
-        #f_rho[~np.isfinite(f_rho)]=0
-        B = np.corrcoef(rho_1)
+        f_rho=np.arctanh(rho_1)
+        f_rho[~np.isfinite(f_rho)]=0
+        B = np.corrcoef(f_rho)
         B[~np.isfinite(B)] = 0
-        f_rho = np.arctanh(B)
-        f_rho[~np.isfinite(B)] = 0
-        affinity_matrix=affinity_mat(B)
-        affinity_matrix[~np.isfinite(affinity_matrix)]=0
         #B = np.abs(B)
 
 
@@ -64,11 +60,12 @@ a2009s.32k_fs.reduce3.very_smooth.'+'left'+'.dfs'))
     if algo == 0:
         SC = SpectralClustering(n_clusters=nClusters,affinity='precomputed')
         #SC=SpectralClustering(n_clusters=nClusters,gamma=0.025)
-        if type_cor==0:
-            affinity_matrix = affinity_mat(rho)
-            labels = SC.fit_predict(affinity_matrix)
-        if type_cor ==1:
-            labels = SC.fit_predict(B)
+        if type_cor==0 and rho.size>0:
+            #affinity_matrix = affinity_mat(rho)
+            affinity_matrix=np.arcsin(rho)
+            labels = SC.fit_predict(np.abs(affinity_matrix))
+        if type_cor ==1 and rho.size>0 :
+            labels = SC.fit_predict(affinity_mat(B))
         #affinity_matrix=SC.fit(np.abs(d))
     elif algo == 1:
         g = nx.Graph()
@@ -92,7 +89,7 @@ a2009s.32k_fs.reduce3.very_smooth.'+'left'+'.dfs'))
         neighbour_correlation(rho, dfs_left_sm.faces, dfs_left_sm.vertices,msk_small_region)
         
 
-    if savepng > 0:
+    if savepng > 0 and labels.size>0:
         r = dfs_left_sm
         r.labels = np.zeros([r.vertices.shape[0]])
         r.labels[msk_small_region] = labels+1

@@ -1,7 +1,7 @@
 import sys
 import itertools
 import numpy as np
-#from mayavi import mlab
+from mayavi import mlab
 import scipy as sp
 from scipy import stats
 import seaborn as sns
@@ -81,22 +81,29 @@ def avgplot(r_labels,nSubjects,r_vertices,r_faces,nCluster):
     labels = np.zeros(r_labels.shape[0],dtype=float)
     for i in range(r_labels.shape[0]):
         labels[i] = np.sum(r_labels[i])/nSubjects
+    mlab.figure(size=(1024, 768), \
+                bgcolor=(1, 1, 1),fgcolor=(0.5,0.5,0.5))
     mlab.triangular_mesh(r_vertices[:, 0], r_vertices[:, 1], r_vertices[:, 2], r_faces, representation='surface',
                          opacity=1, scalars=np.float64(labels))
     mlab.gcf().scene.parallel_projection = True
     mlab.view(azimuth=0, elevation=90)
-    mlab.colorbar(orientation='horizontal')
-    mlab.close()
+    mlab.colorbar(orientation='vertical')
+    mlab.draw()
+    #mlab.close()
     labels = np.zeros(r_labels.shape[0], dtype=float)
     for i in range(r_labels.shape[0]):
         mode,count=stats.mode(r_labels[i])
         labels[i] = mode[0]
+    mlab.figure(size=(1024, 768), \
+                bgcolor=(1, 1, 1),fgcolor=(0.5,0.5,0.5))
     mlab.triangular_mesh(r_vertices[:, 0], r_vertices[:, 1], r_vertices[:, 2], r_faces, representation='surface',
                              opacity=1, scalars=np.float64(labels))
     mlab.gcf().scene.parallel_projection = True
-    mlab.view(azimuth=0, elevation=90)
-    mlab.colorbar(orientation='horizontal')
-    mlab.close()
+    mlab.view(azimuth=0, elevation=10)
+    mlab.colorbar(orientation='vertical')
+    mlab.draw()
+    #mlab.close()
+    return labels
 
 
 def rand_indices_within_subjects(nSession,list_all,nSubjects,mask):
@@ -166,19 +173,21 @@ def intrasubjects(labels,nSubjects):
         ax = sns.kdeplot((count.flatten())/10.0, shade=True, color="r")
         sns.plt.show()
 
-def spatial_map(vector,r_vertices,r_faces,msk_small_region):
+def spatial_map(vector,r_vertices,r_faces,msk_small_region,labs,val):
     r_labels = np.zeros([r_vertices.shape[0]])
     r_labels[~msk_small_region] = vector
+    r_labels[msk_small_region]=labs
+    mlab.figure(size=(1024, 768), \
+                bgcolor=(1, 1, 1),fgcolor=(0.5,0.5,0.5))
     mlab.triangular_mesh(r_vertices[:, 0], r_vertices[:, 1], r_vertices[:,
                                                              2], r_faces, representation='surface',
                          opacity=1, scalars=np.float64(r_labels))
-    #mlab.points3d(cent[0], cent[1], cent[2])
     mlab.gcf().scene.parallel_projection = True
     mlab.view(azimuth=0, elevation=90)
     mlab.draw()
-    #mlab.show()
     mlab.colorbar(orientation='horizontal')
-    mlab.close()
+    mlab.show()
+    #mlab.close()
 
 
 
@@ -255,11 +264,54 @@ def all_separate(labels,vertices,nCluster):
 def plot_graph(store1):
     import numpy as np
     import matplotlib.pyplot as plt
-    t1 = np.arange(store1.shape[0])
-    plt.figure('PCA_VARIANCE_RATIO_OVER_ALL_SUBJECTS')
-    plt.axis([0, 15, 0, 1])
-    plt.plot(t1 + 1, store1, 'k')
-    plt.plot(t1 + 1, store1, 'ro')
+    t1 = np.arange(7)
+
+    fig, (ax1) = plt.subplots(1, 1)
+    fig.set_size_inches(18, 7)
+    ax1.set_xlim([0, 8])
+    ax1.set_ylim(0,1)
+    ax1.set_title("superior temporal gyrus")
+    ax1.set_xlabel("Number of Cluster")
+    #ax1.set_ylabel("Average Silhouette Score")
+    ax1.set_ylabel("Explained variance ratio")
+    ax1.set_yticks([0,0.2,0.4,0.6,0.8,1.0])  # Clear the yaxis labels / ticks
+    ax1.set_xticks([1,2,3,4,5,6,7])
+    for item in ([ax1.title, ax1.xaxis.label,ax1.yaxis.label]+ ax1.get_yticklabels()+ax1.get_xticklabels() ):
+        item.set_fontsize(50)
+
+    #plt.suptitle(("Average Silhouette Score"),fontsize=53, fontweight='bold')
+    plt.suptitle(("PCA EXPLAINED VARIANCE RATIO"), fontsize=53, fontweight='bold')
+
+    ax1.plot(t1+1,store1[:7],'k')
+    ax1.plot(t1 + 1, store1[:7], 'ro')
+    plt.show()
+    diff=np.diff(store1)
+    condlist = store1 < .95
+    return (np.extract(condlist, store1).size + 1)
+
+def plot_graph_1(store1):
+    import numpy as np
+    import matplotlib.pyplot as plt
+    t1 = np.arange(8)
+
+    fig, (ax1) = plt.subplots(1, 1)
+    fig.set_size_inches(18, 7)
+    ax1.set_xlim([0, 11])
+    ax1.set_ylim(0,1)
+    ax1.set_title("superior temporal gyrus")
+    ax1.set_xlabel("Number of Cluster")
+    ax1.set_ylabel("Average Silhouette Score")
+    #ax1.set_ylabel("Explained variance ratio")
+    ax1.set_yticks([0,0.2,0.4,0.6,0.8,1.0])  # Clear the yaxis labels / ticks
+    ax1.set_xticks([1,2,3,4,5,6,7])
+    for item in ([ax1.title, ax1.xaxis.label,ax1.yaxis.label]+ ax1.get_yticklabels()+ax1.get_xticklabels() ):
+        item.set_fontsize(50)
+
+    plt.suptitle(("Average Silhouette Score"),fontsize=53, fontweight='bold')
+    #plt.suptitle(("PCA EXPLAINED VARIANCE RATIO"), fontsize=53, fontweight='bold')
+
+    ax1.plot(t1+2,store1[:8],'k')
+    ax1.plot(t1 + 2, store1[:8], 'ro')
     plt.show()
     diff=np.diff(store1)
     condlist = store1 < .95
