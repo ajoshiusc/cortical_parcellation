@@ -303,8 +303,8 @@ def view_patch_vtk(r):
     iren = vtkRenderWindowInteractor()
     iren.SetRenderWindow(renWin)
     ren.SetBackground(86.0/256,134.0/256,150.0/256)
-    style=vtkInteractorStyleTrackballActor()
-    iren.SetInteractorStyle(style)
+#    style=vtkInteractorStyleTrackballActor()
+#    iren.SetInteractorStyle(style)
     # actor
     # assign actor to the renderer
     ren.AddActor(actor) 
@@ -331,11 +331,15 @@ def view_patch(r, attrib=[], opacity=1, fig=0, show=1):
                              r.vertices[:, 2], r.faces,
                              representation='surface', opacity=opacity,
                              scalars=attrib)
-    else:
-        mlab.triangular_mesh(r.vertices[:, 0], r.vertices[:, 1],
+    elif len(r.vColor)>0 :
+        sc=sp.arange(r.vertices.shape[0])
+        mt=mlab.triangular_mesh(r.vertices[:, 0], r.vertices[:, 1],
                              r.vertices[:, 2],
                              r.faces, representation='surface',
-                             opacity=opacity)
+                             scalars=sc)
+        colors=255*sp.ones((r.vertices.shape[0],4))
+        colors[:,:3]=sp.int16(255.0*r.vColor)
+        mt.module_manager.scalar_lut_manager.lut.table = colors
 
     mlab.gcf().scene.parallel_projection = True
     mlab.view(azimuth=0, elevation=90)
