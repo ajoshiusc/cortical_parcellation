@@ -18,7 +18,7 @@ p_dir_ref='E:\\'
 lst = os.listdir(p_dir)
 r_factor = 3
 ref_dir = os.path.join(p_dir_ref, 'reference')
-nClusters=10
+nClusters=3
 
 ref = '100307'
 print(ref + '.reduce' + str(r_factor) + '.LR_mask.mat')
@@ -31,6 +31,7 @@ count1 = 0
 rho_rho=[];rho_all=[]
 
 labs_all=sp.zeros((len(dfs_left.labels),len(lst)))
+
 for sub in lst:
 #sub ='751348' #; lst:
     data = scipy.io.loadmat(os.path.join(p_dir, sub, sub + '.rfMRI_REST1_RL.reduce3.ftdata.NLM_11N_hvar_25.mat'))
@@ -47,9 +48,9 @@ for sub in lst:
     rho = np.corrcoef(d)
     rho[~np.isfinite(rho)] = 0
     
-    simil_mtx=sp.exp((rho-1)/0.7)
+#    simil_mtx=sp.exp((rho-1)/0.7)
     simil_mtx=abs(sp.arcsin(rho))
-    #simil_mtx=1+rho
+#    simil_mtx=1+rho
     SC = SpectralClustering(n_clusters=nClusters, affinity='precomputed')
     labs = SC.fit_predict(simil_mtx)+1
     
