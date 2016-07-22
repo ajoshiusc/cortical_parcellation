@@ -18,7 +18,7 @@ p_dir_ref='E:\\'
 lst = os.listdir(p_dir)
 r_factor = 3
 ref_dir = os.path.join(p_dir_ref, 'reference')
-nClusters=3
+nClusters=10
 
 ref = '100307'
 print(ref + '.reduce' + str(r_factor) + '.LR_mask.mat')
@@ -80,7 +80,7 @@ for i in range(1,40):
 s=r
 s.vColor=sp.zeros(s.vertices.shape)
 label_vert,lab_count=sp.stats.mode(labs_all.T)
-colr=get_cmap(4)
+colr=get_cmap(nClusters+1)
 lab_count=sp.float32(lab_count.squeeze())
 s.vColor=s.vColor+1
 
