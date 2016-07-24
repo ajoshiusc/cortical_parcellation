@@ -58,12 +58,28 @@ d = temp[msk_small_region, :]
 ref_mean_pc = sp.mean(d,axis=0)
 ref_mean_pc=ref_mean_pc-sp.mean(ref_mean_pc)
 ref_mean_pc=ref_mean_pc/(sp.std(ref_mean_pc))
-rho = np.corrcoef(ref_mean_pc,tempsub)
-rho=rho[0,1:]
+
+rho = np.dot(ref_mean_pc,temp.T)
+rho[~np.isfinite(rho)] = 0
+dfs_left_sm.attributes = rho
+view_patch(dfs_left_sm,rho)
+
+rho = np.dot(ref_mean_pc,tempsub.T)
 rho[~np.isfinite(rho)] = 0
 dfs_left.attributes = rho
-print dfs_left
-view_patch(dfs_left,rho)
-sm=smooth_patch(dfs_left,iter=1000)
-view_patch(sm)
-view_patch(dfs_left,rho)
+view_patch(dfs_left_sm,rho)
+
+#sm=smooth_patch(dfs_left,iter=1000)
+#view_patch(sm)
+#view_patch(dfs_left,rho)
+
+xcorr=sp.dot((tempsub.T),temp)
+
+u,s,v=scipy.linalg.svd(xcorr)
+R=sp.dot(v.T,u.T)
+
+rho = sp.dot(ref_mean_pc,sp.dot(tempsub,R.T).T)
+#rho=rho[0,1:]
+rho[~np.isfinite(rho)] = 0
+dfs_left.attributes = rho
+view_patch(dfs_left_sm,rho)
