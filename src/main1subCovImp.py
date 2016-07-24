@@ -12,13 +12,13 @@ from sklearn.decomposition import DictionaryLearning
 from scipy.stats import trim_mean
 from sklearn.metrics.pairwise import pairwise_distances
 from sklearn.utils.linear_assignment_ import linear_assignment
-
+from sklearn.metrics import silhouette_score
 p_dir = 'E:\\HCP-fMRI-NLM'
 p_dir_ref='E:\\'
 lst = os.listdir(p_dir)
 r_factor = 3
 ref_dir = os.path.join(p_dir_ref, 'reference')
-nClusters=3
+nClusters=2
 
 ref = '100307'
 print(ref + '.reduce' + str(r_factor) + '.LR_mask.mat')
@@ -31,7 +31,11 @@ count1 = 0
 rho_rho=[];rho_all=[]
 
 labs_all=sp.zeros((len(dfs_left.labels),len(lst)))
+#roilist=[30,72,9,47] #prec
+roilist=[6,7,8,9,10] #cing
+#roilist=[2,22,11,58,59,20,43,19,45] #vis
 
+silhouette_avg=sp.zeros(len(lst))
 for sub in lst:
 #sub ='751348' #; lst:
     data = scipy.io.loadmat(os.path.join(p_dir, sub, sub + '.rfMRI_REST1_RL.reduce3.ftdata.NLM_11N_hvar_25.mat'))
@@ -43,24 +47,28 @@ for sub in lst:
     temp = temp - m[:,None]
     s = np.std(temp, 1)+1e-16
     temp = temp/s[:,None]
-    msk_small_region = (dfs_left.labels == 30) | (dfs_left.labels == 72) | (dfs_left.labels == 9) |  (dfs_left.labels == 47)  # % motor
+    msk_small_region = np.in1d(dfs_left.labels,roilist)
+#    msk_small_region = (dfs_left.labels == 30) | (dfs_left.labels == 72) | (dfs_left.labels == 9) |  (dfs_left.labels == 47)  # % motor
     d = temp[msk_small_region, :]
     rho = np.corrcoef(d)
     rho[~np.isfinite(rho)] = 0
     
 #    simil_mtx=sp.exp((rho-1)/0.7)
-    simil_mtx=abs(sp.arcsin(rho))
-#    simil_mtx=1+rho
+    simil_mtx=sp.pi/2.0 + sp.arcsin(rho)
+#    simil_mtx=0.3*sp.ones(rho.shape)
     SC = SpectralClustering(n_clusters=nClusters, affinity='precomputed')
     labs = SC.fit_predict(simil_mtx)+1
+    silhouette_avg[count1] = silhouette_score(sp.pi-simil_mtx, labs-1, metric='precomputed')
     
-    print(count1)
-    
+    print(count1),    
     
     r = dfs_left_sm;r.labels = r.labels*0;r.labels[msk_small_region] = labs
     labs_all[:,count1]=r.labels
     count1+=1
 
+
+print("Avg. Silhoutte Score is:%f"%sp.mean(silhouette_avg))
+ 
 labs_all0_vec = sp.zeros((labs_all.shape[0],nClusters+1),'bool')
 labs_alli_vec = labs_all0_vec.copy()
 for i in range(nClusters+1):
@@ -73,9 +81,6 @@ for i in range(1,40):
 
     D=pairwise_distances(labs_alli_vec.T, labs_all0_vec.T, metric='dice')
     ind1 = linear_assignment(D)
-    print D
-    print ind1
-    print ind1[sp.int16(labs_all[:,i]),1]
     labs_all[:,i] = ind1[sp.int16(labs_all[:,i]),1]
 
 s=r

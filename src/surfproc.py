@@ -358,10 +358,10 @@ def readdfsVTK(fname):
     return poly
 
 
-def smooth_patch(surf, iter1=15, relax1=0.1):
+def smooth_patch(surf, iter=15, relax1=0.1):
     smoothFilter = vtkSmoothPolyDataFilter()
     smoothFilter.SetInput(createPolyData(surf.vertices, surf.faces))
-    smoothFilter.SetNumberOfIterations(iter1)
+    smoothFilter.SetNumberOfIterations(iter)
     smoothFilter.SetRelaxationFactor(relax1)
     smoothFilter.Update()
     surf1= smoothFilter.GetOutput()
@@ -371,6 +371,9 @@ def smooth_patch(surf, iter1=15, relax1=0.1):
     f1 = faces1.GetData()
     f2 = vtk_to_numpy(f1)
     f2 = f2.reshape(len(f2) / 4, 4)
-    surf.faces = f2[:, 1:]
-    surf.vertices = vert1
-    return surf
+    
+    class surf2(surf):
+        pass
+    surf2.faces = f2[:, 1:]
+    surf2.vertices = vert1
+    return surf2
