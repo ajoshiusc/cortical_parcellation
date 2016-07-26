@@ -18,7 +18,7 @@ p_dir_ref='E:\\'
 lst = os.listdir(p_dir)
 r_factor = 3
 ref_dir = os.path.join(p_dir_ref, 'reference')
-nClusters=2
+nClusters=3
 
 ref = '100307'
 print(ref + '.reduce' + str(r_factor) + '.LR_mask.mat')
@@ -47,6 +47,7 @@ for sub in lst:
     temp = temp - m[:,None]
     s = np.std(temp, 1)+1e-16
     temp = temp/s[:,None]
+    roilist=sp.unique(dfs_left.labels)
     msk_small_region = np.in1d(dfs_left.labels,roilist)
 #    msk_small_region = (dfs_left.labels == 30) | (dfs_left.labels == 72) | (dfs_left.labels == 9) |  (dfs_left.labels == 47)  # % motor
     d = temp[msk_small_region, :]

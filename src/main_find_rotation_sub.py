@@ -4,6 +4,7 @@ import scipy as sp
 import numpy as np
 from dfsio import readdfs, writedfs
 from mayavi import mlab
+from fmri_methods_sipi import rot_sub_data
 #import h5py
 import os
 from surfproc import view_patch, view_patch_vtk, get_cmap, smooth_patch
@@ -21,7 +22,7 @@ ref_dir = os.path.join(p_dir_ref, 'reference')
 nClusters=2
 
 ref = '100307'
-sub = lst[2]
+sub = lst[15]
 print sub, ref
 print(ref + '.reduce' + str(r_factor) + '.LR_mask.mat')
 fn1 = ref + '.reduce' + str(r_factor) + '.LR_mask.mat'
@@ -31,7 +32,7 @@ dfs_left = readdfs(os.path.join(p_dir_ref, 'reference', ref + '.aparc.a2009s.32k
 dfs_left_sm = readdfs(os.path.join(p_dir_ref, 'reference', ref + '.aparc.a2009s.32k_fs.reduce3.very_smooth.left.dfs'))
 count1 = 0
 roilist=[30, 72, 9, 47] #pc
-
+ref=lst[11]
 datasub = scipy.io.loadmat(os.path.join(p_dir, sub, sub + '.rfMRI_REST1_RL.reduce3.ftdata.NLM_11N_hvar_25.mat'))
 dataref = scipy.io.loadmat(os.path.join(p_dir, ref, ref + '.rfMRI_REST1_RL.reduce3.ftdata.NLM_11N_hvar_25.mat'))
 
@@ -61,6 +62,13 @@ ref_mean_pc=ref_mean_pc/(sp.std(ref_mean_pc))
 
 rho = np.dot(ref_mean_pc,temp.T)
 rho[~np.isfinite(rho)] = 0
+
+simil_mtx=sp.pi/2.0 + sp.arcsin(rho)
+#    simil_mtx=0.3*sp.ones(rho.shape)
+SC = SpectralClustering(n_clusters=nClusters, affinity='precomputed')
+labs_all = SC.fit_predict(simil_mtx)+1
+
+
 dfs_left_sm.attributes = rho
 view_patch(dfs_left_sm,rho)
 
@@ -73,12 +81,9 @@ view_patch(dfs_left_sm,rho)
 #view_patch(sm)
 #view_patch(dfs_left,rho)
 
-xcorr=sp.dot((tempsub.T),temp)
+sub_rot = rot_sub_data(temp, tempsub)
 
-u,s,v=scipy.linalg.svd(xcorr)
-R=sp.dot(v.T,u.T)
-
-rho = sp.dot(ref_mean_pc,sp.dot(tempsub,R.T).T)
+rho = sp.dot(ref_mean_pc,sub_rot.T)
 #rho=rho[0,1:]
 rho[~np.isfinite(rho)] = 0
 dfs_left.attributes = rho
