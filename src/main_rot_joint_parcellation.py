@@ -14,10 +14,10 @@ from sklearn.metrics import silhouette_score
 p_dir = 'E:\\HCP-fMRI-NLM'
 p_dir_ref='E:\\'
 lst = os.listdir(p_dir)
-lst=lst[30:31]
+lst=lst[0:1]
 r_factor = 3
 ref_dir = os.path.join(p_dir_ref, 'reference')
-nClusters=3
+nClusters=15
 
 ref = '100307'
 print(ref + '.reduce' + str(r_factor) + '.LR_mask.mat')
@@ -40,14 +40,14 @@ for sub in lst:
     LR_flag = msk['LR_flag']
     LR_flag = np.squeeze(LR_flag) > 0
     data = data['ftdata_NLM']
-    temp = data[LR_flag, :100]
+    temp = data[LR_flag, :]
     m = np.mean(temp, 1)
     temp = temp - m[:,None]
     s = np.std(temp, 1)+1e-16
     temp = temp/s[:,None]
     msk_small_region = np.in1d(dfs_left.labels,roilist)
 #    msk_small_region = (dfs_left.labels == 30) | (dfs_left.labels == 72) | (dfs_left.labels == 9) |  (dfs_left.labels == 47)  # % motor
-    d = temp[msk_small_region, :]
+    d = temp#[msk_small_region, :]
     
     if count1==0:        
         sub_data = sp.zeros((d.shape[0],d.shape[1],len(lst)))
@@ -77,6 +77,7 @@ labs_all = SC.fit_predict(simil_mtx)+1
 lab_sub=labs_all.reshape((sub_data.shape[0],nSub),order='F')
 lab1=sp.zeros(dfs_left_sm.vertices.shape[0])
 for ind in range(nSub):
-    lab1[msk_small_region]=lab_sub[:,ind]
+#    lab1[msk_small_region]=lab_sub[:,ind]
+    lab1=lab_sub[:,ind]
     view_patch(dfs_left_sm,lab1)
     
