@@ -14,10 +14,10 @@ from sklearn.metrics import silhouette_score
 p_dir = 'E:\\HCP-fMRI-NLM'
 p_dir_ref='E:\\'
 lst = os.listdir(p_dir)
-lst=lst[0:1]
+lst=lst[0:2]
 r_factor = 3
 ref_dir = os.path.join(p_dir_ref, 'reference')
-nClusters=15
+nClusters=60
 
 ref = '100307'
 print(ref + '.reduce' + str(r_factor) + '.LR_mask.mat')
@@ -68,7 +68,7 @@ for ind in range(nSub):
 
  
 rho=sp.corrcoef(cat_data)
-rho[~np.isfinite(rho)] = 0
+rho[~np.isfinite(rho)] = 1
 
 simil_mtx=sp.pi/2.0 + sp.arcsin(rho)
 SC = SpectralClustering(n_clusters=nClusters, affinity='precomputed')
