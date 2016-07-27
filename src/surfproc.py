@@ -8,7 +8,7 @@ from dfsio import readdfs, writedfs
 from vtk.util.numpy_support import numpy_to_vtk, numpy_to_vtkIdTypeArray, vtk_to_numpy
 import scipy as sp
 from mayavi import mlab
-import trimesh as tm
+#import trimesh as tm
 
 __author__ = "Anand A. Joshi"
 __copyright__ = "University of Southern California, Los Angeles"

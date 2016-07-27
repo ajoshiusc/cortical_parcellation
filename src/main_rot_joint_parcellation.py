@@ -11,8 +11,8 @@ from sklearn.cluster import SpectralClustering
 from sklearn.metrics.pairwise import pairwise_distances
 from sklearn.utils.linear_assignment_ import linear_assignment
 from sklearn.metrics import silhouette_score
-p_dir = 'E:\\HCP-fMRI-NLM'
-p_dir_ref='E:\\'
+p_dir = '/home/ajoshi/HCP_data'
+p_dir_ref='/home/ajoshi/HCP_data'
 lst = os.listdir(p_dir)
 lst=lst[0:2]
 r_factor = 3
