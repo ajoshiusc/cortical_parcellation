@@ -46,7 +46,7 @@ l2=sp.reshape(l,(l.shape[0]*l.shape[1]),order='F')
 l12=sp.concatenate((l1[:,None],l2[:,None]),axis=1)
 
 print sp.sum(sp.absolute(l12[:,1]-l12[:,0]))
-l12=reorder_labels(l12-1)+1
+l12=reorder_labels(l12)
 
 print sp.sum(sp.absolute(l12[:,1]-l12[:,0]))
 

@@ -27,7 +27,7 @@ rho_rho=[];rho_all=[]
 labs_all=sp.zeros((len(dfs_left.labels),len(lst)))
 
 for sub in lst:
-    data = scipy.io.loadmat(os.path.join(p_dir, sub, sub + '.rfMRI_REST1_RL.reduce3.ftdata.NLM_11N_hvar_25.mat'))
+    data = scipy.io.loadmat(os.path.join(p_dir, sub, sub + '.rfMRI_REST2_RL.reduce3.ftdata.NLM_11N_hvar_25.mat'))
     LR_flag = msk['LR_flag']
     LR_flag = np.squeeze(LR_flag) > 0
     data = data['ftdata_NLM']
@@ -60,4 +60,4 @@ SC = KMeans(n_clusters=nClusters,random_state=5324)
 labs_all = SC.fit_predict(cat_data)
 
 lab_sub=labs_all.reshape((sub_data.shape[0],nSub),order='F')
-sp.savez_compressed('labs_all_data1', lab_sub=lab_sub, cat_data=cat_data)
+sp.savez_compressed('labs_all_data2', lab_sub=lab_sub, cat_data=cat_data)
