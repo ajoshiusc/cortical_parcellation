@@ -18,7 +18,7 @@ def rot_sub_data(ref,sub):
 
 def reorder_labels(labels):
     
-    nClusters=sp.amax(labels.flatten())+1
+    nClusters=sp.int32(sp.amax(labels.flatten())+1)
     labels0_vec = sp.zeros((labels.shape[0],nClusters),'bool')
     labelsi_vec = labels0_vec.copy()
     for i in range(nClusters):

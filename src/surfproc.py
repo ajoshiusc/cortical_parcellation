@@ -319,12 +319,16 @@ def view_patch_vtk(r):
     del renWin, iren
     
     
-def view_patch(r, attrib=[], opacity=1, fig=0, show=1):
+def view_patch(r, attrib=[], opacity=1, fig=0, show=1, outfile=0, azimuth=0, elevation=-90):
 
-    if fig == 0:
-        fig = mlab.figure()
+    if show == 0:
+        mlab.options.offscreen=True
     else:
-        mlab.figure(fig)
+        if fig == 0:
+            fig = mlab.figure()
+        else:
+            mlab.figure(fig)        
+        
 
     if len(attrib) > 0:
         mlab.triangular_mesh(r.vertices[:, 0], r.vertices[:, 1],
@@ -342,14 +346,25 @@ def view_patch(r, attrib=[], opacity=1, fig=0, show=1):
         mt.module_manager.scalar_lut_manager.lut.table = colors
 
     mlab.gcf().scene.parallel_projection = True
-    mlab.view(azimuth=0, elevation=90)
+    mlab.view(azimuth=azimuth, elevation=elevation)
     mlab.colorbar(orientation='horizontal')
 
-    mlab.draw()
+    
     if show > 0:
+        mlab.draw()
         mlab.show(stop=True)
 
-    return fig
+#    else:
+#    mlab.options.offscreen=True
+    
+    if outfile != 0:        
+        mlab.savefig(outfile)
+        
+    mlab.close()
+
+        
+    if show != 0:
+        return fig
 
 
 def readdfsVTK(fname):

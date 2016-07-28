@@ -5,6 +5,7 @@ Created on Tue Jul 26 23:31:10 2016
 @author: ajoshi
 """
 # ||AUM||
+
 import scipy.io
 import scipy as sp
 import numpy as np
@@ -17,10 +18,10 @@ from sklearn.cluster import KMeans
 from sklearn.metrics.pairwise import pairwise_distances
 from sklearn.utils.linear_assignment_ import linear_assignment
 from sklearn.metrics import silhouette_score
-p_dir = '/home/ajoshi/HCP_data'
+p_dir = '/home/ajoshi/HCP_data/data'
 p_dir_ref='/home/ajoshi/HCP_data'
 lst = os.listdir(p_dir)
-lst=lst[0:10]
+lst=lst[:5]
 r_factor = 3
 ref_dir = os.path.join(p_dir_ref, 'reference')
 nClusters=30
@@ -35,11 +36,11 @@ dfs_left_sm = readdfs(os.path.join(p_dir_ref, 'reference', ref + '.aparc.a2009s.
 count1 = 0
 rho_rho=[];rho_all=[]
 
-s1=sp.load('labs_all_data1.npz');    
+s1=sp.load('labs_all_data1_rot_individual5.npz');    
 l=s1['lab_sub']
 l1=sp.reshape(l,(l.shape[0]*l.shape[1]),order='F')
 
-s2=sp.load('labs_all_data2.npz');    
+s2=sp.load('labs_all_data2_rot_individual5.npz');    
 l=s2['lab_sub']
 l2=sp.reshape(l,(l.shape[0]*l.shape[1]),order='F')
 
@@ -56,8 +57,8 @@ l2=sp.reshape(l12[:,1],(l.shape[0],l.shape[1]),order='F')
 #
 for ind in range(l.shape[1]):
     lab1=l1[:,ind]
-    view_patch(dfs_left_sm,lab1)
+    view_patch(dfs_left_sm,lab1,show=0,outfile=lst[ind]+'_individual_rot_data1.png')
     lab1=l2[:,ind]
-    view_patch(dfs_left_sm,lab1)
+    view_patch(dfs_left_sm,lab1,show=0,outfile=lst[ind]+'_individual_rot_data2.png')
 #
 
