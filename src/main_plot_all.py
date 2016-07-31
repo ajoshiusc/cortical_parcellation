@@ -51,12 +51,15 @@ print sp.sum(sp.absolute(l12[:,1]-l12[:,0]))
 l1=sp.reshape(l12[:,0],(l.shape[0],l.shape[1]/2.0),order='F')
 l2=sp.reshape(l12[:,1],(l.shape[0],l.shape[1]/2.0),order='F')
 
+perm1=sp.mod(17*sp.arange(max(l1.flatten())+1),max(l1.flatten())+1)
 #
-for ind in range(l1.shape[1]):
+for ind in range(5): #range(l1.shape[1]):
     lab1=l1[:,ind]
     lab2=l2[:,ind]
-    view_patch(dfs_left_sm,lab1,show=0,outfile=lst[ind]+'labs_all_session1_2_data1.png')
-    view_patch(dfs_left_sm,lab2,show=0,outfile=lst[ind]+'labs_all_session2_2_data1.png')
+    view_patch(dfs_left_sm,perm1[lab1],colorbar=0,show=0,elevation=-90,colormap='Paired',outfile=lst[ind]+'_joint_both_session1_view1.png')
+    view_patch(dfs_left_sm,perm1[lab1],colorbar=0,show=0,elevation=90,colormap='Paired',outfile=lst[ind]+'_joint_both_session1_view2.png')
+    view_patch(dfs_left_sm,perm1[lab2],colorbar=0,show=0,elevation=-90,colormap='Paired',outfile=lst[ind]+'_joint_both_session2_view1.png')
+    view_patch(dfs_left_sm,perm1[lab2],colorbar=0,show=0,elevation=90,colormap='Paired',outfile=lst[ind]+'_joint_both_session2_view2.png')
 
 #    lab1=l2[:,ind]
 #    view_patch(dfs_left_sm,lab1,show=0,outfile=lst[ind]+'_individual_rot_data2.png')
