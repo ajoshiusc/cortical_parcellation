@@ -319,7 +319,7 @@ def view_patch_vtk(r):
     del renWin, iren
     
     
-def view_patch(r, attrib=[], opacity=1, fig=0, show=1, outfile=0, azimuth=0, elevation=-90):
+def view_patch(r, attrib=[], opacity=1, fig=0, show=1, colorbar=1, outfile=0, azimuth=0, elevation=-90, colormap='jet'):
 
     if show == 0:
         mlab.options.offscreen=True
@@ -334,7 +334,7 @@ def view_patch(r, attrib=[], opacity=1, fig=0, show=1, outfile=0, azimuth=0, ele
         mlab.triangular_mesh(r.vertices[:, 0], r.vertices[:, 1],
                              r.vertices[:, 2], r.faces,
                              representation='surface', opacity=opacity,
-                             scalars=attrib)
+                             scalars=attrib, colormap=colormap)
     elif len(r.vColor)>0 :
         sc=sp.arange(r.vertices.shape[0])
         mt=mlab.triangular_mesh(r.vertices[:, 0], r.vertices[:, 1],
@@ -347,7 +347,10 @@ def view_patch(r, attrib=[], opacity=1, fig=0, show=1, outfile=0, azimuth=0, ele
 
     mlab.gcf().scene.parallel_projection = True
     mlab.view(azimuth=azimuth, elevation=elevation)
-    mlab.colorbar(orientation='horizontal')
+    
+    if colorbar>0:
+        mlab.colorbar(orientation='horizontal')
+        
 
     
     if show > 0:
