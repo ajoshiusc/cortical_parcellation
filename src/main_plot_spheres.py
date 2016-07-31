@@ -66,3 +66,4 @@ mlab.points3d(v[0,],v[1,],v[2,],scale_factor=0.01,color=(0,0,1))
 
 
 mlab.show(stop=True)
+

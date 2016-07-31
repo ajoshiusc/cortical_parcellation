@@ -65,8 +65,8 @@ rho[~np.isfinite(rho)] = 0
 
 simil_mtx=sp.pi/2.0 + sp.arcsin(rho)
 #    simil_mtx=0.3*sp.ones(rho.shape)
-SC = SpectralClustering(n_clusters=nClusters, affinity='precomputed')
-labs_all = SC.fit_predict(simil_mtx)+1
+#SC = SpectralClustering(n_clusters=nClusters, affinity='precomputed')
+#labs_all = SC.fit_predict(simil_mtx)+1
 
 
 dfs_left_sm.attributes = rho
