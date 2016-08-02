@@ -79,5 +79,5 @@ lab1=sp.zeros(dfs_left_sm.vertices.shape[0])
 for ind in range(nSub):
 #    lab1[msk_small_region]=lab_sub[:,ind]
     lab1=lab_sub[:,ind]
-    view_patch(dfs_left_sm,lab1)
+    view_patch(dfs_left_sm,lab1,outfile='')
     

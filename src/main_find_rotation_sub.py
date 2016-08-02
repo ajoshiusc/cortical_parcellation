@@ -22,7 +22,7 @@ ref_dir = os.path.join(p_dir_ref, 'reference')
 nClusters=2
 
 ref = '100307'
-sub = lst[15]
+sub = lst[25]
 print sub, ref
 print(ref + '.reduce' + str(r_factor) + '.LR_mask.mat')
 fn1 = ref + '.reduce' + str(r_factor) + '.LR_mask.mat'
@@ -39,28 +39,28 @@ dataref = scipy.io.loadmat(os.path.join(p_dir, ref, ref + '.rfMRI_REST1_RL.reduc
 LR_flag = msk['LR_flag']
 LR_flag = np.squeeze(LR_flag) > 0
 data = dataref['ftdata_NLM']
-temp = data[LR_flag, :]
-m = np.mean(temp, 1)
-temp = temp - m[:,None]
-s = np.std(temp, 1)+1e-16
-temp = temp/s[:,None]
+sub1 = data[LR_flag, :]
+m = np.mean(sub1, 1)
+sub1 = sub1 - m[:,None]
+s = np.std(sub1, 1)+1e-16
+sub1 = sub1/s[:,None]
 
 data = datasub['ftdata_NLM']
-tempsub = data[LR_flag, :]
-m = np.mean(tempsub, 1)
-tempsub = tempsub - m[:,None]
-s = np.std(tempsub, 1)+1e-16
-tempsub = tempsub/s[:,None]
+sub2 = data[LR_flag, :]
+m = np.mean(sub2, 1)
+sub2 = sub2 - m[:,None]
+s = np.std(sub2, 1)+1e-16
+sub2 = sub2/s[:,None]
 
 msk_small_region = np.in1d(dfs_left.labels,roilist)
 #    msk_small_region = (dfs_left.labels == 30) | (dfs_left.labels == 72) | (dfs_left.labels == 9) |  (dfs_left.labels == 47)  # % motor
-d = temp[msk_small_region, :]
+d = sub1[msk_small_region, :]
 
 ref_mean_pc = sp.mean(d,axis=0)
 ref_mean_pc=ref_mean_pc-sp.mean(ref_mean_pc)
 ref_mean_pc=ref_mean_pc/(sp.std(ref_mean_pc))
 
-rho = np.dot(ref_mean_pc,temp.T)
+rho = np.dot(ref_mean_pc,sub1.T)/ref_mean_pc.shape[0]
 rho[~np.isfinite(rho)] = 0
 
 simil_mtx=sp.pi/2.0 + sp.arcsin(rho)
@@ -70,21 +70,25 @@ simil_mtx=sp.pi/2.0 + sp.arcsin(rho)
 
 
 dfs_left_sm.attributes = rho
-view_patch(dfs_left_sm,rho)
+view_patch(dfs_left_sm,rho, elevation=-90,clim=[0,1.0],outfile='sub1to1_view1_pc.png')
+view_patch(dfs_left_sm,rho, elevation=90,clim=[0,1.0],outfile='sub1to1_view2_pc.png')
 
-rho = np.dot(ref_mean_pc,tempsub.T)
+
+rho = np.dot(ref_mean_pc,sub2.T)/ref_mean_pc.shape[0]
 rho[~np.isfinite(rho)] = 0
 dfs_left.attributes = rho
-view_patch(dfs_left_sm,rho)
+view_patch(dfs_left_sm,rho, elevation=-90,clim=[0,1.0],outfile='sub1to2_view1_pc.png')
+view_patch(dfs_left_sm,rho, elevation=90,clim=[0,1.0],outfile='sub1to2_view2_pc.png')
 
 #sm=smooth_patch(dfs_left,iter=1000)
 #view_patch(sm)
 #view_patch(dfs_left,rho)
 
-sub_rot = rot_sub_data(temp, tempsub)
+sub_rot = rot_sub_data(sub1, sub2)
 
-rho = sp.dot(ref_mean_pc,sub_rot.T)
+rho = sp.dot(ref_mean_pc,sub_rot.T)/ref_mean_pc.shape[0]
 #rho=rho[0,1:]
 rho[~np.isfinite(rho)] = 0
 dfs_left.attributes = rho
-view_patch(dfs_left_sm,rho)
+view_patch(dfs_left_sm,rho, elevation=-90,clim=[0,1.0],outfile='sub1to2_view1_pc_rot.png')
+view_patch(dfs_left_sm,rho, elevation=90,clim=[0,1.0],outfile='sub1to2_view2_pc_rot.png')
