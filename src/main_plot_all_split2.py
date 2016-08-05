@@ -17,7 +17,7 @@ from surfproc import view_patch, view_patch_vtk, get_cmap
 from sklearn.cluster import KMeans
 from sklearn.metrics.pairwise import pairwise_distances
 from sklearn.utils.linear_assignment_ import linear_assignment
-from sklearn.metrics import silhouette_score
+from sklearn.metrics import silhouette_samples
 p_dir = '/home/ajoshi/HCP_data/data'
 p_dir_ref='/home/ajoshi/HCP_data'
 lst = os.listdir(p_dir)
@@ -55,7 +55,7 @@ l2=sp.reshape(l12[:,1],(l.shape[0],l.shape[1]),order='F')
 
 perm1=sp.mod(17*sp.arange(max(l1.flatten())+1),max(l1.flatten())+1)
 
-#
+# Plot labels
 for ind in range(2):#range(l.shape[1]):
     lab1=l1[:,ind]; lab2=l2[:,ind]
     view_patch(dfs_left_sm,perm1[lab1],colorbar=0,colormap='Paired',elevation=90,show=0,outfile=lst[ind]+'_view1_split1.png')
@@ -66,4 +66,11 @@ for ind in range(2):#range(l.shape[1]):
 #    lab1=l2[:,ind]
 #    view_patch(dfs_left_sm,lab1,show=0,outfile=lst[ind]+'_individual_rot_data2.png')
 #
+# Plot Silhoutte modulated 
+cat_data2=s1['cat_data2']
+lab_sub2=s1['lab_sub2']
+
+for ind in range(2):#range(l.shape[1]):
+    s=silhouette_samples(cat_data2[10832*(ind-1):10832*ind,:],lab_sub2[:,ind])
+    
 

@@ -5,7 +5,7 @@ Created on Tue Jul 26 23:31:10 2016
 @author: ajoshi
 """
 # ||AUM||
-
+from scipy.stats import itemfreq
 import scipy.io
 import scipy as sp
 import numpy as np
@@ -35,7 +35,7 @@ dfs_left_sm = readdfs(os.path.join(p_dir_ref, 'reference', ref + '.aparc.a2009s.
 count1 = 0
 rho_rho=[];rho_all=[]
 
-s1=sp.load('labs_all_data_bothsessions.npz');    
+s1=sp.load('labs_all_data_bothsessions_100_clusters.npz');    
 l=s1['lab_sub']
 l1=sp.reshape(l[:,:40],(l.shape[0]*l.shape[1]/2.0),order='F')
 
@@ -53,13 +53,15 @@ l2=sp.reshape(l12[:,1],(l.shape[0],l.shape[1]/2.0),order='F')
 
 perm1=sp.mod(17*sp.arange(max(l1.flatten())+1),max(l1.flatten())+1)
 #
-for ind in range(5): #range(l1.shape[1]):
+for ind in range(2): #range(l1.shape[1]):
     lab1=l1[:,ind]
+    counts1=itemfreq(lab1)    
     lab2=l2[:,ind]
-    view_patch(dfs_left_sm,perm1[lab1],colorbar=0,show=0,elevation=-90,colormap='Paired',outfile=lst[ind]+'_joint_both_session1_view1.png')
-    view_patch(dfs_left_sm,perm1[lab1],colorbar=0,show=0,elevation=90,colormap='Paired',outfile=lst[ind]+'_joint_both_session1_view2.png')
-    view_patch(dfs_left_sm,perm1[lab2],colorbar=0,show=0,elevation=-90,colormap='Paired',outfile=lst[ind]+'_joint_both_session2_view1.png')
-    view_patch(dfs_left_sm,perm1[lab2],colorbar=0,show=0,elevation=90,colormap='Paired',outfile=lst[ind]+'_joint_both_session2_view2.png')
+    counts2=itemfreq(lab2)        
+    view_patch(dfs_left_sm,perm1[lab1],colorbar=0,show=0,elevation=-90,colormap='Paired',outfile=lst[ind]+'_joint_both_session1_view1_100_clusters.png')
+    view_patch(dfs_left_sm,perm1[lab1],colorbar=0,show=0,elevation=90,colormap='Paired',outfile=lst[ind]+'_joint_both_session1_view2_100_clusters.png')
+    view_patch(dfs_left_sm,perm1[lab2],colorbar=0,show=0,elevation=-90,colormap='Paired',outfile=lst[ind]+'_joint_both_session2_view1_100_clusters.png')
+    view_patch(dfs_left_sm,perm1[lab2],colorbar=0,show=0,elevation=90,colormap='Paired',outfile=lst[ind]+'_joint_both_session2_view2_100_clusters.png')
 
 #    lab1=l2[:,ind]
 #    view_patch(dfs_left_sm,lab1,show=0,outfile=lst[ind]+'_individual_rot_data2.png')

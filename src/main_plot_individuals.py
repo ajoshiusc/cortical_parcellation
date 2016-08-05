@@ -13,6 +13,7 @@ from dfsio import readdfs
 #import h5py
 import os
 from surfproc import view_patch
+from fmri_methods_sipi import rot_sub_data, reorder_labels
 
 p_dir = '/home/ajoshi/HCP_data/data'
 p_dir_ref='/home/ajoshi/HCP_data'
