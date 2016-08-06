@@ -53,7 +53,7 @@ l2=sp.reshape(l12[:,1],(l.shape[0],l.shape[1]/2.0),order='F')
 
 perm1=sp.mod(17*sp.arange(max(l1.flatten())+1),max(l1.flatten())+1)
 #
-for ind in range(2): #range(l1.shape[1]):
+for ind in range(5): #range(l1.shape[1]):
     lab1=l1[:,ind]
     counts1=itemfreq(lab1)    
     lab2=l2[:,ind]

@@ -32,7 +32,7 @@ dfs_left_sm = readdfs(os.path.join(p_dir_ref, 'reference', ref + '.aparc.a2009s.
 count1 = 0
 rho_rho=[];rho_all=[]
 
-s1=sp.load('labs_all_data1_rot_individual5.npz');    
+s1=sp.load('labs_all_data1_rot_individual_nclusters100_sub5.npz');    
 l12=s1['lab_sub']
 #l12=sp.reshape(l,(l.shape[0]*l.shape[1]),order='F')
 print sp.sum(sp.absolute(l12[:,1]-l12[:,0]))
@@ -44,8 +44,8 @@ perm1=sp.mod(17*sp.arange(max(l12.flatten())+1),max(l12.flatten())+1)
 #
 for ind in range(l12.shape[1]):
     lab1=sp.int32(l12[:,ind])
-    view_patch(dfs_left_sm,perm1[lab1],elevation=90,colorbar=0,show=0,outfile=lst[ind]+'_individual_view1.png',colormap='Paired')
-    view_patch(dfs_left_sm,perm1[lab1],elevation=-90,colorbar=0,show=0,outfile=lst[ind]+'_individual_view2.png',colormap='Paired')
+    view_patch(dfs_left_sm,perm1[lab1],elevation=90,colorbar=0,show=0,outfile=lst[ind]+'_individual_view1_nclusters100.png',colormap='Paired')
+    view_patch(dfs_left_sm,perm1[lab1],elevation=-90,colorbar=0,show=0,outfile=lst[ind]+'_individual_view2_nclusters100.png',colormap='Paired')
 
 #    lab1=l2[:,ind]
 #    view_patch(dfs_left_sm,lab1,show=0,outfile=lst[ind]+'_individual_rot_data2.png')

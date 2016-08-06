@@ -13,7 +13,7 @@ lst = os.listdir(p_dir)
 lst=lst[:5]
 r_factor = 3
 ref_dir = os.path.join(p_dir_ref, 'reference')
-nClusters=30
+nClusters=100
 
 ref = '100307'
 print(ref + '.reduce' + str(r_factor) + '.LR_mask.mat')
@@ -64,4 +64,4 @@ for ind in range(nSub):
 #labs_all = SC.fit_predict(cat_data)
 
 #lab_sub=labs_all.reshape((sub_data.shape[0],nSub),order='F')
-sp.savez_compressed('labs_all_data1_rot_individual5', lab_sub=lab_sub, cat_data=cat_data, lst=lst)
+sp.savez_compressed('labs_all_data1_rot_individual_nclusters100_sub5', lab_sub=lab_sub, cat_data=cat_data, lst=lst)
