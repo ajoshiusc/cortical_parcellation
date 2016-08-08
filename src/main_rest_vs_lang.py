@@ -10,7 +10,7 @@ import os
 import numpy as np
 import nibabel as nib
 from dfsio import readdfs, writedfs
-from surfproc import view_patch, smooth_surf_function
+from surfproc import view_patch, view_patch_vtk, smooth_surf_function
 from fmri_methods_sipi import rot_sub_data, reorder_labels
 
 p_dir = '/home/ajoshi/HCP_data'

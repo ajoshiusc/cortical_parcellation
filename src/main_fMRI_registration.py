@@ -65,13 +65,13 @@ vrest2=rot_sub_data(ref=vrest1,sub=vrest2)
 rho_rot = sp.dot(vrest1,vrest2.T)/vrest1.shape[1]
 dist_mat = sp.absolute(sp.arccos(rho_rot))
 
-ind = sp.argmin(dist_mat,axis=1)
+ind = sp.argmin(dist_mat,axis=0)
 #ind = linear_assignment(dist_mat)
 
 view_patch(dfs_left_sm,outfile='before_registered_surf.png',show=0)
 
 dfs_left_sm.faces=ind[dfs_left_sm.faces]
-view_patch(dfs_left_sm,outfile='registered_surf.png')
+view_patch(dfs_left_sm,outfile='registered_surf1.png')
 
 #rho1=smooth_surf_function(dfs_left_sm,rho1)
 #rho2=smooth_surf_function(dfs_left_sm,rho2)
