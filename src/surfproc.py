@@ -319,7 +319,7 @@ def view_patch_vtk(r):
     del renWin, iren
     
     
-def view_patch(r, attrib=[], opacity=1, fig=0, show=1, colorbar=1, clim=0, outfile=0, azimuth=0, elevation=-90, colormap='jet'):
+def view_patch(r, attrib=[], opacity=1, fig=0, show=1, colorbar=1, clim=[0], outfile=0, azimuth=0, elevation=-90, colormap='jet'):
 
     if show == 0:
         mlab.options.offscreen=True
@@ -332,7 +332,7 @@ def view_patch(r, attrib=[], opacity=1, fig=0, show=1, colorbar=1, clim=0, outfi
         
 
     if len(attrib) > 0:
-        if sp.sum(clim)>0:
+        if len(clim)>1:
             vmin=clim[0];vmax=clim[1]
         else:
             vmax=sp.amax(attrib);vmin=sp.amin(attrib)
