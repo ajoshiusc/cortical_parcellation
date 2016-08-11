@@ -260,7 +260,7 @@ def get_sphere(center=[0, 0, 0], radius=5.0, res=100):
 
 from vtk import vtkRenderer, vtkRenderWindow, vtkPolyDataMapper, vtkInteractorStyleTrackballActor, VTK_MAJOR_VERSION, vtkRenderWindowInteractor, vtkActor, vtkPolyDataNormals
 def view_patch_vtk(r):
-    print 'rendering!'
+    print("rendering!")
 
     c=r.vColor;ro=r;
     r=createPolyData(r.vertices,r.faces)
