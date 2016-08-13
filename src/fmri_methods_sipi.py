@@ -17,11 +17,14 @@ def rot_sub_data(ref,sub):
     R=sp.dot(v.T,u.T)
     return sp.dot(sub,R.T)
 
+
 def show_slices(slices,vmax=None,vmin=None):
        """ Function to display row of image slices """
-       fig, axes = plt.subplots(1, len(slices))
-       for i, slice in enumerate(slices):
-           axes[i].imshow(slice.T, cmap="gray", origin="lower",vmax=vmax,vmin=vmin)
+    fig, axes = plt.subplots(1, len(slices))
+    for i, slice in enumerate(slices):
+        axes[i].imshow(slice.T, cmap="gray", origin="lower",vmax=vmax,vmin=vmin)
+    plt.colorbar()
+
 
 def reorder_labels(labels):
     
