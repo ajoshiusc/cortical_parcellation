@@ -7,14 +7,21 @@ Created on Mon Jul 25 14:59:29 2016
 import scipy as sp
 from sklearn.metrics.pairwise import pairwise_distances
 from sklearn.utils.linear_assignment_ import linear_assignment
+import matplotlib.pyplot as plt
 
 
 def rot_sub_data(ref,sub):
+    """ref and sub matrices are of the form (vertices x time) """
     xcorr=sp.dot((sub.T),ref)
     u,s,v=sp.linalg.svd(xcorr)
     R=sp.dot(v.T,u.T)
     return sp.dot(sub,R.T)
 
+def show_slices(slices):
+       """ Function to display row of image slices """
+       fig, axes = plt.subplots(1, len(slices))
+       for i, slice in enumerate(slices):
+           axes[i].imshow(slice.T, cmap="gray", origin="lower")
 
 def reorder_labels(labels):
     
