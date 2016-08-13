@@ -55,17 +55,18 @@ for ind in range(1,len(func_filenames)):
     all_data_orig[:,:,ind] = sub_mskd
     
 
-var_before = sp.average(sp.var(all_data,axis=2),axis=1)
+var_before = sp.average(sp.var(all_data_orig,axis=2),axis=1)
 var_before=nifti_masker.inverse_transform(var_before)
 var_before=var_before.get_data()
-show_slices([var_before[:,:,30],var_before[:,30,:],var_before[30,:,:]])
+show_slices([var_before[:,:,30],var_before[:,30,:],var_before[30,:,:]],vmax=1.0,vmin=0.0)
 
 
 
 var_after = sp.average(sp.var(all_data,axis=2),axis=1)
 var_after=nifti_masker.inverse_transform(var_after)
 var_after=var_after.get_data()
-show_slices([var_after[:,:,30],var_after[:,30,:],var_after[30,:,:]])
+show_slices([var_after[:,:,30],var_after[:,30,:],var_after[30,:,:]],vmax=1.0,vmin=0.0)
+
 
 #    print ind, 
 
