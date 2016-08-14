@@ -10,8 +10,9 @@ from nilearn.plotting import plot_roi, show, plot_stat_map
 from nilearn.image.image import mean_img
 from nilearn.image import index_img
 from sklearn.decomposition import PCA
+from scipy.stats import levene
 
-adhd_dataset = datasets.fetch_adhd(n_subjects=60)
+adhd_dataset = datasets.fetch_adhd()
 func_filenames = adhd_dataset.func  # list of 4D nifti files for each subject
 print('First functional nifti image (4D) is at: %s' %
       func_filenames[0])  # 4D data
@@ -63,9 +64,9 @@ var_after=nifti_masker.inverse_transform(var_after)
 plot_stat_map(var_after,title='Variance Diff between adhd and normals after rotation')
 
 show()
-# Dimensionality reduction using PCA
+''' Dimensionality reduction using PCA'''
 
-n_components=6
+n_components = 15
 P=PCA(n_components=n_components, whiten=False, copy=True)
 P.fit(all_data[:,:,0])
 all_data_pca=sp.zeros((all_data.shape[0],n_components,all_data.shape[2]))
@@ -81,7 +82,7 @@ for ind in range(all_data.shape[2]):
     all_data_orig_pca[:,:,ind]=P.transform(all_data_orig[:,:,ind])
     print ind,
 
-# Now lets work on group difference
+''' Now lets work on group difference'''
 print("Doing Group Diff using Hotelling test")
 #pval,t2=hotelling_t2(all_data[:,:,adhd_flag>0].transpose(1,2,0),all_data[:,:,adhd_flag==0].transpose(1,2,0))
 pval,t2=hotelling_t2(all_data[:,:,adhd_flag==0].transpose(1,2,0),all_data[:,:,adhd_flag>0].transpose(1,2,0))
@@ -102,4 +103,31 @@ pval1=nifti_masker.inverse_transform((0.05-pval)*(pval<0.05))
 plot_stat_map(pval1,title='Hotelling test after rotation (PCA)')
 
 
+''' Reduce to 1 component and do f test'''
+n_components = 1
+P=PCA(n_components=n_components, whiten=False, copy=True)
+P.fit(all_data[:,:,0])
+all_data_pca=sp.zeros((all_data.shape[0],n_components,all_data.shape[2]))
+print("Doing PCA on Synced data")
+for ind in range(all_data.shape[2]):
+    all_data_pca[:,:,ind]=P.transform(all_data[:,:,ind])
+    print ind,
+
+P.fit(all_data_orig[:,:,0])
+all_data_orig_pca=sp.zeros((all_data_orig.shape[0],n_components,all_data_orig.shape[2]))
+print("Doing PCA on Synced data")
+for ind in range(all_data.shape[2]):
+    all_data_orig_pca[:,:,ind]=P.transform(all_data_orig[:,:,ind])
+    print ind,
+
+pval=sp.zeros((all_data_pca.shape[0],1))
+for ind in range(all_data_pca.shape[0]):
+    f,pval[ind] = levene(all_data_orig_pca[ind,:,adhd_flag==0].squeeze(), all_data_orig_pca[ind,:,adhd_flag>0].squeeze())
+pval1=nifti_masker.inverse_transform((0.05-pval.T)*(pval.T<0.05))
+plot_stat_map(pval1,title='leven test before rotation (PCA)')
+
+for ind in range(all_data_pca.shape[0]):
+    f,pval[ind] = levene(all_data_pca[ind,:,adhd_flag==0].squeeze(), all_data_pca[ind,:,adhd_flag>0].squeeze())
+pval1=nifti_masker.inverse_transform((0.05-pval.T)*(pval.T<0.05))
+plot_stat_map(pval1,title='leven test after rotation (PCA)')
     
