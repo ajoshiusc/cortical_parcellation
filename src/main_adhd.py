@@ -17,7 +17,7 @@ print('First functional nifti image (4D) is at: %s' %
       func_filenames[0])  # 4D data
 nifti_masker = input_data.NiftiMasker(standardize=True, mask_strategy='epi',
                            memory="nilearn_cache", memory_level=2,
-                           smoothing_fwhm=6, detrend=True)
+                           smoothing_fwhm=6*4, detrend=True)
 # Compute EPI based mask 
 nifti_masker.fit(func_filenames[0])
 
@@ -65,8 +65,8 @@ plot_stat_map(var_after,title='Variance Diff between adhd and normals after rota
 show()
 # Dimensionality reduction using PCA
 
-n_components=5
-P=PCA(n_components=n_components, whiten=True, copy=True)
+n_components=6
+P=PCA(n_components=n_components, whiten=False, copy=True)
 P.fit(all_data[:,:,0])
 all_data_pca=sp.zeros((all_data.shape[0],n_components,all_data.shape[2]))
 print("Doing PCA on Synced data")
