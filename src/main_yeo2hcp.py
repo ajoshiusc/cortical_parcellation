@@ -16,8 +16,8 @@ def multidim_intersect(arr1, arr2):
     intersected = sp.intersect1d(arr1_view, arr2_view)
     return intersected.view(arr1.dtype).reshape(-1, arr1.shape[1])
 
-inputfile='/home/ajoshi/Downloads/Yeo_JNeurophysiol11_FreeSurfer/fsaverage/label/lh.Yeo2011_17Networks_N1000.annot'
-fsavesurf='/home/ajoshi/Downloads/Yeo_JNeurophysiol11_FreeSurfer/fsaverage/surf/lh.sphere.reg.avg'
+inputfile='/home/ajoshi/data/Yeo_JNeurophysiol11_FreeSurfer/fsaverage/label/lh.Yeo2011_17Networks_N1000.annot'
+fsavesurf='/home/ajoshi/data/Yeo_JNeurophysiol11_FreeSurfer/fsaverage/surf/lh.sphere.reg.avg'
 yeomap,_,_=fsio.read_annot(inputfile)
 vert,faces=fsaverage_surf=fsio.read_geometry(fsavesurf)
 class s:
@@ -28,8 +28,8 @@ class s:
 s.vertices=vert; s.faces=faces;s.labels=yeomap
 view_patch(s,yeomap)
 
-#g_surf = gread('/home/ajoshi/HCP_data/reference/100307/MNINonLinear/fsaverage_LR32k/100307.L.sphere.32k_fs_LR.surf.gii')
-g_surf = gread('/home/ajoshi/HCP_data/reference/100307/MNINonLinear/Native/100307.L.sphere.reg.native.surf.gii')
+#g_surf = gread('/home/ajoshi/data/HCP_data/reference/100307/MNINonLinear/fsaverage_LR32k/100307.L.sphere.32k_fs_LR.surf.gii')
+g_surf = gread('/home/ajoshi/data/HCP_data/reference/100307/MNINonLinear/Native/100307.L.sphere.reg.native.surf.gii')
 vert = g_surf.darrays[0].data
 face = g_surf.darrays[1].data
 
@@ -49,7 +49,7 @@ hcp32k.labels = s.labels[inds]
 
 view_patch(hcp32k,hcp32k.labels)
 
-g_surf = gread('/home/ajoshi/HCP_data/reference/100307/MNINonLinear/Native/100307.L.very_inflated.native.surf.gii')
+g_surf = gread('/home/ajoshi/data/HCP_data/reference/100307/MNINonLinear/Native/100307.L.very_inflated.native.surf.gii')
 vert = g_surf.darrays[0].data
 face = g_surf.darrays[1].data
 hcp32k.vertices = vert; hcp32k.faces=face
@@ -59,7 +59,7 @@ s.vertices = hcp32k.vertices
 s.faces = hcp32k.faces
 s.labels = hcp32k.labels
 
-g_surf = gread('/home/ajoshi/HCP_data/reference/100307/MNINonLinear/fsaverage_LR32k/100307.L.very_inflated.32k_fs_LR.surf.gii')
+g_surf = gread('/home/ajoshi/data/HCP_data/reference/100307/MNINonLinear/fsaverage_LR32k/100307.L.very_inflated.32k_fs_LR.surf.gii')
 vert = g_surf.darrays[0].data
 face = g_surf.darrays[1].data
 hcp32k.vertices = vert; hcp32k.faces=face
