@@ -10,10 +10,9 @@ from sklearn.cluster import KMeans
 p_dir = '/home/ajoshi/HCP_data/data'
 p_dir_ref='/home/ajoshi/HCP_data'
 lst = os.listdir(p_dir)
-lst=lst[:5]
 r_factor = 3
 ref_dir = os.path.join(p_dir_ref, 'reference')
-nClusters=60
+nClusters=10
 
 ref = '100307'
 print(ref + '.reduce' + str(r_factor) + '.LR_mask.mat')
@@ -49,19 +48,24 @@ for sub in lst:
     
 nSub=sub_data.shape[2]
 
-cat_data=sp.zeros((nSub*sub_data.shape[0],sub_data.shape[1]))
+cat_data1=sp.zeros((nSub*sub_data.shape[0]/2,sub_data.shape[1]))
+cat_data2=sp.zeros((nSub*sub_data.shape[0]/2,sub_data.shape[1]))
 
 for ind in range(nSub):
     sub_data[:,:,ind] = rot_sub_data(ref=sub_data[:,:,0],sub=sub_data[:,:,ind])
-    cat_data[sub_data.shape[0]*ind:sub_data.shape[0]*(ind+1),:] = sub_data[:,:,ind]    
-    print ind, sub_data.shape, cat_data.shape
+    if ind < nSub/2:
+        cat_data1[sub_data.shape[0]*ind:sub_data.shape[0]*(ind+1),:] = sub_data[:,:,ind]    
+    else:
+        ind2=ind-nSub/2
+        cat_data2[sub_data.shape[0]*ind2:sub_data.shape[0]*(ind2+1),:] = sub_data[:,:,ind-1]    
+        
 
  
 SC = KMeans(n_clusters=nClusters,random_state=5324)
-lab_sub=sp.zeros((sub_data.shape[0],nSub))
-for ind in range(nSub):
-    lab_sub[:,ind]=SC.fit_predict(sub_data[:,:,ind])    
-#labs_all = SC.fit_predict(cat_data)
+labs_all1 = SC.fit_predict(cat_data1)
+labs_all2 = SC.fit_predict(cat_data2)
 
-#lab_sub=labs_all.reshape((sub_data.shape[0],nSub),order='F')
-sp.savez_compressed('labs_all_data1_rot_individual_nclusters60_sub5', lab_sub=lab_sub, cat_data=cat_data, lst=lst)
+lab_sub1=labs_all1.reshape((sub_data.shape[0],nSub/2),order='F')
+lab_sub2=labs_all2.reshape((sub_data.shape[0],nSub/2),order='F')
+
+sp.savez_compressed('labs_all_split2_data_1common_10clusters', lst=lst, lab_sub1=lab_sub1, lab_sub2=lab_sub2, cat_data1=cat_data1, cat_data2=cat_data2)

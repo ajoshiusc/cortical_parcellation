@@ -12,7 +12,7 @@ p_dir_ref='/home/ajoshi/HCP_data'
 lst = os.listdir(p_dir)
 r_factor = 3
 ref_dir = os.path.join(p_dir_ref, 'reference')
-nClusters=100
+nClusters=10
 
 ref = '100307'
 print(ref + '.reduce' + str(r_factor) + '.LR_mask.mat')
@@ -72,11 +72,10 @@ for ind in range(nSub):
     cat_data[sub_data1.shape[0]*ind1:sub_data1.shape[0]*(ind1+1),:] = sub_data2[:,:,ind]    
 
     print ind, sub_data1.shape, cat_data.shape
-sp.savez_compressed('data_bothsessions', cat_data=cat_data)
+#sp.savez_compressed('data_bothsessions', cat_data=cat_data)
 
- 
 SC = KMeans(n_clusters=nClusters,random_state=5324)
 labs_all = SC.fit_predict(cat_data)
 
 lab_sub=labs_all.reshape((sub_data1.shape[0],2*nSub),order='F')
-sp.savez_compressed('labs_all_data_bothsessions_100_clusters', lab_sub=lab_sub, cat_data=cat_data, lst=lst, nClusters=nClusters)
+sp.savez_compressed('labs_all_data_bothsessions_10_clusters', lab_sub=lab_sub, cat_data=cat_data, lst=lst, nClusters=nClusters)

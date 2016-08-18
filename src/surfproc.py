@@ -14,15 +14,26 @@ __author__ = "Anand A. Joshi"
 __copyright__ = "University of Southern California, Los Angeles"
 __email__ = "ajoshi@sipi.usc.edu"
 
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 import matplotlib.cm as cmx
 import matplotlib.colors as colors
+
+
+def patch_color_labels(s,freq=1):
+    ''' color by freq of labels '''
+    s.vColor = sp.zeros(s.vertices.shape)
+    colr = get_cmap(sp.amax(s.labels)+1)
+    s.vColor = s.vColor+1
+    freq=sp.reshape(freq,(len(freq),1))
+    s.vColor = (1-freq) + freq*sp.array(colr(s.labels)[:,:3])
+    return s
+        
 
 def get_cmap(N):
     '''Returns a function that maps each index in 0, 1, ... N-1 to a distinct 
     RGB color.'''
     color_norm  = colors.Normalize(vmin=0, vmax=N-1)
-    scalar_map = cmx.ScalarMappable(norm=color_norm, cmap='jet') 
+    scalar_map = cmx.ScalarMappable(norm=color_norm, cmap='Paired') 
     def map_index_to_rgb_color(index):
         return scalar_map.to_rgba(index)
     return map_index_to_rgb_color

@@ -5,7 +5,7 @@ Created on Tue Jul 26 23:31:10 2016
 @author: ajoshi
 """
 # ||AUM||
-from scipy.stats import itemfreq
+
 import scipy.io
 import scipy as sp
 import numpy as np
@@ -17,13 +17,13 @@ from surfproc import view_patch, view_patch_vtk, get_cmap
 from sklearn.cluster import KMeans
 from sklearn.metrics.pairwise import pairwise_distances
 from sklearn.utils.linear_assignment_ import linear_assignment
-from sklearn.metrics import silhouette_score
+from sklearn.metrics import silhouette_samples
 p_dir = '/home/ajoshi/HCP_data/data'
 p_dir_ref='/home/ajoshi/HCP_data'
 lst = os.listdir(p_dir)
 r_factor = 3
 ref_dir = os.path.join(p_dir_ref, 'reference')
-nClusters=60
+nClusters=10
 
 ref = '100307'
 print(ref + '.reduce' + str(r_factor) + '.LR_mask.mat')
@@ -35,35 +35,44 @@ dfs_left_sm = readdfs(os.path.join(p_dir_ref, 'reference', ref + '.aparc.a2009s.
 count1 = 0
 rho_rho=[];rho_all=[]
 
-s1=sp.load('labs_all_data_bothsessions_60_clusters.npz');    
-l=s1['lab_sub']
-l1=sp.reshape(l[:,:40],(l.shape[0]*l.shape[1]/2.0),order='F')
+s1=sp.load('labs_all_split2_data_1common_10clusters.npz');    
+l=s1['lab_sub1']
+l1=sp.reshape(l,(l.shape[0]*l.shape[1]),order='F')
 
-l2=sp.reshape(l[:,40:80],(l.shape[0]*l.shape[1]/2.0),order='F')
+#s2=sp.load('labs_all_split2_data_30clusters.npz');    
+l=s1['lab_sub2']
+l2=sp.reshape(l,(l.shape[0]*l.shape[1]),order='F')
 
 l12=sp.concatenate((l1[:,None],l2[:,None]),axis=1)
 
 print sp.sum(sp.absolute(l12[:,1]-l12[:,0]))
-#l12=reorder_labels(l12)
+l12=reorder_labels(l12)
 
 print sp.sum(sp.absolute(l12[:,1]-l12[:,0]))
 
-l1=sp.reshape(l12[:,0],(l.shape[0],l.shape[1]/2.0),order='F')
-l2=sp.reshape(l12[:,1],(l.shape[0],l.shape[1]/2.0),order='F')
+l1=sp.reshape(l12[:,0],(l.shape[0],l.shape[1]),order='F')
+l2=sp.reshape(l12[:,1],(l.shape[0],l.shape[1]),order='F')
 
 perm1=sp.mod(17*sp.arange(max(l1.flatten())+1),max(l1.flatten())+1)
-#
-for ind in range(5): #range(l1.shape[1]):
-    lab1=l1[:,ind]
-    counts1=itemfreq(lab1)    
-    lab2=l2[:,ind]
-    counts2=itemfreq(lab2)        
-    view_patch(dfs_left_sm,perm1[lab1],colorbar=0,show=0,elevation=-90,colormap='Paired',outfile=lst[ind]+'_joint_both_session1_view1_60_clusters.png')
-    view_patch(dfs_left_sm,perm1[lab1],colorbar=0,show=0,elevation=90,colormap='Paired',outfile=lst[ind]+'_joint_both_session1_view2_60_clusters.png')
-    view_patch(dfs_left_sm,perm1[lab2],colorbar=0,show=0,elevation=-90,colormap='Paired',outfile=lst[ind]+'_joint_both_session2_view1_60_clusters.png')
-    view_patch(dfs_left_sm,perm1[lab2],colorbar=0,show=0,elevation=90,colormap='Paired',outfile=lst[ind]+'_joint_both_session2_view2_60_clusters.png')
+
+# Plot labels
+ind=19
+ind2=0
+lab1=l1[:,ind]; lab2=l2[:,ind2]
+view_patch(dfs_left_sm,perm1[lab1],colorbar=0,colormap='Paired',elevation=90,show=0,outfile=lst[ind]+'_view1_split1_10clusters_1common.png')
+view_patch(dfs_left_sm,perm1[lab1],colorbar=0,colormap='Paired',elevation=-90,show=0,outfile=lst[ind]+'_view2_split1_10clusters_1common.png')
+view_patch(dfs_left_sm,perm1[lab2],colorbar=0,colormap='Paired',elevation=90,show=0,outfile=lst[ind2+l.shape[1]-1]+'_view1_split2_10clusters_1common.png')
+view_patch(dfs_left_sm,perm1[lab2],colorbar=0,colormap='Paired',elevation=-90,show=0,outfile=lst[ind2+l.shape[1]-1]+'_view2_split2_10clusters_1common.png')
 
 #    lab1=l2[:,ind]
 #    view_patch(dfs_left_sm,lab1,show=0,outfile=lst[ind]+'_individual_rot_data2.png')
 #
+# Plot Silhoutte modulated 
+#cat_data2=s1['cat_data2']
+#s=silhouette_samples(cat_data2[10832*(ind):10832*(ind+1),:],lab1)
+
+#lab_sub2=s1['lab_sub2']
+#
+#for ind in range(2):#range(l.shape[1]):
+#    
 

@@ -35,12 +35,12 @@ dfs_left_sm = readdfs(os.path.join(p_dir_ref, 'reference', ref + '.aparc.a2009s.
 count1 = 0
 rho_rho=[];rho_all=[]
 
-s1=sp.load('labs_all_split2_data1.npz');    
+s1=sp.load('labs_all_split2_data_60clusters.npz');    
 l=s1['lab_sub1']
 l1=sp.reshape(l,(l.shape[0]*l.shape[1]),order='F')
 
-s2=sp.load('labs_all_split2_data1.npz');    
-l=s2['lab_sub2']
+#s2=sp.load('labs_all_split2_data_60clusters.npz');    
+l=s1['lab_sub2']
 l2=sp.reshape(l,(l.shape[0]*l.shape[1]),order='F')
 
 l12=sp.concatenate((l1[:,None],l2[:,None]),axis=1)
@@ -56,12 +56,12 @@ l2=sp.reshape(l12[:,1],(l.shape[0],l.shape[1]),order='F')
 perm1=sp.mod(17*sp.arange(max(l1.flatten())+1),max(l1.flatten())+1)
 
 # Plot labels
-for ind in range(2):#range(l.shape[1]):
+for ind in range(4):#range(l.shape[1]):
     lab1=l1[:,ind]; lab2=l2[:,ind]
-    view_patch(dfs_left_sm,perm1[lab1],colorbar=0,colormap='Paired',elevation=90,show=0,outfile=lst[ind]+'_view1_split1.png')
-    view_patch(dfs_left_sm,perm1[lab1],colorbar=0,colormap='Paired',elevation=-90,show=0,outfile=lst[ind]+'_view2_split1.png')
-    view_patch(dfs_left_sm,perm1[lab2],colorbar=0,colormap='Paired',elevation=90,show=0,outfile=lst[ind+l.shape[1]]+'_view1_split2.png')
-    view_patch(dfs_left_sm,perm1[lab2],colorbar=0,colormap='Paired',elevation=-90,show=0,outfile=lst[ind+l.shape[1]]+'_view2_split2.png')
+    view_patch(dfs_left_sm,perm1[lab1],colorbar=0,colormap='Paired',elevation=90,show=0,outfile=lst[ind]+'_view1_split1_60clusters.png')
+    view_patch(dfs_left_sm,perm1[lab1],colorbar=0,colormap='Paired',elevation=-90,show=0,outfile=lst[ind]+'_view2_split1_60clusters.png')
+    view_patch(dfs_left_sm,perm1[lab2],colorbar=0,colormap='Paired',elevation=90,show=0,outfile=lst[ind+l.shape[1]]+'_view1_split2_60clusters.png')
+    view_patch(dfs_left_sm,perm1[lab2],colorbar=0,colormap='Paired',elevation=-90,show=0,outfile=lst[ind+l.shape[1]]+'_view2_split2_60clusters.png')
 
 #    lab1=l2[:,ind]
 #    view_patch(dfs_left_sm,lab1,show=0,outfile=lst[ind]+'_individual_rot_data2.png')
@@ -71,6 +71,6 @@ cat_data2=s1['cat_data2']
 lab_sub2=s1['lab_sub2']
 
 for ind in range(2):#range(l.shape[1]):
-    s=silhouette_samples(cat_data2[10832*(ind-1):10832*ind,:],lab_sub2[:,ind])
+    s=silhouette_samples(cat_data2[10832*(ind):10832*(ind+1),:],lab_sub2[:,ind])
     
 

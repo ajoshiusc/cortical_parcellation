@@ -12,7 +12,7 @@ p_dir_ref='/home/ajoshi/HCP_data'
 lst = os.listdir(p_dir)
 r_factor = 3
 ref_dir = os.path.join(p_dir_ref, 'reference')
-nClusters=30
+nClusters=60
 
 ref = '100307'
 print(ref + '.reduce' + str(r_factor) + '.LR_mask.mat')
@@ -68,4 +68,4 @@ labs_all2 = SC.fit_predict(cat_data2)
 lab_sub1=labs_all1.reshape((sub_data.shape[0],nSub/2),order='F')
 lab_sub2=labs_all2.reshape((sub_data.shape[0],nSub/2),order='F')
 
-sp.savez_compressed('labs_all_split2_data1', lst=lst, lab_sub1=lab_sub1, lab_sub2=lab_sub2, cat_data1=cat_data1, cat_data2=cat_data2)
+sp.savez_compressed('labs_all_split2_data_60clusters', lst=lst, lab_sub1=lab_sub1, lab_sub2=lab_sub2, cat_data1=cat_data1, cat_data2=cat_data2)
