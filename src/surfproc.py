@@ -269,8 +269,13 @@ def get_sphere(center=[0, 0, 0], radius=5.0, res=100):
     surf.vertices = vert1
     return surf
 
-from vtk import vtkRenderer, vtkRenderWindow, vtkPolyDataMapper, vtkInteractorStyleTrackballActor, VTK_MAJOR_VERSION, vtkRenderWindowInteractor, vtkActor, vtkPolyDataNormals
-def view_patch_vtk(r):
+from vtk import (vtkRenderer, vtkRenderWindow, vtkPolyDataMapper, 
+vtkInteractorStyleTrackballActor, VTK_MAJOR_VERSION,
+vtkRenderWindowInteractor, vtkActor, vtkPolyDataNormals,
+vtkWindowToImageFilter, vtkPNGWriter)
+     
+     
+def view_patch_vtk(r, azimuth=90, elevation=0, roll=90, outfile=0):
     print("rendering!")
 
     c=r.vColor;ro=r;
@@ -314,23 +319,99 @@ def view_patch_vtk(r):
     iren = vtkRenderWindowInteractor()
     iren.SetRenderWindow(renWin)
     ren.SetBackground(86.0/256,134.0/256,150.0/256)
-#    style=vtkInteractorStyleTrackballActor()
-#    iren.SetInteractorStyle(style)
-    # actor
-    # assign actor to the renderer
+    
     ren.AddActor(actor) 
 
     # enable user interface interactor
     iren.Initialize()
     renWin.Render()
-    ren.GetActiveCamera().Azimuth(-90)
-    ren.GetActiveCamera().Roll(90)
-    iren.Start()
+    ren.GetActiveCamera().Azimuth(azimuth)
+    ren.GetActiveCamera().Elevation(elevation)
+    ren.GetActiveCamera().Roll(roll)
+    renWin.Render()
+#  windowToImageFilter->SetInput(renderWindow);
+#  windowToImageFilter->SetMagnification(3); //set the resolution of the output image (3 times the current resolution of vtk render window)
+#  windowToImageFilter->SetInputBufferTypeToRGBA(); //also record the alpha (transparency) channel
+#  windowToImageFilter->ReadFrontBufferOff(); // read from the back buffer
+#  windowToImageFilter->Update();
+
+    
+    if outfile != 0:        
+        w2i = vtkWindowToImageFilter()
+        writer = vtkPNGWriter()
+        w2i.SetInput(renWin)
+        w2i.SetInputBufferTypeToRGBA()
+        w2i.ReadFrontBufferOff()
+        w2i.Update()
+        writer.SetInput(w2i.GetOutput())
+        writer.SetFileName(outfile)
+        iren.Render()
+        writer.Write()
+    else:
+        iren.Start()
+
     #close_window(iren)
     del renWin, iren
+
+
+def axisEqual3D(ax):
+    extents = np.array([getattr(ax, 'get_{}lim'.format(dim))() for dim in 'xyz'])
+    sz = extents[:,1] - extents[:,0]
+    centers = np.mean(extents, axis=1)
+    maxsize = max(abs(sz))
+    r = maxsize/2
+    for ctr, dim in zip(centers, 'xyz'):
+        getattr(ax, 'set_{}lim'.format(dim))(ctr - r, ctr + r)    
+        
+        
+from mpl_toolkits.mplot3d import Axes3D
+import matplotlib.tri as mtri
+import matplotlib.pyplot as plt
+from matplotlib.colors import LightSource
+from vispy import scene
+from vispy.color import Color
+from vispy import gloo
+from vispy.scene.cameras import TurntableCamera
+import vispy.io
+import vispy.geometry
+import ply
+import sys
+
+def view_patch_vispy(r, attrib=[], opacity=1, fig=0, show=1, colorbar=1, clim=[0], outfile=0, azimuth=0, elevation=-90, colormap='jet'):
+    meshdata = vispy.geometry.MeshData(vertices=r.vertices, faces=r.faces, vertex_colors=r.vColor)
+    canvas = scene.SceneCanvas(keys='interactive', size=(800, 600), show=True)
+    mesh = scene.visuals.Mesh(meshdata=meshdata, shading='smooth')
+    view = canvas.central_widget.add_view()
+    view.add(mesh)
+    view.bgcolor = '#efefef'    
+    view.camera = TurntableCamera(azimuth=azimuth, elevation=elevation)
+    color = Color("#3f51b5")
+#    mesh.set_gl_state('translucent', depth_test=True, cull_face=True)
+    axis = scene.visuals.XYZAxis(parent=view.scene)
+    if __name__ == '__main__' and sys.flags.interactive == 0:
+        canvas.app.run()
     
     
-def view_patch(r, attrib=[], opacity=1, fig=0, show=1, colorbar=1, clim=[0], outfile=0, azimuth=0, elevation=-90, colormap='jet'):
+def view_patch_mplt(r, attrib=[], opacity=1, fig=0, show=1, colorbar=1, clim=[0], outfile=0, azimuth=0, elevation=-90, colormap='jet'):
+    fig = plt.figure()
+    fC=r.vColor[r.faces[:,0],:]
+#    print fC.shape
+    ax = fig.add_subplot(1, 1, 1, projection='3d',aspect='equal')
+    LightSource(azdeg=0, altdeg=65)
+    ax.view_init(azim=180, elev=0)
+    ax.grid(False)
+    t = ax.plot_trisurf(r.vertices[:,0], r.vertices[:,1], r.vertices[:,2],
+                    triangles=r.faces, linewidth=0, facecolors=fC, antialiased=False)
+    t.set_facecolors(fC)
+    axisEqual3D(ax)
+    ax.axis("off")
+#    plt.axis('equal')
+    plt.show()
+
+
+
+    
+def view_patch(r, attrib=[], opacity=1, fig=0, show=1, colorbar=1, clim=[0], outfile=0, azimuth=0, elevation=-90, colormap='jet', close=1):
 
     if show == 0:
         mlab.options.offscreen=True
@@ -378,7 +459,8 @@ def view_patch(r, attrib=[], opacity=1, fig=0, show=1, colorbar=1, clim=[0], out
     if outfile != 0:        
         mlab.savefig(outfile)
         
-    mlab.close()
+    if close==1:    
+        mlab.close()
 
         
     if show != 0:
