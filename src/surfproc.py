@@ -19,13 +19,17 @@ import matplotlib.cm as cmx
 import matplotlib.colors as colors
 
 
-def patch_color_labels(s,freq=[1],cmap='Paired'):
+def patch_color_labels(s,freq=[1],cmap='Paired', shuffle=True):
     ''' color by freq of labels '''
     s.vColor = sp.zeros(s.vertices.shape)
     colr = get_cmap(sp.amax(s.labels)+1,cmap=cmap)
     s.vColor = s.vColor+1
+    perm1=sp.mod(1703*sp.arange(sp.amax(s.labels)+1),sp.amax(s.labels)+1)
     freq=sp.reshape(freq,(len(freq),1))
-    s.vColor = (1-freq) + freq*sp.array(colr(s.labels)[:,:3])
+    if shuffle==True:
+        s.vColor = (1-freq) + freq*sp.array(colr(perm1[s.labels])[:,:3])
+    else:            
+        s.vColor = (1-freq) + freq*sp.array(colr(s.labels)[:,:3])
     return s
         
 def patch_color_attrib(s,values=[],cmap='jet', clim=0):
@@ -292,7 +296,7 @@ vtkRenderWindowInteractor, vtkActor, vtkPolyDataNormals,
 vtkWindowToImageFilter, vtkPNGWriter)
      
      
-def view_patch_vtk(r, azimuth=90, elevation=0, roll=90, outfile=0, show=0):
+def view_patch_vtk(r, azimuth=90, elevation=0, roll=-90, outfile=0, show=1):
     print("rendering!")
 
     c=r.vColor;ro=r;
