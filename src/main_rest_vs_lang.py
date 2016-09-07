@@ -13,8 +13,8 @@ from dfsio import readdfs, writedfs
 from surfproc import view_patch, view_patch_vtk, smooth_surf_function
 from fmri_methods_sipi import rot_sub_data, reorder_labels
 
-p_dir = '/home/ajoshi/HCP_data'
-p_dir_ref='/home/ajoshi/HCP_data'
+p_dir = '/home/ajoshi/data/HCP_data'
+p_dir_ref='/home/ajoshi/data/HCP_data'
 lst = os.listdir(p_dir)
 r_factor = 3
 ref_dir = os.path.join(p_dir_ref, 'reference')
@@ -30,7 +30,7 @@ dfs_left_sm = readdfs(os.path.join(p_dir_ref, 'reference', ref + '.aparc.a2009s.
 
 
 
-vrest=nib.load('/home/ajoshi/HCP5/110411/MNINonLinear/Results/rfMRI_REST2_LR/rfMRI_REST2_LR_Atlas_hp2000_clean.dtseries.nii')
+vrest=nib.load('/home/ajoshi/data/HCP5/110411/MNINonLinear/Results/rfMRI_REST2_LR/rfMRI_REST2_LR_Atlas_hp2000_clean.dtseries.nii')
 
 LR_flag = msk['LR_flag']
 LR_flag = np.squeeze(LR_flag) > 0
@@ -41,7 +41,7 @@ vrest = vrest - m[:,None]
 s = np.std(vrest, 1)+1e-16
 vrest1 = vrest/s[:,None]
 
-vrest=nib.load('/home/ajoshi/HCP5/110411/MNINonLinear/Results/rfMRI_REST1_LR/rfMRI_REST1_LR_Atlas_hp2000_clean.dtseries.nii')
+vrest=nib.load('/home/ajoshi/data/HCP5/110411/MNINonLinear/Results/rfMRI_REST1_LR/rfMRI_REST1_LR_Atlas_hp2000_clean.dtseries.nii')
 
 LR_flag = msk['LR_flag']
 LR_flag = np.squeeze(LR_flag) > 0
@@ -52,7 +52,7 @@ vrest = vrest - m[:,None]
 s = np.std(vrest, 1)+1e-16
 vrest2 = vrest/s[:,None]
 
-vlang=nib.load('/home/ajoshi/HCP5/110411/MNINonLinear/Results/tfMRI_LANGUAGE_LR/tfMRI_LANGUAGE_LR_Atlas.dtseries.nii')
+vlang=nib.load('/home/ajoshi/data/HCP5/110411/MNINonLinear/Results/tfMRI_LANGUAGE_LR/tfMRI_LANGUAGE_LR_Atlas.dtseries.nii')
 
 LR_flag = msk['LR_flag']
 LR_flag = np.squeeze(LR_flag) > 0
@@ -81,5 +81,5 @@ view_patch(dfs_left_sm,rho2,clim=[0,1],outfile='rest_after_rot.png',show=0)
 rho1lang=smooth_surf_function(dfs_left_sm,rho1lang)
 rho2lang=smooth_surf_function(dfs_left_sm,rho2lang)
 
-view_patch(dfs_left_sm,rho1lang,clim=[0,.15],outfile='lang_task_before_rot.png',show=0)
-view_patch(dfs_left_sm,rho2lang,clim=[0,.15],outfile='lang_task_after_rot.png',show=0)
+view_patch(dfs_left_sm,rho1lang,clim=[0,1],outfile='lang_task_before_rot.png',show=0)
+view_patch(dfs_left_sm,rho2lang,clim=[0,1],outfile='lang_task_after_rot.png',show=0)

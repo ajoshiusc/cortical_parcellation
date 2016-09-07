@@ -19,21 +19,38 @@ import matplotlib.cm as cmx
 import matplotlib.colors as colors
 
 
-def patch_color_labels(s,freq=1):
+def patch_color_labels(s,freq=[1],cmap='Paired'):
     ''' color by freq of labels '''
     s.vColor = sp.zeros(s.vertices.shape)
-    colr = get_cmap(sp.amax(s.labels)+1)
+    colr = get_cmap(sp.amax(s.labels)+1,cmap=cmap)
     s.vColor = s.vColor+1
     freq=sp.reshape(freq,(len(freq),1))
     s.vColor = (1-freq) + freq*sp.array(colr(s.labels)[:,:3])
     return s
         
+def patch_color_attrib(s,values=[],cmap='jet', clim=0):
+    ''' color by freq of labels '''
+    if len(values) == 0:
+        values = s.attributes
+    if clim == 0:
+        vmin = sp.amin(values); vmax = sp.amax(values)
+    else:
+        vmin = clim[0]; vmax = clim[1]
+            
+        
+    s.vColor = sp.zeros(s.vertices.shape)
+    color_norm  = colors.Normalize(vmin=vmin,vmax=vmax)
+    scalar_map = cmx.ScalarMappable(norm=color_norm, cmap=cmap) 
+    s.vColor = scalar_map.to_rgba(values)
+    s.vColor =  s.vColor[:,:3]
+    return s
 
-def get_cmap(N):
+
+def get_cmap(N,cmap='jet'):
     '''Returns a function that maps each index in 0, 1, ... N-1 to a distinct 
     RGB color.'''
     color_norm  = colors.Normalize(vmin=0, vmax=N-1)
-    scalar_map = cmx.ScalarMappable(norm=color_norm, cmap='Paired') 
+    scalar_map = cmx.ScalarMappable(norm=color_norm, cmap=cmap) 
     def map_index_to_rgb_color(index):
         return scalar_map.to_rgba(index)
     return map_index_to_rgb_color
@@ -275,7 +292,7 @@ vtkRenderWindowInteractor, vtkActor, vtkPolyDataNormals,
 vtkWindowToImageFilter, vtkPNGWriter)
      
      
-def view_patch_vtk(r, azimuth=90, elevation=0, roll=90, outfile=0):
+def view_patch_vtk(r, azimuth=90, elevation=0, roll=90, outfile=0, show=0):
     print("rendering!")
 
     c=r.vColor;ro=r;
@@ -347,7 +364,8 @@ def view_patch_vtk(r, azimuth=90, elevation=0, roll=90, outfile=0):
         writer.SetFileName(outfile)
         iren.Render()
         writer.Write()
-    else:
+
+    if show!=0:
         iren.Start()
 
     #close_window(iren)
