@@ -32,11 +32,11 @@ def patch_color_labels(s,freq=[1],cmap='Paired', shuffle=True):
         s.vColor = (1-freq) + freq*sp.array(colr(s.labels)[:,:3])
     return s
         
-def patch_color_attrib(s,values=[],cmap='jet', clim=0):
+def patch_color_attrib(s,values=[],cmap='jet', clim=[0]):
     ''' color by freq of labels '''
     if len(values) == 0:
         values = s.attributes
-    if clim == 0:
+    if len(clim) == 1:
         vmin = sp.amin(values); vmax = sp.amax(values)
     else:
         vmin = clim[0]; vmax = clim[1]
@@ -335,16 +335,22 @@ def view_patch_vtk(r, azimuth=90, elevation=0, roll=-90, outfile=0, show=1):
     
     ren = vtkRenderer()
     renWin = vtkRenderWindow()
+    renWin.SetSize(600,600)
+#    renWin.SetDPI(200)
+    if show == 0:
+        renWin.SetOffScreenRendering(1)
+        
     renWin.AddRenderer(ren) 
     # create a renderwindowinteractor
     iren = vtkRenderWindowInteractor()
     iren.SetRenderWindow(renWin)
-    ren.SetBackground(86.0/256,134.0/256,150.0/256)
+    ren.SetBackground(256.0/256,256.0/256,256.0/256)
     
     ren.AddActor(actor) 
 
     # enable user interface interactor
     iren.Initialize()
+        
     renWin.Render()
     ren.GetActiveCamera().Azimuth(azimuth)
     ren.GetActiveCamera().Elevation(elevation)
@@ -357,9 +363,10 @@ def view_patch_vtk(r, azimuth=90, elevation=0, roll=-90, outfile=0, show=1):
 #  windowToImageFilter->Update();
 
     
-    if outfile != 0:        
+    if outfile != 0:     
         w2i = vtkWindowToImageFilter()
         writer = vtkPNGWriter()
+#        iren.SetDPI(200)
         w2i.SetInput(renWin)
         w2i.SetInputBufferTypeToRGBA()
         w2i.ReadFrontBufferOff()

@@ -15,8 +15,8 @@ from fmri_methods_sipi import rot_sub_data, reorder_labels
 from sklearn.utils.linear_assignment_ import linear_assignment
 
 #from scipy.spatial import cKDTree
-p_dir = '/home/ajoshi/HCP_data/data'
-p_dir_ref='/home/ajoshi/HCP_data'
+p_dir = '/home/ajoshi/data/HCP_data/data'
+p_dir_ref='/home/ajoshi/data/HCP_data'
 lst = os.listdir(p_dir)
 r_factor = 3
 ref_dir = os.path.join(p_dir_ref, 'reference')
@@ -68,14 +68,14 @@ dist_mat = sp.absolute(sp.arccos(rho_rot))
 ind = sp.argmin(dist_mat,axis=0)
 #ind = linear_assignment(dist_mat)
 
-view_patch(dfs_left_sm,outfile='before_registered_surf.png',show=0)
+view_patch(dfs_left_sm,outfile='before_registered_surf.png',show=1)
 
 dfs_left_sm.faces=ind[dfs_left_sm.faces]
-view_patch(dfs_left_sm,outfile='registered_surf1.png')
+view_patch(dfs_left_sm,outfile='registered_surf1.png',show=1)
 
 #rho1=smooth_surf_function(dfs_left_sm,rho1)
 #rho2=smooth_surf_function(dfs_left_sm,rho2)
 
 #view_patch(dfs_left_sm,rho_orig,clim=[0,1])
-#view_patch(dfs_left_sm,rho_rot,clim=[0,1])
+#view_patch(dfs_left_sm,rho_rot,clim=[0,1],show=1)
 

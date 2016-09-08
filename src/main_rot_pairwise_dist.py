@@ -3,12 +3,12 @@ import scipy.io
 import scipy as sp
 import numpy as np
 from fmri_methods_sipi import rot_sub_data
-from surfproc import view_patch
+from surfproc import view_patch_vtk, patch_color_attrib
 from dfsio import readdfs
 import os
 
-p_dir = 'E:\\HCP-fMRI-NLM'
-p_dir_ref='E:\\'
+p_dir = '/home/ajoshi/data/HCP_data/data'
+p_dir_ref='/home/ajoshi/data/HCP_data'
 lst = os.listdir(p_dir)
 
 r_factor = 3
@@ -49,7 +49,7 @@ nSub=sub_data.shape[2]
 rperm=sp.random.permutation(dfs_left_sm.vertices.shape[0])
 #rperm=range(dfs_left_sm.vertices.shape[0])
 
-sub_data[:,:,1]=sub_data[rperm,:,1]
+#sub_data[:,:,1]=sub_data[rperm,:,1]
 sub_data_orig=sub_data.copy()
 for ind in range(1,nSub):
     sub_data[:,:,ind] = rot_sub_data(ref=sub_data[:,:,0],sub=sub_data[:,:,ind])
@@ -61,11 +61,14 @@ avg_sub_data = sp.mean(sub_data, axis=2)
 
 corr_all_orig = sp.mean(sub_data_orig[:,:,0]*sub_data_orig[:,:,1],axis=(1))
 corr_all_rot = sp.mean(sub_data[:,:,0]*sub_data[:,:,1],axis=(1))
+#azimuth=-90,elevation=-180, roll=-90, 
+dfs_left_sm=patch_color_attrib(dfs_left_sm,corr_all_orig, clim=[-1,1])
+view_patch_vtk(dfs_left_sm, azimuth=-90,elevation=-180, roll=-90, outfile='corr_orig_view1_1sub.png',show=1)        
+view_patch_vtk(dfs_left_sm, azimuth=90,elevation=180, roll=90, outfile='corr_orig_view2_1sub.png',show=1)        
 
-view_patch(dfs_left_sm,corr_all_orig, clim=[-1,1], elevation=90, outfile='corr_orig_view1_1sub_perm.png',show=0)        
-view_patch(dfs_left_sm,corr_all_orig, clim=[-1,1], elevation=-90, outfile='corr_orig_view2_1sub_perm.png')        
-view_patch(dfs_left_sm,corr_all_rot, clim=[-1,1],elevation=90, outfile='corr_rot_view1_1sub_perm.png')
-view_patch(dfs_left_sm,corr_all_rot, clim=[-1,1],elevation=-90, outfile='corr_rot_view2_1sub_perm.png')
+dfs_left_sm=patch_color_attrib(dfs_left_sm,corr_all_rot, clim=[-1,1])
+view_patch_vtk(dfs_left_sm,azimuth=-90,elevation=-180, roll=-90, outfile='corr_rot_view1_1sub.png',show=1)
+view_patch_vtk(dfs_left_sm,azimuth=90,elevation=180, roll=90, outfile='corr_rot_view2_1sub.png',show=1)
 
 
 

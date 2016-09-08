@@ -72,14 +72,14 @@ vlang=rot_sub_data(ref=vrest1[:,:vlang.shape[1]],sub=vlang)
 rho2=sp.sum(vrest1*vrest2,axis=1)/vrest1.shape[1]
 rho2lang=sp.sum(vrest1[:,:vlang.shape[1]]*vlang,axis=1)/vrest1.shape[1]
 
-rho1=smooth_surf_function(dfs_left_sm,rho1)
-rho2=smooth_surf_function(dfs_left_sm,rho2)
+#rho1=smooth_surf_function(dfs_left_sm,rho1)
+#rho2=smooth_surf_function(dfs_left_sm,rho2)
 
 view_patch(dfs_left_sm,rho1,clim=[0,1],outfile='rest_before_rot.png',show=0)
 view_patch(dfs_left_sm,rho2,clim=[0,1],outfile='rest_after_rot.png',show=0)
 
-rho1lang=smooth_surf_function(dfs_left_sm,rho1lang)
-rho2lang=smooth_surf_function(dfs_left_sm,rho2lang)
+#rho1lang=smooth_surf_function(dfs_left_sm,rho1lang)
+#rho2lang=smooth_surf_function(dfs_left_sm,rho2lang)
 
 view_patch(dfs_left_sm,rho1lang,clim=[0,1],outfile='lang_task_before_rot.png',show=0)
 view_patch(dfs_left_sm,rho2lang,clim=[0,1],outfile='lang_task_after_rot.png',show=0)
