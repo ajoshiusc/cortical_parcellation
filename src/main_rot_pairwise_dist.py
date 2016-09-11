@@ -24,7 +24,7 @@ dfs_left = readdfs(os.path.join(p_dir_ref, 'reference', ref + '.aparc.a2009s.32k
 dfs_left_sm = readdfs(os.path.join(p_dir_ref, 'reference', ref + '.aparc.a2009s.32k_fs.reduce3.very_smooth.left.dfs'))
 count1 = 0
 rho_rho=[];rho_all=[]
-lst=lst[:2]
+#lst=lst[:2]
 labs_all=sp.zeros((len(dfs_left.labels),len(lst)))
 
 for sub in lst:
@@ -48,19 +48,24 @@ for sub in lst:
 nSub=sub_data.shape[2]
 rperm=sp.random.permutation(dfs_left_sm.vertices.shape[0])
 #rperm=range(dfs_left_sm.vertices.shape[0])
-
+corr_all_orig=sp.zeros(len(dfs_left_sm.vertices))
+corr_all_rot=corr_all_orig.copy()
 #sub_data[:,:,1]=sub_data[rperm,:,1]
 sub_data_orig=sub_data.copy()
+
 for ind in range(1,nSub):
+    corr_all_orig += sp.mean(sub_data_orig[:,:,0]*sub_data_orig[:,:,ind],axis=(1))
     sub_data[:,:,ind] = rot_sub_data(ref=sub_data[:,:,0],sub=sub_data[:,:,ind])
+    corr_all_rot += sp.mean(sub_data[:,:,0]*sub_data[:,:,ind],axis=(1))
     print ind, 
+
+corr_all_rot = corr_all_rot/nSub
+corr_all_orig = corr_all_orig/nSub
 
 var_all=sp.zeros((sub_data.shape[0],sub_data.shape[1]))
 
 avg_sub_data = sp.mean(sub_data, axis=2)
 
-corr_all_orig = sp.mean(sub_data_orig[:,:,0]*sub_data_orig[:,:,1],axis=(1))
-corr_all_rot = sp.mean(sub_data[:,:,0]*sub_data[:,:,1],axis=(1))
 #azimuth=-90,elevation=-180, roll=-90, 
 dfs_left_sm=patch_color_attrib(dfs_left_sm,corr_all_orig, clim=[-1,1])
 view_patch_vtk(dfs_left_sm, azimuth=-90,elevation=-180, roll=-90, outfile='corr_orig_view1_1sub.png',show=1)        
