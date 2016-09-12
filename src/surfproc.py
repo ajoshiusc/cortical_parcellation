@@ -22,14 +22,16 @@ import matplotlib.colors as colors
 def patch_color_labels(s,freq=[1],cmap='Paired', shuffle=True):
     ''' color by freq of labels '''
     s.vColor = sp.zeros(s.vertices.shape)
-    colr = get_cmap(sp.amax(s.labels)+1,cmap=cmap)
+    _, labels = sp.unique(s.labels, return_inverse=True)
+    labels += 1
+    colr = get_cmap(sp.amax(labels)+1,cmap=cmap)
     s.vColor = s.vColor+1
-    perm1=sp.mod(1703*sp.arange(sp.amax(s.labels)+1),sp.amax(s.labels)+1)
+    perm1=sp.mod(3511*sp.arange(sp.amax(labels)+1),sp.amax(labels)+1)
     freq=sp.reshape(freq,(len(freq),1))
     if shuffle==True:
-        s.vColor = (1-freq) + freq*sp.array(colr(perm1[s.labels])[:,:3])
+        s.vColor = (1-freq) + freq*sp.array(colr(perm1[labels])[:,:3])
     else:            
-        s.vColor = (1-freq) + freq*sp.array(colr(s.labels)[:,:3])
+        s.vColor = (1-freq) + freq*sp.array(colr(labels)[:,:3])
     return s
         
 def patch_color_attrib(s,values=[],cmap='jet', clim=[0]):
