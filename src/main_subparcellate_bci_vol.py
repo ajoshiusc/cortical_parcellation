@@ -5,7 +5,7 @@ Created on Tue Sep  6 00:08:31 2016
 @author: ajoshi
 """
 from fmri_methods_sipi import interpolate_labels
-from dfsio import readdfs
+from dfsio import readdfs, writedfs
 import time
 import scipy as sp
 import nibabel as nib
@@ -17,11 +17,25 @@ left_mid1 = readdfs('/home/ajoshi/data/BCI-DNI_brain_atlas/BCI-DNI_brain.left.\
 mid.cortex.dfs')
 left_mid.vertices = left_mid1.vertices
 
+left_inner = readdfs('/home/ajoshi/data/BCI-DNI_brain_atlas/BCI-DNI_brain\
+.left.inner.cortex.dfs')
+right_inner = readdfs('/home/ajoshi/data/BCI-DNI_brain_atlas/BCI-DNI_brain\
+.right.inner.cortex.dfs')
+left_pial = readdfs('/home/ajoshi/data/BCI-DNI_brain_atlas/BCI-DNI_brain\
+.left.pial.cortex.dfs')
+right_pial = readdfs('/home/ajoshi/data/BCI-DNI_brain_atlas/BCI-DNI_brain\
+.right.pial.cortex.dfs')
+
 right_mid = readdfs('/home/ajoshi/data/BCI-DNI_brain_atlas/BCI-DNI_brain.right.\
 mid.cortex_refined_labs.dfs')
 right_mid1 = readdfs('/home/ajoshi/data/BCI-DNI_brain_atlas/BCI-DNI_brain.right.\
 mid.cortex.dfs')
 right_mid.vertices = right_mid1.vertices
+
+r1_vert = (right_pial.vertices + right_mid.vertices)/2.0
+r2_vert = (right_inner.vertices + right_mid.vertices)/2.0
+l1_vert = (left_pial.vertices + left_mid.vertices)/2.0
+l2_vert = (left_inner.vertices + left_mid.vertices)/2.0
 
 vol_lab = nib.load('/home/ajoshi/data/BCI-DNI_brain_atlas/\
 BCI-DNI_brain.label.nii.gz')
@@ -52,8 +66,18 @@ class f:
 
 
 t.vertices = sp.concatenate((Xc[:, None], Yc[:, None], Zc[:, None]), axis=1)
-f.vertices = sp.concatenate((left_mid.vertices, right_mid.vertices))
-f.labels = sp.concatenate((left_mid.labels, right_mid.labels))
+f.vertices = sp.concatenate((left_mid.vertices, right_mid.vertices,
+                             left_inner.vertices, right_inner.vertices,
+                             left_pial.vertices, right_pial.vertices,
+                             l1_vert, r1_vert, l2_vert, r2_vert))
+
+f.labels = sp.concatenate((left_mid.labels, right_mid.labels,
+                           left_mid.labels, right_mid.labels,
+                           left_mid.labels, right_mid.labels,
+                           left_mid.labels, right_mid.labels,
+                           left_mid.labels, right_mid.labels,
+                           left_mid.labels, right_mid.labels,
+                           left_mid.labels, right_mid.labels))
 
 tic = time.time()
 t = interpolate_labels(f, t)
@@ -65,3 +89,29 @@ vol_img[ind] = t.labels
 new_img = nib.Nifti1Image(vol_img, vol_lab.affine)
 nib.save(new_img, '/home/ajoshi/data/BCI-DNI_brain_atlas/\
 BCI-DNI_brain.refined.label.nii.gz')
+
+right_inner.labels = right_mid.labels
+right_inner.vColor = right_mid.vColor
+writedfs('/home/ajoshi/data/BCI-DNI_brain_atlas/BCI-DNI_brain\
+.right.inner.cortex.refined.dfs', right_inner)
+
+right_pial.labels = right_mid.labels
+right_pial.vColor = right_mid.vColor
+writedfs('/home/ajoshi/data/BCI-DNI_brain_atlas/BCI-DNI_brain\
+.right.pial.cortex.refined.dfs', right_pial)
+
+left_inner.labels = left_mid.labels
+left_inner.vColor = left_mid.vColor
+writedfs('/home/ajoshi/data/BCI-DNI_brain_atlas/BCI-DNI_brain\
+.left.inner.cortex.refined.dfs', left_inner)
+
+left_pial.labels = left_mid.labels
+left_pial.vColor = left_mid.vColor
+writedfs('/home/ajoshi/data/BCI-DNI_brain_atlas/BCI-DNI_brain\
+.left.pial.cortex.refined.dfs', left_pial)
+
+writedfs('/home/ajoshi/data/BCI-DNI_brain_atlas/BCI-DNI_brain\
+.left.mid.cortex.refined.dfs', left_mid)
+
+writedfs('/home/ajoshi/data/BCI-DNI_brain_atlas/BCI-DNI_brain\
+.right.mid.cortex.refined.dfs', right_mid)
