@@ -4,7 +4,7 @@ import numpy as np
 from mayavi import mlab
 import scipy as sp
 from scipy import stats
-import seaborn as sns
+#import seaborn as sns
 from sklearn.decomposition import PCA
 
 def modified_find_centroid(c):
@@ -88,12 +88,14 @@ def avgplot(r_labels,nSubjects,r_vertices,r_faces,nCluster):
     mlab.gcf().scene.parallel_projection = True
     mlab.view(azimuth=0, elevation=90)
     mlab.colorbar(orientation='vertical')
-    mlab.draw()
+    mlab.show()
     #mlab.close()
     labels = np.zeros(r_labels.shape[0], dtype=float)
+    freq = np.zeros(r_labels.shape[0], dtype=float)
     for i in range(r_labels.shape[0]):
         mode,count=stats.mode(r_labels[i])
         labels[i] = mode[0]
+        freq[i]=count
     mlab.figure(size=(1024, 768), \
                 bgcolor=(1, 1, 1),fgcolor=(0.5,0.5,0.5))
     mlab.triangular_mesh(r_vertices[:, 0], r_vertices[:, 1], r_vertices[:, 2], r_faces, representation='surface',
@@ -101,9 +103,9 @@ def avgplot(r_labels,nSubjects,r_vertices,r_faces,nCluster):
     mlab.gcf().scene.parallel_projection = True
     mlab.view(azimuth=0, elevation=10)
     mlab.colorbar(orientation='vertical')
-    mlab.draw()
+    mlab.show()
     #mlab.close()
-    return labels
+    return labels,freq
 
 
 def rand_indices_within_subjects(nSession,list_all,nSubjects,mask):
@@ -139,7 +141,7 @@ def rand_indices_across_subjects(nSession,list_all,nSubjects,mask):
     temp=np.array(temp)
     return sum/(20.0*39*4)
 
-def intersubjects(labels,nSubjects):
+'''def intersubjects(labels,nSubjects):
     session_num=4
     count=np.array([])
     list_intra=[]
@@ -155,10 +157,10 @@ def intersubjects(labels,nSubjects):
             count = sp.vstack([count, np.extract(mode > 0, count1)])
     ax = sns.kdeplot(count.flatten(), shade=True, color="r")
     sns.plt.show()
-    '''mode, count1 = stats.mode(list_intra)
+    mode, count1 = stats.mode(list_intra)
     count = sp.array(np.extract(mode > 0,count1))
     ax = sns.kdeplot((count.flatten())/40.0, shade=True, color="g")
-    sns.plt.show()'''
+    sns.plt.show()
     print
 
 def intrasubjects(labels,nSubjects):
@@ -171,7 +173,7 @@ def intrasubjects(labels,nSubjects):
         mode, count1 = stats.mode(list)
         count = sp.array(np.extract(mode > 0, count1))
         ax = sns.kdeplot((count.flatten())/10.0, shade=True, color="r")
-        sns.plt.show()
+      sns.plt.show()'''
 
 def spatial_map(vector,r_vertices,r_faces,msk_small_region,labs,val):
     r_labels = np.zeros([r_vertices.shape[0]])
@@ -185,7 +187,7 @@ def spatial_map(vector,r_vertices,r_faces,msk_small_region,labs,val):
     mlab.gcf().scene.parallel_projection = True
     mlab.view(azimuth=0, elevation=90)
     mlab.draw()
-    mlab.colorbar(orientation='horizontal')
+    #mlab.colorbar(orientation='horizontal')
     mlab.show()
     #mlab.close()
 
@@ -261,16 +263,16 @@ def all_separate(labels,vertices,nCluster):
 
 
 
-def plot_graph(store1):
+def plot_graph(store1,roiregion):
     import numpy as np
     import matplotlib.pyplot as plt
     t1 = np.arange(7)
-
     fig, (ax1) = plt.subplots(1, 1)
+    plt.subplots_adjust(left=0.12, right=0.90, top=0.83, bottom=0.15)
     fig.set_size_inches(18, 7)
     ax1.set_xlim([0, 8])
     ax1.set_ylim(0,1)
-    ax1.set_title("superior temporal gyrus")
+    ax1.set_title(roiregion)
     ax1.set_xlabel("Number of Cluster")
     #ax1.set_ylabel("Average Silhouette Score")
     ax1.set_ylabel("Explained variance ratio")
@@ -289,16 +291,17 @@ def plot_graph(store1):
     condlist = store1 < .95
     return (np.extract(condlist, store1).size + 1)
 
-def plot_graph_1(store1):
+def plot_graph_1(store1,roiregion):
     import numpy as np
     import matplotlib.pyplot as plt
     t1 = np.arange(8)
 
     fig, (ax1) = plt.subplots(1, 1)
     fig.set_size_inches(18, 7)
+    plt.subplots_adjust(left=0.12, right=0.90, top=0.83, bottom=0.15)
     ax1.set_xlim([0, 11])
     ax1.set_ylim(0,1)
-    ax1.set_title("superior temporal gyrus")
+    ax1.set_title(roiregion)
     ax1.set_xlabel("Number of Cluster")
     ax1.set_ylabel("Average Silhouette Score")
     #ax1.set_ylabel("Explained variance ratio")
