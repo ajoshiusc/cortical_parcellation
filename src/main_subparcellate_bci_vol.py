@@ -40,6 +40,7 @@ l2_vert = (left_inner.vertices + left_mid.vertices)/2.0
 vol_lab = nib.load('/home/ajoshi/data/BCI-DNI_brain_atlas/\
 BCI-DNI_brain.label.nii.gz')
 vol_img = vol_lab.get_data()
+
 xres = vol_lab.header['pixdim'][1]
 yres = vol_lab.header['pixdim'][2]
 zres = vol_lab.header['pixdim'][3]
@@ -55,6 +56,7 @@ ind = (vol_img >= 120) & (vol_img < 600)
 Xc = X[ind]
 Yc = Y[ind]
 Zc = Z[ind]
+v_lab = vol_img[ind]
 
 
 class t:
@@ -66,6 +68,7 @@ class f:
 
 
 t.vertices = sp.concatenate((Xc[:, None], Yc[:, None], Zc[:, None]), axis=1)
+t.labels = sp.mod(v_lab,1000)
 f.vertices = sp.concatenate((left_mid.vertices, right_mid.vertices,
                              left_inner.vertices, right_inner.vertices,
                              left_pial.vertices, right_pial.vertices,
@@ -75,15 +78,22 @@ f.labels = sp.concatenate((left_mid.labels, right_mid.labels,
                            left_mid.labels, right_mid.labels,
                            left_mid.labels, right_mid.labels,
                            left_mid.labels, right_mid.labels,
-                           left_mid.labels, right_mid.labels,
-                           left_mid.labels, right_mid.labels,
                            left_mid.labels, right_mid.labels))
 
 tic = time.time()
-t = interpolate_labels(f, t)
-toc = time.time()
-print 'Time Elapsed = %f sec.' % (toc - tic)
-
+# t = interpolate_labels(f, t)
+v_labels = t.labels
+for labid in sp.unique(v_labels):
+    indf = (sp.floor(f.labels/10.0) == labid)
+    if sp.sum(indf) == 0:
+        continue
+    indt = (v_labels == labid)
+    tree = sp.spatial.cKDTree(f.vertices[indf, :])
+    d, inds = tree.query(t.vertices[indt, :], k=1, p=2)
+    t.labels[indt] = f.labels[indf][inds]
+    toc = time.time()
+    print 'Time Elapsed = %f sec.' % (toc - tic)
+# here make sure that hanns labels are not modified TBD
 vol_img[ind] = t.labels
 
 new_img = nib.Nifti1Image(vol_img, vol_lab.affine)

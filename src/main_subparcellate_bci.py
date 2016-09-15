@@ -4,11 +4,12 @@ Created on Tue Sep  6 00:08:31 2016
 
 @author: ajoshi
 """
-from fmri_methods_sipi import reduce3_to_bci_rh, interpolate_labels
+from fmri_methods_sipi import reduce3_to_bci_lh, interpolate_labels
 from dfsio import readdfs, writedfs
 import scipy.io
+import matlab.engine as meng
 import os
-from surfproc import patch_color_labels, view_patch_vtk, smooth_patch, patch_color_attrib
+from surfproc import patch_color_labels, view_patch_vtk, patch_color_attrib
 # smooth_patch
 import scipy as sp
 
@@ -27,10 +28,10 @@ p_dir = '/home/sgaurav/Documents/git_sandbox/cortical_parcellation/src/\
 intensity_mode_map/'
 nSub = 40
 lst = os.listdir(p_dir)
-bci_bst = readdfs('/home/ajoshi/data/BCI-DNI_brain_atlas/BCI-DNI_brain.right.\
+bci_bst = readdfs('/home/ajoshi/data/BCI-DNI_brain_atlas/BCI-DNI_brain.left.\
 mid.cortex.dfs')
 bci_bst_sm = readdfs('/home/ajoshi/data/BCI-DNI_brain_atlas/BCI-DNI_brain.\
-right.mid.cortex_smooth10.dfs')
+left.mid.cortex_smooth10.dfs')
 bci_bst.vertices = bci_bst_sm.vertices
 
 freq = sp.zeros(bci_bst.vertices.shape[0])
@@ -43,18 +44,17 @@ for fname in lst:
 
     roino = int(fname[s-3:s])
     print roino
-    if sp.mod(roino, 2) != 0:
+    if sp.mod(roino, 2) == 0:
         continue
 
     data1 = scipy.io.loadmat(os.path.join(p_dir, fname))
 
     labs = data1['labs_all']
     freq1 = data1['freq']
-    print 'max freq1 = %f' % sp.amax(freq1)
     freq1 = freq1/nSub
     freq1[labs == 0] = 0
-    bci_labs = reduce3_to_bci_rh(labs)
-    freq1 = reduce3_to_bci_rh(freq1)
+    bci_labs = reduce3_to_bci_lh(labs)
+    freq1 = reduce3_to_bci_lh(freq1)
     bci_labs_orig = bci_labs
 
     if sp.amax(bci_labs) > 0:
@@ -71,7 +71,6 @@ for fname in lst:
         sp.amin(freq1[(bci_labs_orig > 0) & (freq1 != 0)])
 
     freq[(bci_bst.labels == roino*10)] += freq1[(bci_bst.labels == roino*10)]
-    print 'max freq = %f' % sp.amax(freq)
     bci_bst.labels += bci_labs
 
 
@@ -80,13 +79,38 @@ bci_bst.attributes = freq
 bci_bst = patch_color_labels(bci_bst, cmap='Paired')
 # bci_bst = smooth_patch(bci_bst, iterations=90, relaxation=10.8)
 view_patch_vtk(bci_bst, show=1)
-writedfs('/home/ajoshi/data/BCI-DNI_brain_atlas/BCI-DNI_brain.right.\
-mid.cortex_refined_labs.dfs', bci_bst)
+writedfs('/home/ajoshi/data/BCI-DNI_brain_atlas/BCI-DNI_brain.left.\
+mid.cortex_refined_labs_uncorr.dfs', bci_bst)
 bci_bst = patch_color_attrib(bci_bst, bci_bst.labels)
 view_patch_vtk(bci_bst, show=1)
 
 bci_bst = patch_color_labels(bci_bst, freq=freq, cmap='Paired')
 # bci_bst = smooth_patch(bci_bst, iterations=90, relaxation=10.8)
 view_patch_vtk(bci_bst, show=1)
-writedfs('/home/ajoshi/data/BCI-DNI_brain_atlas/BCI-DNI_brain.right.\
+writedfs('/home/ajoshi/data/BCI-DNI_brain_atlas/BCI-DNI_brain.left.\
+mid.cortex_refined_labs_mod_freq_uncorr.dfs', bci_bst)
+
+surfname = '/home/ajoshi/data/BCI-DNI_brain_atlas/BCI-DNI_brain.left.\
+mid.cortex_refined_labs_uncorr.dfs'
+sub_out = '/home/ajoshi/data/BCI-DNI_brain_atlas/BCI-DNI_brain.left.\
+mid.cortex_refined_labs_out.dfs'
+
+eng = meng.start_matlab()
+eng.addpath(eng.genpath('/home/ajoshi/coding_ground/svreg-matlab/MEX_Files'))
+eng.addpath(eng.genpath('/home/ajoshi/coding_ground/svreg-matlab/3rdParty'))
+eng.addpath(eng.genpath('/home/ajoshi/coding_ground/svreg-matlab/src'))
+
+eng.corr_topology_labels(surfname, sub_out)
+
+bci_bst = readdfs(sub_out)
+bci_bst = patch_color_labels(bci_bst, freq=freq, cmap='Paired')
+# bci_bst = smooth_patch(bci_bst, iterations=90, relaxation=10.8)
+view_patch_vtk(bci_bst, show=1)
+writedfs('/home/ajoshi/data/BCI-DNI_brain_atlas/BCI-DNI_brain.left.\
 mid.cortex_refined_labs_mod_freq.dfs', bci_bst)
+
+bci_bst = patch_color_labels(bci_bst, cmap='Paired')
+# bci_bst = smooth_patch(bci_bst, iterations=90, relaxation=10.8)
+view_patch_vtk(bci_bst, show=1)
+writedfs('/home/ajoshi/data/BCI-DNI_brain_atlas/BCI-DNI_brain.left.\
+mid.cortex_refined_labs.dfs', bci_bst)

@@ -297,6 +297,7 @@ vtkInteractorStyleTrackballActor, VTK_MAJOR_VERSION,
 vtkRenderWindowInteractor, vtkActor, vtkPolyDataNormals,
 vtkWindowToImageFilter, vtkPNGWriter)
      
+from PIL import Image
      
 def view_patch_vtk(r, azimuth=90, elevation=0, roll=-90, outfile=0, show=1):
     print("rendering!")
@@ -363,9 +364,8 @@ def view_patch_vtk(r, azimuth=90, elevation=0, roll=-90, outfile=0, show=1):
 #  windowToImageFilter->SetInputBufferTypeToRGBA(); //also record the alpha (transparency) channel
 #  windowToImageFilter->ReadFrontBufferOff(); // read from the back buffer
 #  windowToImageFilter->Update();
-
     
-    if outfile != 0:     
+    if outfile != 0:
         w2i = vtkWindowToImageFilter()
         writer = vtkPNGWriter()
 #        iren.SetDPI(200)
@@ -377,6 +377,15 @@ def view_patch_vtk(r, azimuth=90, elevation=0, roll=-90, outfile=0, show=1):
         writer.SetFileName(outfile)
         iren.Render()
         writer.Write()
+
+        image=Image.open(outfile)
+        image.load()        
+        imageSize = image.size
+        imageBox = image.getbbox()
+        print(image.getbbox())
+        cropped=image.crop(imageBox)
+        print(cropped.getbbox())        
+        cropped.save(outfile)
 
     if show!=0:
         iren.Start()
