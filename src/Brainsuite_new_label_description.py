@@ -42,6 +42,6 @@ for i in xrange(T2.__len__()):
             flag=1
             ET.SubElement(root,"label\t",id=str(T1[i]*10+j+1)+"\t",tag = T2[i]+"_"+str(j+1)+"\t", color=str(hex(255*np.array(refined_roilists[T1[i]*10+j+1][0])))[2:-1]+str(hex(255*np.array(refined_roilists[T1[i]*10+j+1][1])))[2:-1]+str(hex(255*np.array(refined_roilists[T1[i]*10+j+1][2])))[2:-1],  vfullname ="\t"+ T3[i]+"_"+str(j+1)+"\t")
     if flag == 0:
-        ET.SubElement(root, "label\t", id=str(T1[i])+"\t", tag=T2[i]+"\t", color=T4[i],vfullname="\t"+T3[i]+"\t" )
+        ET.SubElement(root, "label\t", id=str(T1[i])+"\t", tag=T2[i]+"\t", color=T4[i][2:],vfullname="\t"+T3[i]+"\t" )
 with open("Brainsuite_refined_label_description.xml","w") as f:
     f.write(prettify(root))
