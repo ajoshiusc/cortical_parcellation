@@ -20,21 +20,21 @@ print(ref + '.reduce' + str(r_factor) + '.LR_mask.mat')
 fn1 = ref + '.reduce' + str(r_factor) + '.LR_mask.mat'
 fname1 = os.path.join(ref_dir, fn1)
 msk = scipy.io.loadmat(fname1)  # h5py.File(fname1);
-dfs_right = readdfs(os.path.join(p_dir_ref, 'reference', ref + '.aparc.\
-a2009s.32k_fs.reduce3.right.dfs'))
-dfs_right_sm = readdfs(os.path.join(p_dir_ref, 'reference', ref + '.aparc.\
-a2009s.32k_fs.reduce3.very_smooth.right.dfs'))
+dfs_left = readdfs(os.path.join(p_dir_ref, 'reference', ref + '.aparc.\
+a2009s.32k_fs.reduce3.left.dfs'))
+dfs_left_sm = readdfs(os.path.join(p_dir_ref, 'reference', ref + '.aparc.\
+a2009s.32k_fs.reduce3.very_smooth.left.dfs'))
 count1 = 0
 rho_rho = []
 rho_all = []
 #lst=lst[:2]
-labs_all = sp.zeros((len(dfs_right.labels), len(lst)))
+labs_all = sp.zeros((len(dfs_left.labels), len(lst)))
 
 for sub in lst:
-    data = scipy.io.loadmat(os.path.join(p_dir, sub, sub + '.rfMRI_REST2_RL.\
+    data = scipy.io.loadmat(os.path.join(p_dir, sub, sub + '.rfMRI_REST1_LR.\
 reduce3.ftdata.NLM_11N_hvar_25.mat'))
     LR_flag = msk['LR_flag']
-    LR_flag = np.squeeze(LR_flag) == 0
+    LR_flag = np.squeeze(LR_flag) != 0
     data = data['ftdata_NLM']
     temp = data[LR_flag, :]
     m = np.mean(temp, 1)
@@ -50,9 +50,9 @@ reduce3.ftdata.NLM_11N_hvar_25.mat'))
     print count1,
 
 nSub = sub_data.shape[2]
-rperm = sp.random.permutation(dfs_right_sm.vertices.shape[0])
-#rperm=range(dfs_right_sm.vertices.shape[0])
-corr_all_orig = sp.zeros(len(dfs_right_sm.vertices))
+rperm = sp.random.permutation(dfs_left_sm.vertices.shape[0])
+#rperm=range(dfs_left_sm.vertices.shape[0])
+corr_all_orig = sp.zeros(len(dfs_left_sm.vertices))
 corr_all_rot = corr_all_orig.copy()
 #sub_data[:,:,1]=sub_data[rperm,:,1]
 sub_data_orig = sub_data.copy()
@@ -73,15 +73,15 @@ var_all = sp.zeros((sub_data.shape[0], sub_data.shape[1]))
 avg_sub_data = sp.mean(sub_data, axis=2)
 
 #azimuth=-90,elevation=-180, roll=-90,
-dfs_right_sm = patch_color_attrib(dfs_right_sm, corr_all_orig, clim=[0, 1])
-view_patch_vtk(dfs_right_sm, azimuth=-90, elevation=-180,
-               roll=-90, outfile='corr_orig_view1_1sub_right.png', show=0)
-view_patch_vtk(dfs_right_sm, azimuth=90, elevation=180, roll=90,
-               outfile='corr_orig_view2_1sub_right.png', show=0)
+dfs_left_sm = patch_color_attrib(dfs_left_sm, corr_all_orig, clim=[0, 1])
+view_patch_vtk(dfs_left_sm, azimuth=-90, elevation=-180,
+               roll=-90, outfile='corr_orig_view1_1sub_left.png', show=0)
+view_patch_vtk(dfs_left_sm, azimuth=90, elevation=180, roll=90,
+               outfile='corr_orig_view2_1sub_left.png', show=0)
 
-dfs_right_sm = patch_color_attrib(dfs_right_sm, corr_all_rot, clim=[.5, 1])
-view_patch_vtk(dfs_right_sm, azimuth=-90, elevation=-180, roll=-90,
-               outfile='corr_rot_view1_1sub_right.png', show=0)
-view_patch_vtk(dfs_right_sm, azimuth=90, elevation=180, roll=90,
-               outfile='corr_rot_view2_1sub_right.png', show=0)
+dfs_left_sm = patch_color_attrib(dfs_left_sm, corr_all_rot, clim=[.5, 1])
+view_patch_vtk(dfs_left_sm, azimuth=-90, elevation=-180, roll=-90,
+               outfile='corr_rot_view1_1sub_left.png', show=0)
+view_patch_vtk(dfs_left_sm, azimuth=90, elevation=180, roll=90,
+               outfile='corr_rot_view2_1sub_left.png', show=0)
 
