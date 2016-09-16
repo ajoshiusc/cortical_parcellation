@@ -6,14 +6,14 @@ import numpy as np
 from scipy import io
 
 nSubjects = 40
-roiregion=['pars orbitalis','pars orbitalis','motor','temporal','precuneus','semato','visual']
+roiregion=['fusiforme gyrus','pars orbitalis','motor','temporal','precuneus','semato','visual']
 
 #roilist = np.array([[29,69,70],[(30, 72, 9, 47)],[33,34,35,36,74],[6,7,8,9,10],[28],[(2,22,11,58,59,20,43,19,45)]])
 
 #nCluster=np.array([3,3,7,3,2,4])
 
-nCluster = np.array([1])
-roilist = np.array([147,146])
+nCluster = np.array([2])
+roilist = np.array([331,330])
 
 for n in range(nCluster.shape[0]):
     for hemi in range(0,2):
