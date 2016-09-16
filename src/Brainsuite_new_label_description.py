@@ -33,8 +33,6 @@ T3 = [atype.get('fullname') for atype in e.findall('label') ]
 T4 = [atype.get('color') for atype in e.findall('label') ]
 label_list=label_list+left_mid.labels.tolist()
 vColor_list=vColor_list+left_mid.vColor.tolist()
-#print sorted(list(set(label_list)))
-#print sorted(refined_roilists.viewkeys())
 for i in xrange(T2.__len__()):
     flag=0
     for j in xrange(5):
