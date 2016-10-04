@@ -16,14 +16,13 @@ def prettify(elem):
 e = xml.etree.ElementTree.parse('/home/ajoshi/for_gaurav/brainsuite_labeldescription.xml').getroot()
 root = ET.Element("labelset")
 left_mid = readdfs('/home/ajoshi/data/BCI-DNI_brain_atlas/BCI-DNI_brain.left.mid.cortex.refined.dfs')
+right_mid = readdfs('/home/ajoshi/data/BCI-DNI_brain_atlas/BCI-DNI_brain.right.mid.cortex.refined.dfs')
 refined_roilists={}
 refined_roilists[left_mid.labels[0]]=left_mid.vColor[0]
 roilist_count=0
 for label_id in range(left_mid.labels.shape[0]):
     roilist_count=mapping(refined_roilists,roilist_count,left_mid.labels[label_id],left_mid.vColor[label_id])
-left_mid = readdfs('/home/ajoshi/data/BCI-DNI_brain_atlas/BCI-DNI_brain.right.mid.cortex.refined.dfs')
-for label_id in range(left_mid.labels.shape[0]):
-    roilist_count=mapping(refined_roilists,roilist_count,left_mid.labels[label_id],left_mid.vColor[label_id])
+    roilist_count = mapping(refined_roilists, roilist_count, right_mid.labels[label_id], right_mid.vColor[label_id])
 sorted(refined_roilists)
 T1 = np.array([int(atype.get('id')) for atype in e.findall('label') ])
 T2 = [atype.get('tag') for atype in e.findall('label') ]
@@ -39,6 +38,7 @@ for i in xrange(T2.__len__()):
         ET.SubElement(root, "label\t", id=str(T1[i])+"\t", tag=T2[i]+"\t", color=T4[i][2:],vfullname="\t"+T3[i]+"\t" )
 with open("Brainsuite_refined_label_description.xml","w") as f:
     f.write(prettify(root))
+    
 '''e = xml.etree.ElementTree.parse('/home/sgaurav/Documents/git_sandbox/cortical_parcellation/src/Brainsuite_refined_label_description.xml').getroot()
 root = ET.Element("labelset")
 T1 = np.array([int(atype.get('id')) for atype in e.findall('label') ])

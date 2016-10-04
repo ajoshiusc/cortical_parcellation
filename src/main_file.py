@@ -6,24 +6,25 @@ import numpy as np
 from scipy import io
 
 nSubjects = 40
-roiregion=['fusiforme gyrus','pars orbitalis','motor','temporal','precuneus','semato','visual']
+roiregion=['angular gyrus','pars orbitalis','motor','temporal','precuneus','semato','visual']
 
 #roilist = np.array([[29,69,70],[(30, 72, 9, 47)],[33,34,35,36,74],[6,7,8,9,10],[28],[(2,22,11,58,59,20,43,19,45)]])
 
 #nCluster=np.array([3,3,7,3,2,4])
 
-nCluster = np.array([2])
-roilist = np.array([331,330])
+nCluster = np.array([3])
+roilist = np.array([227,226])
 
 for n in range(nCluster.shape[0]):
     for hemi in range(0,2):
-        data_file='data_file'+roiregion[n] +str(hemi) +'BCI_overall.npz'
+        data_file='data_file'+roiregion[n] +str(hemi)  +'BCI_overall.npz'
         labs_all_1 = []
         vert_all_1 = np.array([])
         faces = np.array([])
         all_centroid=sp.array([])
         correlation_within_precuneus=np.load(data_file)['correlation_within_precuneus']
-        correlation_with_rest=np.load(data_file)['correlation_with_rest']
+        correlation_with_rest=\
+            np.load(data_file)['correlation_with_rest']
         labs_all_1=np.load(data_file)['labels']
         vertices=np.load(data_file)['vertices']
         faces=np.load(data_file)['faces']
