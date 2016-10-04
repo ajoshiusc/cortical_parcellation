@@ -2,8 +2,6 @@ import numpy as np
 import os
 import xml.etree.ElementTree
 from centroid import mapping
-from dfsio import readdfs
-import scipy.io
 
 class s:
     pass
