@@ -458,11 +458,9 @@ def view_patch(r, attrib=[], opacity=1, fig=0, show=1, colorbar=1, clim=[0], out
 #    else:
         
     if fig == 0:
-        fig = mlab.figure() #(bgcolor=(1,1,1))
+        fig = mlab.figure(bgcolor=(1, 1, 1), fgcolor=(0.5, 0.5, 0.5)) #(bgcolor=(1,1,1))
     else:
-        mlab.figure(fig)        
-        
-
+        mlab.figure(fig)
     if len(attrib) > 0:
         if len(clim)>1:
             vmin=clim[0];vmax=clim[1]

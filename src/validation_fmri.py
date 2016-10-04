@@ -9,6 +9,7 @@ from sklearn.cluster import SpectralClustering, AgglomerativeClustering
 import networkx as nx
 from sklearn.mixture import GMM
 
+from surfproc import patch_color_labels, view_patch
 
 
 def parcellate_region(roilist, sub, nClusters, scan, scan_type, savepng=0, session=1, algo=0, type_cor=0):
@@ -135,6 +136,9 @@ def parcellate_region(roilist, sub, nClusters, scan, scan_type, savepng=0, sessi
     return (r, correlation_within_precuneus_vector, correlation_with_rest_vector, msk_small_region, new_cent)
 
 
+class sc:
+    pass
+
 right_hemisphere=np.array([226,168,184,446,330,164,442,328,172,444,130,424,166,326,342,142,146,144,222,170,
 150,242,186,120,422,228,224,322,310,162,324,500])
 
@@ -177,15 +181,12 @@ for sub in lst:
                 labs_all[mask]=labs1.labels[mask] +label_count
                 label_count += nClusters[n]
 
-            from mayavi import mlab
-            mlab.figure(size=(1024, 768), \
-                                bgcolor=(1, 1, 1), fgcolor=(0.5, 0.5, 0.5))
-            mlab.triangular_mesh(labs1.vertices[:, 0], labs1.vertices[:, 1], labs1.vertices[:, 2], labs1.faces, representation='surface',
-                                 opacity=1, scalars=np.float64(labs_all.transpose()))
-            mlab.gcf().scene.parallel_projection = True
-            mlab.view(azimuth=0, elevation=90)
-            mlab.colorbar(orientation='vertical')
-            mlab.show()
+            sc.labels = labs_all
+            sc.vertices = labs1.vertices
+            sc.faces = labs1.faces
+            sc.vColor = np.zeros([labs1.vertices.shape[0]])
+            sc = patch_color_labels(sc, cmap='Paired', shuffle=True)
+            view_patch(sc, show=1, colormap='Paired', colorbar=0)
 
             data_file = 'validation'
             sp.savez(data_file +str(sub)+'_'+scan_type[i]+'.npz', labels=labs_all, vertices=labs1.vertices,

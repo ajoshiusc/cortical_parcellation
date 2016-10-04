@@ -2,8 +2,9 @@ import scipy.io
 import os
 import scipy as sp
 import numpy as np
-from collections import namedtuple
-from dfsio import readdfs, writedfs
+import xml.etree.ElementTree
+from centroid import mapping
+from dfsio import readdfs
 
 roiregion=['angular gyrus','anterior orbito-frontal gyrus','cingulate','cuneus','fusiforme gyrus','gyrus rectus','inferior occipital gyrus','inferior temporal gyrus','lateral orbito-frontal gyrus','lingual gyrus','middle frontal gyrus','middle occipital gyrus','middle orbito-frontal gyrus','middle temporal gyrus','parahippocampal gyrus','pars opercularis','pars orbitalis','pars triangularis','post-central gyrus','posterior orbito-frontal gyrus','pre-central gyrus','precuneus','subcallosal gyrus','superior frontal gyrus','superior occipital gyrus','superior parietal gyrus','supramarginal gyrus','temporal','temporal pole','transvers frontal gyrus','transverse temporal gyrus','Insula']
 #intensity_file_anterior orbito-frontal gyrus_169_nCluster=1_BCI
@@ -16,10 +17,6 @@ left_hemisphere=np.array([227,169,185,447,331,165,443,329,173,445,131,425,167,32
 nClusters=np.array([3,1,3,2,2,2,3,3,2,2,2,3,1,4,1,2,1,3,2,1,4,2,1,2,2,2,2,3,1,2,1,2])
 scan_type=['left','right']
 p_dir='/home/sgaurav/Documents/git_sandbox/cortical_parcellation'
-
-
-
-
 
 for hemi in range(0,2):
     dfs_left = readdfs(os.path.join('/home/ajoshi/for_gaurav', '100307.BCI2reduce3.very_smooth.' + scan_type[hemi] + '.dfs'))
@@ -34,11 +31,9 @@ for hemi in range(0,2):
         labels[msk_small_region] = roilist*10 + data['labs_all'].flatten()[msk_small_region]
         '''if max(data['labs_all'].flatten()[msk_small_region]) == 1:
             labels[msk_small_region]=roilist'''
-        MyStruct = namedtuple("MyStruct","labels vertices faces vColor")
-        s = MyStruct(labels=labels , vertices=dfs_left.vertices , faces=dfs_left.faces, vColor=np.zeros([dfs_left.vertices.shape[0]]))
-        writedfs(
-        'very_smooth_data_'+scan_type[hemi]+'.dfs',s)
-        s=readdfs('very_smooth_data_'+scan_type[hemi]+'.dfs')
+        sp.savez(
+        'very_smooth_data_'+scan_type[hemi],
+        labels=labels, vertices=dfs_left.vertices,faces=dfs_left.faces,vColor=np.zeros([dfs_left.vertices.shape[0]]))
     from mayavi import mlab
 
     mlab.figure(size=(1024, 768), \
