@@ -155,15 +155,11 @@ session_type=[1,2]
 fadd_1='.rfMRI_REST'
 fadd_2='.reduce3.ftdata.NLM_11N_hvar_25.mat'
 
-count_break = 0
 # %% Across session study
-for sub in ['151526']:
-    for scan in range(1,2):
+for sub in lst:
+    for scan in range(0,4):
         if os.path.isfile(os.path.join(p_dir, sub, sub + fadd_1 + str(session_type[scan%2]) + sdir[scan/2] + fadd_2)):
-            count_break += 1
-            if count_break == 2:
-                break;
-            for i in range(0,1):
+            for i in range(0,2):
                 labs_all  = np.zeros([10832])
                 count1 = 0
                 all_centroid = []
