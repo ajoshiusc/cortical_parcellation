@@ -135,7 +135,6 @@ def parcellate_region(roilist, sub, nClusters, scan, scan_type, savepng=0, sessi
                 cent[manual_order[i]][1] = save[i]
     return (r, correlation_within_precuneus_vector, correlation_with_rest_vector, msk_small_region, new_cent)
 
-
 class sc:
     pass
 
@@ -150,7 +149,7 @@ nClusters=np.array([3,1,3,2,2,2,3,3,2,2,2,3,1,4,1,2,1,3,2,1,4,2,1,2,2,2,2,3,1,2,
 p_dir = '/home/ajoshi/data/HCP_data/data'
 lst = os.listdir(p_dir) #{'100307'}
 
-sdir=['_LR','_RL']
+sdir=['RL','LR']
 scan_type=['left','right']
 session_type=[1,2]
 fadd_1='.rfMRI_REST'
@@ -159,36 +158,40 @@ fadd_2='.reduce3.ftdata.NLM_11N_hvar_25.mat'
 count_break = 0
 # %% Across session study
 for sub in lst:
-    if os.path.isfile(os.path.join(p_dir, sub, sub + fadd_1 + str(session_type[0]) + sdir[1] + fadd_2)):
-        count_break += 1
-        if count_break == 2:
-            break;
-        for i in range(0,2):
-            labs_all  = np.zeros([10832])
-            count1 = 0
-            all_centroid = []
-            centroid = []
-            label_count=0
-            for n in range(nClusters.shape[0]):
-                print n
-                roiregion=left_hemisphere[n]
-                if i==1 :
-                    roiregion=right_hemisphere[n]
-                labs1, correlation_within_roi_vector, correlation_with_rest_vector, mask, centroid = parcellate_region(
-                    roiregion, sub, nClusters[n], sdir[1], scan_type[i],
-                    1, session_type[0], 0, 0)
+    for scan in range(1,2):
+        if os.path.isfile(os.path.join(p_dir, sub, sub + fadd_1 + str(session_type[0]) + sdir[1] + fadd_2)):
+            count_break += 1
+            if count_break == 2:
+                break;
+            for i in range(0,2):
+                labs_all  = np.zeros([10832])
+                count1 = 0
+                all_centroid = []
+                centroid = []
+                label_count=0
+                for n in range(nClusters.shape[0]):
+                    print n
+                    roiregion=left_hemisphere[n]
+                    if i==1 :
+                        roiregion=right_hemisphere[n]
+                    labs1, correlation_within_roi_vector, correlation_with_rest_vector, mask, centroid = parcellate_region(
+                        roiregion, sub, nClusters[n], sdir[scan/2], scan_type[i],
+                        1, session_type[scan%2], 0, 0)
 
-                labs_all[mask]=labs1.labels[mask] +label_count
-                label_count += nClusters[n]
+                    labs_all[mask]=labs1.labels[mask] +label_count
+                    label_count += nClusters[n]
 
-            sc.labels = labs_all
-            sc.vertices = labs1.vertices
-            sc.faces = labs1.faces
-            sc.vColor = np.zeros([labs1.vertices.shape[0]])
-            sc = patch_color_labels(sc, cmap='Paired', shuffle=True)
-            view_patch(sc, show=1, colormap='Paired', colorbar=0)
+                sc.labels = labs_all
+                sc.vertices = labs1.vertices
+                sc.faces = labs1.faces
+                sc.vColor = np.zeros([labs1.vertices.shape[0]])
+                #sc = patch_color_labels(sc, cmap='Paired', shuffle=True)
+                #view_patch(sc, show=1, colormap='Paired', colorbar=0)
 
-            data_file = 'validation'
-            sp.savez(data_file +str(sub)+'_'+scan_type[i]+'.npz', labels=labs_all, vertices=labs1.vertices,
-                     faces=labs1.faces)
+
+                data_file = 'validation'
+                sp.savez(
+                    data_file + str(sub) + '_' + scan_type[i] + '_' + sdir[scan/2] + '_' + str(session_type[scan%2]) + '.npz',
+                    labels=sc.labels, vertices=sc.vertices,
+                    faces=sc.faces)
 

@@ -29,8 +29,6 @@ for hemi in range(0,2):
         msk_small_region = np.in1d(dfs_left.labels, roilist)
         data=scipy.io.loadmat(os.path.join(p_dir,'src','intensity_mode_map','intensity_file_'+roiregion[n]+'_'+str(roilist)+'_nCluster='+str(nClusters[n])+'_BCI.mat'))
         labels[msk_small_region] = roilist*10 + data['labs_all'].flatten()[msk_small_region]
-        '''if max(data['labs_all'].flatten()[msk_small_region]) == 1:
-            labels[msk_small_region]=roilist'''
         sp.savez(
         'very_smooth_data_'+scan_type[hemi],
         labels=labels, vertices=dfs_left.vertices,faces=dfs_left.faces,vColor=np.zeros([dfs_left.vertices.shape[0]]))
