@@ -149,7 +149,7 @@ nClusters=np.array([3,1,3,2,2,2,3,3,2,2,2,3,1,4,1,2,1,3,2,1,4,2,1,2,2,2,2,3,1,2,
 p_dir = '/home/ajoshi/data/HCP_data/data'
 lst = os.listdir(p_dir) #{'100307'}
 
-sdir=['RL','LR']
+sdir=['_RL','_LR']
 scan_type=['left','right']
 session_type=[1,2]
 fadd_1='.rfMRI_REST'
@@ -157,13 +157,13 @@ fadd_2='.reduce3.ftdata.NLM_11N_hvar_25.mat'
 
 count_break = 0
 # %% Across session study
-for sub in lst:
+for sub in ['151526']:
     for scan in range(1,2):
-        if os.path.isfile(os.path.join(p_dir, sub, sub + fadd_1 + str(session_type[0]) + sdir[1] + fadd_2)):
+        if os.path.isfile(os.path.join(p_dir, sub, sub + fadd_1 + str(session_type[scan%2]) + sdir[scan/2] + fadd_2)):
             count_break += 1
             if count_break == 2:
                 break;
-            for i in range(0,2):
+            for i in range(0,1):
                 labs_all  = np.zeros([10832])
                 count1 = 0
                 all_centroid = []
@@ -191,7 +191,7 @@ for sub in lst:
 
                 data_file = 'validation'
                 sp.savez(
-                    data_file + str(sub) + '_' + scan_type[i] + '_' + sdir[scan/2] + '_' + str(session_type[scan%2]) + '.npz',
+                    data_file + str(sub) + '_' + scan_type[i]  + sdir[scan/2] + '_' + str(session_type[scan%2]) + '.npz',
                     labels=sc.labels, vertices=sc.vertices,
                     faces=sc.faces)
 
