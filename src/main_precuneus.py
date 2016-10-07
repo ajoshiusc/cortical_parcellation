@@ -15,9 +15,9 @@ roilist = []
 #nClusters=np.array([3,3,7,3,2,4])
 #roilist =  np.array([[143],[142],[145],[144],[147],[146],[151],[150],[161],[160],[163],[162]])
 #roiregion=['pars opercularis','pars triangularis','pars orbitalis','pre-central gyrus','pole|orbital frontal lobe','transvers frontal gyrus']
-roilist =  np.array([[147],[146]])
-roiregion=['pars orbitalis','motor','temporal','precuneus','semato','visual']
-nClusters=np.array([1])
+roilist =  np.array([[323],[322]])
+roiregion=['temporal','motor','temporal','precuneus','semato','visual']
+nClusters=np.array([2])
 
 p_dir = '/home/ajoshi/data/HCP_data/data'
 lst = os.listdir(p_dir) #{'100307'}
@@ -66,7 +66,7 @@ for n in range(nClusters.shape[0]):
                     all_centroid = sp.vstack([all_centroid, centroid])
 
         data_file = 'data_file'
-        sp.savez(data_file + roiregion[n] +str(i) +'BCI_overall.npz', correlation_within_precuneus=correlation_within_precuneus,
+        sp.savez(data_file + roiregion[n] +str(nClusters[n])+str(i) +'BCI_overall.npz', correlation_within_precuneus=correlation_within_precuneus,
                  correlation_with_rest=correlation_with_rest, labels=labs_all_1, vertices=labs1.vertices,
                  faces=labs1.faces, mask=mask, centroid=all_centroid)
 

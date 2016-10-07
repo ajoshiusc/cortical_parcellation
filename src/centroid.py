@@ -187,7 +187,7 @@ def spatial_map(vector,r_vertices,r_faces,msk_small_region,labs,val):
     mlab.gcf().scene.parallel_projection = True
     mlab.view(azimuth=0, elevation=90)
     mlab.draw()
-    #mlab.colorbar(orientation='horizontal')
+    mlab.colorbar(orientation='vertical')
     mlab.show()
     #mlab.close()
 
