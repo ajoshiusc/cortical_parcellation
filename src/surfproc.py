@@ -70,18 +70,10 @@ def face_areas(s):
     return area1
 
 
-def smooth_surf_function(s, f0, a1=None, a2=None, aniso=None, normalize=None):
-    if a1 is None:
-        a1 = 3.1
-
-    if a2 is None:
-        a2 = 3.1
+def smooth_surf_function(s, f0, a1=3.1, a2=3.1, aniso=None, normalize=0):
 
     if aniso is None:
         aniso = np.ones((len(s.vertices), 1))
-
-    if normalize is None:
-        normalize = 0
 
     S, Dx, Dy = get_stiffness_matrix_tri_wt(s, aniso)
     M = vstack((a1*S, a2*vstack((Dx, Dy))))
