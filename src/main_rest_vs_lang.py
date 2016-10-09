@@ -89,14 +89,14 @@ for sub in lst:
     rho2lang+=sp.sum(vlang1*vlang2,axis=1)/vlang1.shape[1]
     
     
-rho1=smooth_surf_function(dfs_left_sm,rho1)
-rho2=smooth_surf_function(dfs_left_sm,rho2)
+#rho1=smooth_surf_function(dfs_left_sm,rho1,a1=0,a2=1)
+#rho2=smooth_surf_function(dfs_left_sm,rho2,a1=0,a2=1)
 
 view_patch(dfs_left_sm,rho1/len(lst),clim=[0,1],outfile='rest_before_rot.png',show=0)
 view_patch(dfs_left_sm,rho2/len(lst),clim=[0,1],outfile='rest_after_rot.png',show=0)
 
-rho1lang=smooth_surf_function(dfs_left_sm,rho1lang)
-rho2lang=smooth_surf_function(dfs_left_sm,rho2lang)
+#rho1lang=smooth_surf_function(dfs_left_sm,rho1lang,a1=0,a2=1)
+#rho2lang=smooth_surf_function(dfs_left_sm,rho2lang,a1=0,a2=1)
 
-view_patch(dfs_left_sm,rho1lang/len(lst),clim=[.2,.6],outfile='lang_lang_before_rot.png',show=0)
-view_patch(dfs_left_sm,rho2lang/len(lst),clim=[.2,.6],outfile='lang_lang_after_rot.png',show=0)
+view_patch(dfs_left_sm,rho1lang/len(lst),clim=[0,1],outfile='lang_lang_before_rot.png',show=0)
+view_patch(dfs_left_sm,rho2lang/len(lst),clim=[0,1],outfile='lang_lang_after_rot.png',show=0)
