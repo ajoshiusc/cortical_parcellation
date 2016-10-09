@@ -146,8 +146,9 @@ left_hemisphere=np.array([227,169,185,447,331,165,443,329,173,445,131,425,167,32
 
 nClusters=np.array([3,1,3,2,2,2,3,3,2,2,2,3,1,4,1,2,1,3,2,1,4,2,1,2,2,2,2,3,1,2,1,2])
 
-p_dir = '/home/ajoshi/data/HCP_data/data'
+p_dir = '/big_disk/HCP100-fMRI-NLM/HCP100-fMRI-NLM'
 lst = os.listdir(p_dir) #{'100307'}
+save_dir= '/home/sgaurav/Documents/git_sandbox/cortical_parcellation/src/validation'
 
 sdir=['_RL','_LR']
 scan_type=['left','right']
@@ -158,7 +159,7 @@ fadd_2='.reduce3.ftdata.NLM_11N_hvar_25.mat'
 # %% Across session study
 for sub in lst:
     for scan in range(0,4):
-        if os.path.isfile(os.path.join(p_dir, sub, sub + fadd_1 + str(session_type[scan%2]) + sdir[scan/2] + fadd_2)):
+        if (sub is not 'reference' or 'zip1') and (os.path.isfile(os.path.join(p_dir, sub, sub + fadd_1 + str(session_type[scan%2]) + sdir[scan/2] + fadd_2))):
             for i in range(0,2):
                 labs_all  = np.zeros([10832])
                 count1 = 0
@@ -166,6 +167,7 @@ for sub in lst:
                 centroid = []
                 label_count=0
                 for n in range(nClusters.shape[0]):
+
                     print n
                     roiregion=left_hemisphere[n]
                     if i==1 :
@@ -185,9 +187,7 @@ for sub in lst:
                 #view_patch(sc, show=1, colormap='Paired', colorbar=0)
 
 
-                data_file = 'validation'
-                sp.savez(
-                    data_file + str(sub) + '_' + scan_type[i]  + sdir[scan/2] + '_' + str(session_type[scan%2]) + '.npz',
+                sp.savez(os.path.join(save_dir, str(sub) + '_' + scan_type[i]  + sdir[scan/2] + '_' + str(session_type[scan%2]) + '.npz'),
                     labels=sc.labels, vertices=sc.vertices,
                     faces=sc.faces)
 

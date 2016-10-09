@@ -11,7 +11,7 @@ from surfproc import patch_color_labels, view_patch
 scan_type=['left','right']
 p_dir='/home/sgaurav/Documents/git_sandbox/cortical_parcellation'
 e = xml.etree.ElementTree.parse('/home/ajoshi/for_gaurav/brainsuite_labeldescription.xml').getroot()
-for hemi in range(1,2):
+for hemi in range(0,2):
     left_mid = np.load('very_smooth_data_'+scan_type[hemi]+'.npz')
     lab=left_mid['labels']
     vertices=left_mid['vertices']
@@ -37,5 +37,11 @@ for hemi in range(1,2):
     s.vertices=vertices
     s.faces=faces
     s.vColor=left_mid['vColor']
-    s=patch_color_labels(s,cmap='Paired',shuffle=True)
-    view_patch(s,show=1,colormap='Paired',colorbar=0)
+    prev=refined_roilists
+    #s=patch_color_labels(s,cmap='Paired',shuffle=True)
+    #view_patch(s,show=1,colormap='Paired',colorbar=0)
+    save_dir = '/home/sgaurav/Documents/git_sandbox/cortical_parcellation/src/validation'
+    import scipy as sp
+    sp.savez(os.path.join(save_dir, 'very_smooth_data_'+scan_type[hemi] + '.npz'),
+             labels=s.labels, vertices=s.vertices,
+             faces=s.faces)

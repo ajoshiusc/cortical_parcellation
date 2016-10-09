@@ -18,20 +18,7 @@ nClusters=np.array([3,1,3,2,2,2,3,3,2,2,2,3,1,4,1,2,1,3,2,1,4,2,1,2,2,2,2,3,1,2,
 scan_type=['left','right']
 p_dir='/home/sgaurav/Documents/git_sandbox/cortical_parcellation'
 
-for hemi in range(0,2):
-    dfs_left = readdfs(os.path.join('/home/ajoshi/for_gaurav', '100307.BCI2reduce3.very_smooth.' + scan_type[hemi] + '.dfs'))
-    labels=np.zeros([dfs_left.vertices.shape[0]])
-    for n in range(nClusters.shape[0]):
-        print n
-        roilist=left_hemisphere[n]
-        if hemi ==1:
-            roilist=right_hemisphere[n]
-        msk_small_region = np.in1d(dfs_left.labels, roilist)
-        data=scipy.io.loadmat(os.path.join(p_dir,'src','intensity_mode_map','intensity_file_'+roiregion[n]+'_'+str(roilist)+'_nCluster='+str(nClusters[n])+'_BCI.mat'))
-        labels[msk_small_region] = roilist*10 + data['labs_all'].flatten()[msk_small_region]
-        sp.savez(
-        'very_smooth_data_'+scan_type[hemi],
-        labels=labels, vertices=dfs_left.vertices,faces=dfs_left.faces,vColor=np.zeros([dfs_left.vertices.shape[0]]))
+def plot_figure(dfs_left,labels):
     from mayavi import mlab
 
     mlab.figure(size=(1024, 768), \
@@ -43,3 +30,19 @@ for hemi in range(0,2):
     mlab.view(azimuth=0, elevation=90)
     mlab.colorbar(orientation='vertical')
     mlab.show()
+
+for hemi in range(0,2):
+    dfs_left = readdfs(os.path.join('/home/ajoshi/for_gaurav', '100307.BCI2reduce3.very_smooth.' + scan_type[hemi] + '.dfs'))
+    labels=np.zeros([dfs_left.vertices.shape[0]])
+    for n in range(nClusters.shape[0]):
+        print n
+        roilist=left_hemisphere[n]
+        if hemi ==1:
+            roilist=right_hemisphere[n]
+        msk_small_region = np.in1d(dfs_left.labels, roilist)
+        data=scipy.io.loadmat(os.path.join(p_dir,'src','intensity_mode_map','intensity_file_'+roiregion[n]+'_'+str(roilist)+'_nCluster='+str(nClusters[n])+'_BCI.mat'))
+        labels[msk_small_region] = roilist*10 + data['labs_all'].flatten()[msk_small_region]
+        plot_figure(dfs_left,labels)
+    sp.savez(
+        'very_smooth_data_'+scan_type[hemi],
+        labels=labels, vertices=dfs_left.vertices,faces=dfs_left.faces,vColor=np.zeros([dfs_left.vertices.shape[0]]))
