@@ -13,7 +13,7 @@ from surfproc import patch_color_labels, view_patch
 
 
 def parcellate_region(roilist, sub, nClusters, scan, scan_type, savepng=0, session=1, algo=0, type_cor=0):
-    p_dir = '/home/ajoshi/data/HCP_data'
+    p_dir = '/big_disk/HCP100-fMRI-NLM/HCP100-fMRI-NLM'
     r_factor = 3
     ref_dir = os.path.join(p_dir, 'reference')
     ref = '100307'
@@ -25,7 +25,7 @@ def parcellate_region(roilist, sub, nClusters, scan, scan_type, savepng=0, sessi
         os.path.join('/home/ajoshi/for_gaurav', '100307.BCI2reduce3.very_smooth.' + scan_type + '.dfs'))
     dfs_left = readdfs(os.path.join('/home/ajoshi/for_gaurav', '100307.BCI2reduce3.very_smooth.' + scan_type + '.dfs'))
 
-    data = scipy.io.loadmat(os.path.join(p_dir, 'data', sub, sub + '.rfMRI_REST' + str(
+    data = scipy.io.loadmat(os.path.join(p_dir,  sub, sub + '.rfMRI_REST' + str(
         session) + scan + '.reduce3.ftdata.NLM_11N_hvar_25.mat'))
 
     LR_flag = msk['LR_flag']
@@ -148,6 +148,8 @@ nClusters=np.array([3,1,3,2,2,2,3,3,2,2,2,3,1,4,1,2,1,3,2,1,4,2,1,2,2,2,2,3,1,2,
 
 p_dir = '/big_disk/HCP100-fMRI-NLM/HCP100-fMRI-NLM'
 lst = os.listdir(p_dir) #{'100307'}
+old_lst = os.listdir('/home/ajoshi/data/HCP_data/data')
+old_lst+=['reference','zip1','106016','366446']
 save_dir= '/home/sgaurav/Documents/git_sandbox/cortical_parcellation/src/validation'
 
 sdir=['_RL','_LR']
@@ -159,7 +161,7 @@ fadd_2='.reduce3.ftdata.NLM_11N_hvar_25.mat'
 # %% Across session study
 for sub in lst:
     for scan in range(0,4):
-        if (sub is not 'reference' or 'zip1') and (os.path.isfile(os.path.join(p_dir, sub, sub + fadd_1 + str(session_type[scan%2]) + sdir[scan/2] + fadd_2))):
+        if (sub not in old_lst) and (os.path.isfile(os.path.join(p_dir, sub, sub + fadd_1 + str(session_type[scan%2]) + sdir[scan/2] + fadd_2))):
             for i in range(0,2):
                 labs_all  = np.zeros([10832])
                 count1 = 0
@@ -167,7 +169,6 @@ for sub in lst:
                 centroid = []
                 label_count=0
                 for n in range(nClusters.shape[0]):
-
                     print n
                     roiregion=left_hemisphere[n]
                     if i==1 :

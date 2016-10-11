@@ -2,7 +2,7 @@ import numpy as np
 import os
 from surfproc import patch_color_labels, view_patch
 
-def plot_histogram(nsub,temp):
+def plot_histogram(nsub,temp,lst):
     import matplotlib.pyplot as plt
     import pandas as pd
     Color = ['r', 'g', 'b', 'y', 'k', 'c', 'm', '#A78F1E', '#F78F1E', '#BE3224', 'w', 'r', 'g', 'b', 'y', 'k', 'c', 'm', '#A78F1E',
@@ -15,7 +15,7 @@ def plot_histogram(nsub,temp):
     plt.subplots_adjust(left=0.06, right=0.96, top=0.90, bottom=0.09)
     ax.set_xlabel("SUBJECTS ( LEFT HEMISPHERE FOLLOWED BY RIGHT HEMISPHERE )", fontsize=30, fontweight='bold')
     ax.set_ylabel("RAND INDEX", fontsize=20, fontweight='bold')
-    ax.set_ylim(0, 1.75)
+    ax.set_ylim(0, 2)
     import matplotlib.patches as mpatches
 
     NA = mpatches.Patch(color='r', label='Direct Mapping to Session 1')
@@ -29,16 +29,15 @@ def plot_histogram(nsub,temp):
     SA2 = mpatches.Patch(color='#F78F1E', label='Session 2 to Session 4')
     SA3 = mpatches.Patch(color='#BE3224', label='Session 3 to Session 4')
     plt.legend(handles=[NA, EU, AP, SA, NA1, EU1, AP1, SA1, SA2, SA3], loc=2)
-    raw_data = {'first_name': ['nSub=118528', 'nSub=133928', 'nSub=196750', 'nSub=151526'],
-                'pre_score': [4, 24, 31, 2],
-                'mid_score': [25, 94, 57, 62],
-                'post_score': [5, 43, 23, 23]}
+    raw_data = {'first_name': lst,
+                'pre_score': [4, 24, 31, 2,1,1,1,1,1,1],
+                'mid_score': [25, 94, 57, 62,1,1,1,1,1,1],
+                'post_score': [5, 43, 23, 23,1,1,1,1,1,1]}
     df = pd.DataFrame(raw_data, columns=['first_name', 'pre_score', 'mid_score', 'post_score'])
 
     # manually plotted
-    ax.set_xticks([10, 32, 55.5, 79])
+    ax.set_xticks([10, 32, 55.5, 79,102,125,148,171,194,217])
 
-    ax.set_xticklabels(df['first_name'])
     ax.set_xticklabels(df['first_name'])
     plt.show()
 
@@ -95,33 +94,34 @@ def plot_fmri_subject(lst):
             view_patch(sc, show=1, colormap='Paired', colorbar=0)
 
 from sklearn.metrics import adjusted_rand_score
-p_dir = '/big_disk/HCP100-fMRI-NLM/HCP100-fMRI-NLM'
-lst = os.listdir(p_dir)
-#lst=['118528','133928','196750','151526']
-save_dir= '/home/sgaurav/Documents/git_sandbox/cortical_parcellation/src/validation'
+save_dir = '/home/sgaurav/Documents/git_sandbox/cortical_parcellation/src/validation'
+lst = os.listdir(save_dir)
+
+lst=['101915','106016','108828','122317','125525','136833','138534','147737','148335','156637']
 
 sdir=['_RL','_LR']
 scan_type=['left','right']
 session_type=[1,2]
 temp=[]
 for sub in lst:
-    for hemi in range(0,2):
-        direct= np.load(os.path.join(save_dir, 'very_smooth_data_'+scan_type[hemi] + '.npz'))
-        dir_labels = direct['labels']
-        for scan in range(0,4):
-             fmri= np.load(os.path.join(save_dir, 'validation'+str(sub) + '_' + scan_type[hemi]  + sdir[scan/2] + '_' + str(session_type[scan%2]) + '.npz'))
-             fmri_labels = fmri['labels']
-             temp.append(adjusted_rand_score(dir_labels,fmri_labels))
-        for scan1 in range(0, 4):
-            fmri1 = np.load(os.path.join(save_dir,  'validation'+str(sub) + '_' + scan_type[hemi]  + sdir[scan1/2] + '_' + str(session_type[scan1%2]) + '.npz'))
-            fmri1_labels = fmri1['labels']
-            for scan2 in range(scan1 + 1, 4):
-                fmri2 = np.load(os.path.join(save_dir, 'validation'+ str(sub) + '_' + scan_type[hemi]  + sdir[scan2/2] + '_' + str(session_type[scan2%2]) + '.npz'))
-                fmri2_labels = fmri2['labels']
-                if adjusted_rand_score(fmri1_labels, fmri2_labels) > 0:
-                    temp.append(adjusted_rand_score(fmri1_labels, fmri2_labels))
+    #if not (sub.startswith('direct_mapping')):
+        for hemi in range(0,2):
+            direct= np.load(os.path.join(save_dir, 'direct_mapping'+scan_type[hemi] + '.npz'))
+            dir_labels = direct['labels']
+            for scan in range(0,4):
+                 fmri= np.load(os.path.join(save_dir, str(sub) + '_' + scan_type[hemi]  + sdir[scan/2] + '_' + str(session_type[scan%2]) + '.npz' ))
+                 fmri_labels = fmri['labels']
+                 temp.append(adjusted_rand_score(dir_labels,fmri_labels))
+            for scan1 in range(0, 4):
+                fmri1 = np.load(os.path.join(save_dir,  str(sub) + '_' + scan_type[hemi]  + sdir[scan1/2] + '_' + str(session_type[scan1%2]) + '.npz'))
+                fmri1_labels = fmri1['labels']
+                for scan2 in range(scan1 + 1, 4):
+                    fmri2 = np.load(os.path.join(save_dir, str(sub) + '_' + scan_type[hemi]  + sdir[scan2/2] + '_' + str(session_type[scan2%2]) + '.npz'))
+                    fmri2_labels = fmri2['labels']
+                    if adjusted_rand_score(fmri1_labels, fmri2_labels) > 0:
+                        temp.append(adjusted_rand_score(fmri1_labels, fmri2_labels))
+            temp.append(0)
         temp.append(0)
-    temp.append(0)
 temp.append(0)
 temp=np.array(temp)
 import scipy as sp
@@ -129,4 +129,4 @@ sp.savez(
     os.path.join(save_dir, 'sub_and_rand-index_data.npz'),
     rand_index=temp,subjects=lst)
 nsub=lst.__len__()
-plot_histogram(nsub,temp)
+plot_histogram(nsub,temp,lst)

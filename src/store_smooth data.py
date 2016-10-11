@@ -31,18 +31,28 @@ def plot_figure(dfs_left,labels):
     mlab.colorbar(orientation='vertical')
     mlab.show()
 
+def fun(data):
+    z1 = (data['labs_all'])
+    temp = []
+    for var in range(z1.shape[1]):
+        if z1[0][var] not in temp:
+            temp.append(z1[0][var])
+    print temp
+
+
 for hemi in range(0,2):
     dfs_left = readdfs(os.path.join('/home/ajoshi/for_gaurav', '100307.BCI2reduce3.very_smooth.' + scan_type[hemi] + '.dfs'))
     labels=np.zeros([dfs_left.vertices.shape[0]])
     for n in range(nClusters.shape[0]):
-        print n
         roilist=left_hemisphere[n]
         if hemi ==1:
             roilist=right_hemisphere[n]
+        #print n, roiregion[n], roilist
         msk_small_region = np.in1d(dfs_left.labels, roilist)
         data=scipy.io.loadmat(os.path.join(p_dir,'src','intensity_mode_map','intensity_file_'+roiregion[n]+'_'+str(roilist)+'_nCluster='+str(nClusters[n])+'_BCI.mat'))
         labels[msk_small_region] = roilist*10 + data['labs_all'].flatten()[msk_small_region]
-        plot_figure(dfs_left,labels)
+        #plot_figure(dfs_left,labels)
+        #fun(data)
     sp.savez(
         'very_smooth_data_'+scan_type[hemi],
         labels=labels, vertices=dfs_left.vertices,faces=dfs_left.faces,vColor=np.zeros([dfs_left.vertices.shape[0]]))

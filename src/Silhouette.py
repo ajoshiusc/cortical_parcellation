@@ -11,7 +11,7 @@ from sklearn.cluster import SpectralClustering
 
 
 hemisphere=['left','right']
-roiregion=np.array(['pars orbitalis'])
+roiregion=np.array(['inferior occipital gyrus'])
 for n in range(roiregion.shape[0]):
     for hemi in range(0,2):
         all_silhoutte_avg = []
