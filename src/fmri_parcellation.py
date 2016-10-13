@@ -60,8 +60,8 @@ def parcellate_region(roilist, sub, nClusters, scan,scan_type,savepng=0, session
     if type_cor==1:
         f_rho=np.arctanh(rho_1)
         f_rho[~np.isfinite(f_rho)]=0
-        f_rho = np.corrcoef(f_rho)
-        f_rho[~np.isfinite(f_rho)] = 0
+        rho = np.corrcoef(f_rho)
+        rho[~np.isfinite(rho)] = 0
         #B = np.abs(B)
 
 
