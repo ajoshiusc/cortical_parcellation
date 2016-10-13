@@ -8,14 +8,29 @@ def plot_histogram(nsub,temp,lst):
     Color = ['r', 'g', 'b', 'y', 'k', 'c', 'm', '#A78F1E', '#F78F1E', '#BE3224', 'w', 'r', 'g', 'b', 'y', 'k', 'c', 'm', '#A78F1E',
              '#F78F1E', '#BE3224', 'w', 'w']
     Color = np.tile(Color, nsub)
+    cmap = plt.get_cmap('jet',268)
+    cmap.set_under('gray')
+    cmaplist = [cmap(i) for i in range(cmap.N)]
+    cnt=0
+    cmaplist[0]=(0.5,0.5,0.5,1.0)
+    print temp.__len__()
+    for i in range(0,temp.__len__()/4):
+        cmaplist[cnt] = cmap(i)
+        cmaplist[cnt+1] = cmap(i)
+        cmaplist[cnt+2] = cmap(i)
+        cmaplist[cnt+3] = cmap(i)
+        cnt+=4
+        #print cnt , i
+    cmap=cmap.from_list('Custom cmap',cmaplist,cmap.N)
     temp = pd.Series.from_array(temp)
     plt.figure(figsize=(12, 8))
+    #ax = temp.plot(kind='bar', stacked=True, rot=0, color=cmaplist)
     ax = temp.plot(kind='bar', stacked=True, rot=0, color=Color)
     ax.set_title("VALIDATION PLOT", fontsize=53, fontweight='bold')
     plt.subplots_adjust(left=0.06, right=0.96, top=0.90, bottom=0.09)
-    ax.set_xlabel("SUBJECTS ( LEFT HEMISPHERE FOLLOWED BY RIGHT HEMISPHERE )", fontsize=30, fontweight='bold')
+    ax.set_xlabel("SUBJECT "+str(nsub)+"( LEFT HEMISPHERE FOLLOWED BY RIGHT HEMISPHERE )", fontsize=30, fontweight='bold')
     ax.set_ylabel("RAND INDEX", fontsize=20, fontweight='bold')
-    ax.set_ylim(0, 2)
+    ax.set_ylim(0, 1.5)
     import matplotlib.patches as mpatches
 
     NA = mpatches.Patch(color='r', label='Direct Mapping to Session 1')
@@ -28,7 +43,29 @@ def plot_histogram(nsub,temp,lst):
     SA1 = mpatches.Patch(color='#A78F1E', label='Session 2 to Session 3')
     SA2 = mpatches.Patch(color='#F78F1E', label='Session 2 to Session 4')
     SA3 = mpatches.Patch(color='#BE3224', label='Session 3 to Session 4')
-    plt.legend(handles=[NA, EU, AP, SA, NA1, EU1, AP1, SA1, SA2, SA3], loc=2)
+    roiregion = ['angular gyrus', 'anterior orbito-frontal gyrus', 'cingulate', 'cuneus', 'fusiforme gyrus',
+                 'gyrus rectus', 'inferior occipital gyrus', 'inferior temporal gyrus', 'lateral orbito-frontal gyrus',
+                 'lingual gyrus', 'middle frontal gyrus', 'middle occipital gyrus', 'middle orbito-frontal gyrus',
+                 'middle temporal gyrus', 'parahippocampal gyrus', 'pars opercularis', 'pars orbitalis',
+                 'pars triangularis', 'post-central gyrus', 'posterior orbito-frontal gyrus', 'pre-central gyrus',
+                 'precuneus', 'subcallosal gyrus', 'superior frontal gyrus', 'superior occipital gyrus',
+                 'superior parietal gyrus', 'supramarginal gyrus', 'temporal', 'temporal pole',
+                 'transvers frontal gyrus', 'transverse temporal gyrus', 'Insula']
+    cmap = plt.get_cmap('jet',70)
+    cmap.set_under('gray')
+    cmaplist = [cmap(i) for i in range(cmap.N)]
+    cmaplist[0]=(0.0,0.0,0.0,1.0)
+    cmap=cmap.from_list('Custom cmap',cmaplist,cmap.N)
+    cnt=0
+    for n in range(roiregion.__len__()):
+        handle=[mpatches.Patch(color=cmaplist[n],label=roiregion[n])]
+        if cnt == 0:
+            handles = handle
+        else :
+            handles += handle
+        cnt+=1
+    #plt.legend(handles=handles, loc=9,ncol=4)
+    plt.legend(handles=[NA,EU,AP,SA,SA1,SA2,SA3,NA1,EU1,AP1],loc=2,ncol=2)
     raw_data = {'first_name': lst,
                 'pre_score': [4, 24, 31, 2,1,1,1,1,1,1],
                 'mid_score': [25, 94, 57, 62,1,1,1,1,1,1],
@@ -93,7 +130,59 @@ def plot_fmri_subject(lst):
             sc = patch_color_labels(sc, cmap='Paired', shuffle=True)
             view_patch(sc, show=1, colormap='Paired', colorbar=0)
 
-from sklearn.metrics import adjusted_rand_score
+def calculate_mean(msk,sub,scan_type):
+    temp=[]
+    direct = np.load(os.path.join(save_dir, 'direct_mapping' + scan_type + '.npz'))
+    dir_labels = direct['labels'][msk]
+    RI_val = 0
+    for scan in range(0, 4):
+        fmri = np.load(os.path.join(save_dir, str(sub) + '_' + scan_type + sdir[scan / 2] + '_' + str(
+            session_type[scan % 2]) + '.npz'))
+        fmri_labels = fmri['labels'][msk]
+        RI_val += adjusted_rand_score(dir_labels, fmri_labels)
+    temp.append(RI_val / 4.0)
+    RI_val = 0
+    for scan1 in range(0, 4):
+        fmri1 = np.load(os.path.join(save_dir, str(sub) + '_' + scan_type + sdir[scan1 / 2] + '_' + str(
+            session_type[scan1 % 2]) + '.npz'))
+        fmri1_labels = fmri1['labels'][msk]
+        for scan2 in range(scan1 + 1, 4):
+            fmri2 = np.load(os.path.join(save_dir, str(sub) + '_' + scan_type + sdir[scan2 / 2] + '_' + str(
+                session_type[scan2 % 2]) + '.npz'))
+            fmri2_labels = fmri2['labels'][msk]
+            if adjusted_rand_score(fmri1_labels, fmri2_labels) > 0:
+                RI_val += adjusted_rand_score(fmri1_labels, fmri2_labels)
+    temp.append(RI_val / 6.0)
+    return temp
+
+def RI_mean():
+    roilists=[]
+    scan_type = ['left', 'right']
+    for hemi in range(1,2):
+        direct = np.load(os.path.join(save_dir, 'direct_mapping' + scan_type[hemi] + '.npz'))
+        if roilists.__len__() ==  0:
+            roilists=direct['roilists'].tolist()
+        else :
+            roilists =+ direct['roilists'].tolist()
+    dir_roilists=np.array(roilists)
+    sorted(dir_roilists)
+    refined_left=np.load('very_smooth_data_left.npz')['labels']
+    refined_right = np.load('very_smooth_data_right.npz')['labels']
+    for sub in lst:
+    #if not (sub.startswith('direct_mapping')):
+        temp=[]
+        for roilist in roilists:
+            msk_small_region = np.in1d(refined_right,roilist)
+            if temp.__len__() >0:
+                temp+=calculate_mean(msk_small_region,sub,scan_type[1])
+            else :
+                temp=calculate_mean(msk_small_region,sub,scan_type[1])
+            msk_small_region = np.in1d(refined_left, roilist+10)
+            temp+=calculate_mean(msk_small_region,sub,scan_type[0])
+        plot_histogram(sub,temp,lst)
+        print
+
+from sklearn.metrics import adjusted_rand_score ,adjusted_mutual_info_score
 save_dir = '/home/sgaurav/Documents/git_sandbox/cortical_parcellation/src/validation'
 lst = os.listdir(save_dir)
 
@@ -103,6 +192,7 @@ sdir=['_RL','_LR']
 scan_type=['left','right']
 session_type=[1,2]
 temp=[]
+#RI_mean()
 for sub in lst:
     #if not (sub.startswith('direct_mapping')):
         for hemi in range(0,2):
@@ -111,7 +201,7 @@ for sub in lst:
             for scan in range(0,4):
                  fmri= np.load(os.path.join(save_dir, str(sub) + '_' + scan_type[hemi]  + sdir[scan/2] + '_' + str(session_type[scan%2]) + '.npz' ))
                  fmri_labels = fmri['labels']
-                 temp.append(adjusted_rand_score(dir_labels,fmri_labels))
+                 temp.append(adjusted_mutual_info_score(dir_labels,fmri_labels))
             for scan1 in range(0, 4):
                 fmri1 = np.load(os.path.join(save_dir,  str(sub) + '_' + scan_type[hemi]  + sdir[scan1/2] + '_' + str(session_type[scan1%2]) + '.npz'))
                 fmri1_labels = fmri1['labels']
@@ -119,7 +209,7 @@ for sub in lst:
                     fmri2 = np.load(os.path.join(save_dir, str(sub) + '_' + scan_type[hemi]  + sdir[scan2/2] + '_' + str(session_type[scan2%2]) + '.npz'))
                     fmri2_labels = fmri2['labels']
                     if adjusted_rand_score(fmri1_labels, fmri2_labels) > 0:
-                        temp.append(adjusted_rand_score(fmri1_labels, fmri2_labels))
+                        temp.append(adjusted_mutual_info_score(fmri1_labels, fmri2_labels))
             temp.append(0)
         temp.append(0)
 temp.append(0)

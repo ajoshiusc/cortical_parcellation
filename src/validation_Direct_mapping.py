@@ -7,8 +7,15 @@ class s:
     pass
 
 from surfproc import patch_color_labels, view_patch
+right_hemisphere=[226,168,184,446,330,164,442,328,172,444,130,424,166,326,342,142,146,144,222,170,
+150,242,186,120,422,228,224,322,310,162,324,500]
 
-scan_type=['left','right']
+left_hemisphere=[227,169,185,447,331,165,443,329,173,445,131,425,167,327,343,143,147,145,223,171,
+151,243,187,121,423,229,225,323,311,163,325,501]
+
+roilists=right_hemisphere
+
+scan_type=['right','left']
 p_dir='/home/sgaurav/Documents/git_sandbox/cortical_parcellation'
 e = xml.etree.ElementTree.parse('/home/ajoshi/for_gaurav/brainsuite_labeldescription.xml').getroot()
 for hemi in range(0,2):
@@ -24,6 +31,11 @@ for hemi in range(0,2):
         roilist_count = mapping(refined_roilists, roilist_count, lab[label_id], 1)
     sorted(refined_roilists)
     T1 = np.array([int(atype.get('id')) for atype in e.findall('label') ])
+    if hemi==0:
+        roilists=right_hemisphere
+    else:
+        roilists=left_hemisphere
+    T1=np.array(roilists)
     label_count=1
     labs_all=np.zeros([vertices.shape[0]])
     for i in xrange(T1.__len__()):
@@ -43,8 +55,7 @@ for hemi in range(0,2):
     #view_patch(s,show=1,colormap='Paired',colorbar=0)
     save_dir = '/home/sgaurav/Documents/git_sandbox/cortical_parcellation/src/validation'
     import scipy as sp
-    refined_list=np.array(refined_list)
     sorted(refined_list)
     sp.savez(os.path.join(save_dir, 'direct_mapping'+scan_type[hemi] + '.npz'),
              labels=s.labels, vertices=s.vertices,
-             faces=s.faces,roilists=refined_list)
+             faces=s.faces,roilists=lab,label=refined_list)

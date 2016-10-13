@@ -13,7 +13,7 @@ from surfproc import patch_color_labels, view_patch
 
 
 def parcellate_region(roilist, sub, nClusters, scan, scan_type, savepng=0, session=1, algo=0, type_cor=0):
-    p_dir = '/big_disk/HCP100-fMRI-NLM/HCP100-fMRI-NLM'
+    p_dir = '/big_disk/ajoshi/HCP100-fMRI-NLM/HCP100-fMRI-NLM'
     r_factor = 3
     ref_dir = os.path.join(p_dir, 'reference')
     ref = '100307'
@@ -146,10 +146,10 @@ left_hemisphere=np.array([227,169,185,447,331,165,443,329,173,445,131,425,167,32
 
 nClusters=np.array([3,1,3,2,2,2,3,3,2,2,2,3,1,4,1,2,1,3,2,1,4,2,1,2,2,2,2,3,1,2,1,2])
 
-p_dir = '/big_disk/HCP100-fMRI-NLM/HCP100-fMRI-NLM'
+p_dir = '/big_disk/ajoshi/HCP100-fMRI-NLM/HCP100-fMRI-NLM'
 lst = os.listdir(p_dir) #{'100307'}
 old_lst = os.listdir('/home/ajoshi/data/HCP_data/data')
-old_lst+=['reference','zip1','106016','366446']
+old_lst+=['reference','zip1','100408','101107','139637','106016','127933','366446','144832','100408','101915','108828','110411','366446','111312','113922','115320','122317','124422','125525','128632','414229','149539','135225','136833','138534','147737','148335','149337','156637','160123','161731','178950','189450','208226','211417','211720','212318','239944','245333','280739','298051','654754','672756','856766']
 save_dir= '/home/sgaurav/Documents/git_sandbox/cortical_parcellation/src/validation'
 
 sdir=['_RL','_LR']
@@ -162,6 +162,7 @@ fadd_2='.reduce3.ftdata.NLM_11N_hvar_25.mat'
 for sub in lst:
     for scan in range(0,4):
         if (sub not in old_lst) and (os.path.isfile(os.path.join(p_dir, sub, sub + fadd_1 + str(session_type[scan%2]) + sdir[scan/2] + fadd_2))):
+            print sub
             for i in range(0,2):
                 labs_all  = np.zeros([10832])
                 count1 = 0
@@ -169,7 +170,7 @@ for sub in lst:
                 centroid = []
                 label_count=0
                 for n in range(nClusters.shape[0]):
-                    print n
+                    #print n
                     roiregion=left_hemisphere[n]
                     if i==1 :
                         roiregion=right_hemisphere[n]
