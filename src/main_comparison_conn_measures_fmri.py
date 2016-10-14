@@ -93,8 +93,8 @@ nClusters=nClusters[rlist]
 
 p_dir = '/big_disk/ajoshi/HCP100-fMRI-NLM/HCP100-fMRI-NLM'
 lst = os.listdir(p_dir) #{'100307'}
-old_lst = os.listdir('/home/ajoshi/data/HCP_data/data')
-old_lst+=['reference','zip1','106016','366446']
+old_lst = [] #os.listdir('/home/ajoshi/data/HCP_data/data')
+old_lst+=['reference','zip1'] #,'106016','366446']
 save_dir= '/big_disk/ajoshi/fmri_validation'
 
 sdir=['_RL','_LR']

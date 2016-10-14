@@ -30,10 +30,10 @@ def patch_color_labels(s,freq=[1],cmap='Paired', shuffle=True):
     freq=sp.reshape(freq,(len(freq),1))
     if shuffle==True:
         s.vColor = (1-freq) + freq*sp.array(colr(perm1[labels])[:,:3])
-    else:            
+    else:
         s.vColor = (1-freq) + freq*sp.array(colr(labels)[:,:3])
     return s
-        
+
 def patch_color_attrib(s,values=[],cmap='jet', clim=[0]):
     ''' color by freq of labels '''
     if len(values) == 0:
@@ -42,25 +42,25 @@ def patch_color_attrib(s,values=[],cmap='jet', clim=[0]):
         vmin = sp.amin(values); vmax = sp.amax(values)
     else:
         vmin = clim[0]; vmax = clim[1]
-            
-        
+
+
     s.vColor = sp.zeros(s.vertices.shape)
     color_norm  = colors.Normalize(vmin=vmin,vmax=vmax)
-    scalar_map = cmx.ScalarMappable(norm=color_norm, cmap=cmap) 
+    scalar_map = cmx.ScalarMappable(norm=color_norm, cmap=cmap)
     s.vColor = scalar_map.to_rgba(values)
     s.vColor =  s.vColor[:,:3]
     return s
 
 
 def get_cmap(N,cmap='jet'):
-    '''Returns a function that maps each index in 0, 1, ... N-1 to a distinct 
+    '''Returns a function that maps each index in 0, 1, ... N-1 to a distinct
     RGB color.'''
     color_norm  = colors.Normalize(vmin=0, vmax=N-1)
-    scalar_map = cmx.ScalarMappable(norm=color_norm, cmap=cmap) 
+    scalar_map = cmx.ScalarMappable(norm=color_norm, cmap=cmap)
     def map_index_to_rgb_color(index):
         return scalar_map.to_rgba(index)
     return map_index_to_rgb_color
-    
+
 
 def face_areas(s):
     r12 = s.vertices[s.faces[:, 0],:]
@@ -165,7 +165,7 @@ def close_window(iren):
     render_window = iren.GetRenderWindow()
     render_window.Finalize()
     iren.TerminateApp()
-    
+
 def createPolyData(verts, faces):
 
     poly = vtkPolyData()
@@ -228,7 +228,7 @@ def reducepatch(surf, ratio=0.90, VERBOSITY=0):
     f2 = vtk_to_numpy(f1)
     f2 = f2.reshape(len(f2)/4,4)
     surf.faces = f2[:, 1:]
-     
+
     return surf
 
 def add_normals(s1):
@@ -284,29 +284,29 @@ def get_sphere(center=[0, 0, 0], radius=5.0, res=100):
     surf.vertices = vert1
     return surf
 
-from vtk import (vtkRenderer, vtkRenderWindow, vtkPolyDataMapper, 
+from vtk import (vtkRenderer, vtkRenderWindow, vtkPolyDataMapper,
 vtkInteractorStyleTrackballActor, VTK_MAJOR_VERSION,
 vtkRenderWindowInteractor, vtkActor, vtkPolyDataNormals,
 vtkWindowToImageFilter, vtkPNGWriter)
-     
-from PIL import Image
-     
-def view_patch_vtk(r, azimuth=90, elevation=0, roll=-90, outfile=0, show=1):
-    print("rendering!")
 
-    c=r.vColor;ro=r;
-    r=createPolyData(r.vertices,r.faces)
-    
-    Colors=vtkUnsignedCharArray()
+from PIL import Image
+
+def view_patch_vtk(r, azimuth=90, elevation=0, roll=-90, outfile=0, show=1):
+
+    c = r.vColor
+    ro = r
+    r = createPolyData(r.vertices, r.faces)
+
+    Colors = vtkUnsignedCharArray()
     Colors.SetNumberOfComponents(3)
     Colors.SetName("Colors")
-    
+
     for i in range(len(ro.vertices)):
-         Colors.InsertNextTuple3(255*c[i,0],255*c[i,1],255*c[i,2])
-         
-    r.GetPointData().SetScalars(Colors);
+        Colors.InsertNextTuple3(255*c[i, 0], 255*c[i, 1], 255*c[i, 2])
+
+    r.GetPointData().SetScalars(Colors)
     r.Modified()
-    r.Update()     
+    r.Update()
     # mapper
     mapper = vtkPolyDataMapper()
     if VTK_MAJOR_VERSION <= 5:
@@ -315,9 +315,9 @@ def view_patch_vtk(r, azimuth=90, elevation=0, roll=-90, outfile=0, show=1):
         mapper.SetInputConnection(r.GetOutputPort())
 
     actor = vtkActor()
-    actor.SetMapper(mapper) 
+    actor.SetMapper(mapper)
 #    actor.GetProperty().SetInterpolationToPhong()
-    normals=vtkPolyDataNormals()
+    normals = vtkPolyDataNormals()
     normals.SetInput(r)
 #    normals.ComputePointNormalsOn()
 #    normals.ComputeCellNormalsOn()
@@ -326,26 +326,26 @@ def view_patch_vtk(r, azimuth=90, elevation=0, roll=-90, outfile=0, show=1):
 #    normals.AutoOrientNormalsOn()
 #    normals.ConsistencyOn()
 #    normals.SetFeatureAngle(4.01)
-    mapper.SetInput(normals.GetOutput()) 
-    
+    mapper.SetInput(normals.GetOutput())
+
     ren = vtkRenderer()
     renWin = vtkRenderWindow()
-    renWin.SetSize(600,600)
+    renWin.SetSize(600, 600)
 #    renWin.SetDPI(200)
     if show == 0:
         renWin.SetOffScreenRendering(1)
-        
-    renWin.AddRenderer(ren) 
+
+    renWin.AddRenderer(ren)
     # create a renderwindowinteractor
     iren = vtkRenderWindowInteractor()
     iren.SetRenderWindow(renWin)
-    ren.SetBackground(256.0/256,256.0/256,256.0/256)
-    
-    ren.AddActor(actor) 
+    ren.SetBackground(256.0/256, 256.0/256, 256.0/256)
+
+    ren.AddActor(actor)
 
     # enable user interface interactor
     iren.Initialize()
-        
+
     renWin.Render()
     ren.GetActiveCamera().Azimuth(azimuth)
     ren.GetActiveCamera().Elevation(elevation)
@@ -356,7 +356,7 @@ def view_patch_vtk(r, azimuth=90, elevation=0, roll=-90, outfile=0, show=1):
 #  windowToImageFilter->SetInputBufferTypeToRGBA(); //also record the alpha (transparency) channel
 #  windowToImageFilter->ReadFrontBufferOff(); // read from the back buffer
 #  windowToImageFilter->Update();
-    
+
     if outfile != 0:
         w2i = vtkWindowToImageFilter()
         writer = vtkPNGWriter()
@@ -370,16 +370,16 @@ def view_patch_vtk(r, azimuth=90, elevation=0, roll=-90, outfile=0, show=1):
         iren.Render()
         writer.Write()
 
-        image=Image.open(outfile)
-        image.load()        
-        imageSize = image.size
+        image = Image.open(outfile)
+        image.load()
+#        imageSize = image.size
         imageBox = image.getbbox()
         print(image.getbbox())
-        cropped=image.crop(imageBox)
-        print(cropped.getbbox())        
+        cropped = image.crop(imageBox)
+        print(cropped.getbbox())
         cropped.save(outfile)
 
-    if show!=0:
+    if show != 0:
         iren.Start()
 
     #close_window(iren)
@@ -393,9 +393,9 @@ def axisEqual3D(ax):
     maxsize = max(abs(sz))
     r = maxsize/2
     for ctr, dim in zip(centers, 'xyz'):
-        getattr(ax, 'set_{}lim'.format(dim))(ctr - r, ctr + r)    
-        
-        
+        getattr(ax, 'set_{}lim'.format(dim))(ctr - r, ctr + r)
+
+
 from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.tri as mtri
 import matplotlib.pyplot as plt
@@ -415,15 +415,15 @@ def view_patch_vispy(r, attrib=[], opacity=1, fig=0, show=1, colorbar=1, clim=[0
     mesh = scene.visuals.Mesh(meshdata=meshdata, shading='smooth')
     view = canvas.central_widget.add_view()
     view.add(mesh)
-    view.bgcolor = '#efefef'    
+    view.bgcolor = '#efefef'
     view.camera = TurntableCamera(azimuth=azimuth, elevation=elevation)
     color = Color("#3f51b5")
 #    mesh.set_gl_state('translucent', depth_test=True, cull_face=True)
     axis = scene.visuals.XYZAxis(parent=view.scene)
     if __name__ == '__main__' and sys.flags.interactive == 0:
         canvas.app.run()
-    
-    
+
+
 def view_patch_mplt(r, attrib=[], opacity=1, fig=0, show=1, colorbar=1, clim=[0], outfile=0, azimuth=0, elevation=-90, colormap='jet'):
     fig = plt.figure()
     fC=r.vColor[r.faces[:,0],:]
@@ -442,13 +442,13 @@ def view_patch_mplt(r, attrib=[], opacity=1, fig=0, show=1, colorbar=1, clim=[0]
 
 
 
-    
+
 def view_patch(r, attrib=[], opacity=1, fig=0, show=1, colorbar=1, clim=[0], outfile=0, azimuth=0, elevation=-90, colormap='jet', close=1):
 
     if show == 0:
         mlab.options.offscreen=True
 #    else:
-        
+
     if fig == 0:
         fig = mlab.figure(bgcolor=(1, 1, 1), fgcolor=(0.5, 0.5, 0.5)) #(bgcolor=(1,1,1))
     else:
@@ -475,24 +475,24 @@ def view_patch(r, attrib=[], opacity=1, fig=0, show=1, colorbar=1, clim=[0], out
 
     mlab.gcf().scene.parallel_projection = True
     mlab.view(azimuth=azimuth, elevation=elevation)
-    
+
     if colorbar>0:
         mlab.colorbar(orientation='horizontal')
-        
+
     if show > 0:
         mlab.draw()
         mlab.show(stop=True)
 
 #    else:
 #    mlab.options.offscreen=True
-    
-    if outfile != 0:        
+
+    if outfile != 0:
         mlab.savefig(outfile)
-        
-    if close==1:    
+
+    if close==1:
         mlab.close()
 
-        
+
     if show != 0:
         return fig
 
@@ -516,7 +516,7 @@ def smooth_patch(surf, iterations=15, relaxation=0.1):
     f1 = faces1.GetData()
     f2 = vtk_to_numpy(f1)
     f2 = f2.reshape(len(f2) / 4, 4)
-    
+
     class surf2(surf):
         pass
     surf2.faces = f2[:, 1:]

@@ -20,7 +20,28 @@ from sklearn.metrics.pairwise import pairwise_distances
 from sklearn.utils.linear_assignment_ import linear_assignment
 from sklearn.metrics import adjusted_rand_score
 
-p_dir_ref='/home/ajoshi/data/HCP_data'
+
+def mean_std_rand(labels_all):
+    # labels_all is nvert x nsub matrix
+    # delete subjects for which parcellation is not done
+    labs1 = labels_all
+    ind = (sp.sum(labs1, axis=0) != 0)
+    labs1 = labs1[:, ind]
+
+    labs = reorder_labels(labs1)
+
+    labs_mode, freq = sp.stats.mode(labs, axis=1)
+    freq1 = sp.double(freq.squeeze())
+    freq1 /= labs.shape[1]
+
+    ars = sp.zeros(labs.shape[1])
+    for ind in range(labs.shape[1]):
+        ars[ind] = adjusted_rand_score(labs_mode.squeeze(), labs[:, ind])
+
+    return ars.mean(), ars.std(), freq1, labs_mode
+
+
+p_dir_ref = '/home/ajoshi/data/HCP_data'
 ref = '100307'
 dfs_left_sm = readdfs(os.path.join(p_dir_ref, 'reference',
                                    ref + '.aparc.a2009s.32k_fs.reduce3.\
@@ -53,7 +74,7 @@ session_type = [1, 2]
 fadd_1 = '.rfMRI_REST'
 fadd_2 = '.reduce3.ftdata.NLM_11N_hvar_25.mat'
 
-#%%Across session study
+# %% Across session study
 labels_corr_sininv_all = sp.zeros((len(lst), 4, msksize[0]))
 labels_corr_corr_exp_all = sp.zeros((len(lst), 4, msksize[0]))
 labels_corr_dist_all = sp.zeros((len(lst), 4, msksize[0]))
@@ -82,31 +103,56 @@ for sub in lst:
     subno += 1
 
 
-labs1 = labels_corr_sininv_all[:, 0, :].T
-ind = (sp.sum(labs1, axis=0) != 0)
-labs1 = labs1[:, ind]
-
-labs = reorder_labels(labs1)
-
-labs_mode, freq = sp.stats.mode(labs, axis=1)
-freq1 = sp.double(freq.squeeze())
-freq1 /= labs.shape[1]
-
-
 labels = sp.zeros([10832])
-
 ind = l['msk_small_region']
+freq = sp.zeros([10832])
+scanid = 0
+# labels_corr_sininv_all is nsub x nsession x nvert
+m, s, freq1, labs_mode = mean_std_rand(labels_corr_sininv_all[:, scanid, :].T)
+print('scanid = ' + str(scanid) + ' roi = ' + str(roiregion) +
+      ' labels_corr_sininv_all mean =' + str(m) + ' std = ' + str(s))
 labels[ind] = labs_mode.squeeze()
 
-freq = sp.zeros([10832])
 freq[ind] = freq1
 
 dfs_left_sm.labels = labels
 dfs_left_sm = patch_color_labels(dfs_left_sm, freq=freq, cmap='jet')
 view_patch_vtk(dfs_left_sm)
 
-ars = sp.zeros(labs.shape[1])
-for ind in range(labs.shape[1]):
-    ars[ind] = adjusted_rand_score(labs_mode.squeeze(), labs[:, ind])
+# labels_corr_corr_exp_all is nsub x nsession x nvert
+m, s, freq1, labs_mode = mean_std_rand(labels_corr_corr_exp_all[:, 0, :].T)
+print('scanid = ' + str(scanid) + ' roi = ' + str(roiregion) +
+      ' labels_corr_corr_exp_all mean =' + str(m) + ' std = ' + str(s))
+labels[ind] = labs_mode.squeeze()
 
-print ars.mean(), ars.std()
+freq[ind] = freq1
+
+dfs_left_sm.labels = labels
+dfs_left_sm = patch_color_labels(dfs_left_sm, freq=freq, cmap='jet')
+view_patch_vtk(dfs_left_sm)
+
+# labels_corr_dist_all is nsub x nsession x nvert
+m, s, freq1, labs_mode = mean_std_rand(labels_corr_dist_all[:, 0, :].T)
+print('scanid = ' + str(scanid) + ' roi = ' + str(roiregion) +
+      ' labels_corr_dist_all mean =' + str(m) + ' std = ' + str(s))
+labels[ind] = labs_mode.squeeze()
+
+freq[ind] = freq1
+
+dfs_left_sm.labels = labels
+dfs_left_sm = patch_color_labels(dfs_left_sm, freq=freq, cmap='jet')
+view_patch_vtk(dfs_left_sm)
+
+
+# labels_corr_corr_exp_all is nsub x nsession x nvert
+m, s, freq1, labs_mode = mean_std_rand(labels_corr_exp_all[:, 0, :].T)
+print('scanid = ' + str(scanid) + ' roi = ' + str(roiregion) +
+      ' labels_corr_exp_all mean =' + str(m) + ' std = ' + str(s))
+
+labels[ind] = labs_mode.squeeze()
+
+freq[ind] = freq1
+
+dfs_left_sm.labels = labels
+dfs_left_sm = patch_color_labels(dfs_left_sm, freq=freq, cmap='jet')
+view_patch_vtk(dfs_left_sm)
