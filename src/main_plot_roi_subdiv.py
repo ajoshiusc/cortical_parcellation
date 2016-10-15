@@ -50,6 +50,8 @@ very_smooth.left.dfs'))
 
 rlist = [21]
 msksize = [507]
+
+# rlist = [10]
 # right_hemisphere=np.array([226,168,184,446,330,164,442,328,172,444,130,424,166,326,342,142,146,144,222,170,
 # 150,242,186,120,422,228,224,322,310,162,324,500])
 
@@ -64,8 +66,8 @@ nClusters = nClusters[rlist]
 out_dir = '/big_disk/ajoshi/out_dir'
 p_dir = '/big_disk/ajoshi/HCP100-fMRI-NLM/HCP100-fMRI-NLM'
 lst = os.listdir(p_dir)
-old_lst = os.listdir('/home/ajoshi/data/HCP_data/data')
-old_lst += ['reference', 'zip1', '106016', '366446']
+old_lst = []  # os.listdir('/home/ajoshi/data/HCP_data/data')
+old_lst += ['reference', 'zip1']  # , '106016', '366446']
 save_dir = '/big_disk/ajoshi/fmri_validation'
 
 sdir = ['_RL', '_LR']
@@ -102,57 +104,158 @@ for sub in lst:
             labels_corr_exp_all[subno, scan, :] = l['labels_corr_exp']
     subno += 1
 
+ind = (sp.sum(labels_corr_sininv_all, axis=(1, 2)) != 0)
+labels_corr_sininv_all = labels_corr_sininv_all[ind, :, :]
+labels_corr_corr_exp_all = labels_corr_corr_exp_all[ind, :, :]
+labels_corr_dist_all = labels_corr_dist_all[ind, :, :]
+labels_corr_exp_all = labels_corr_exp_all[ind, :, :]
 
 labels = sp.zeros([10832])
 ind = l['msk_small_region']
 freq = sp.zeros([10832])
-scanid = 0
-# labels_corr_sininv_all is nsub x nsession x nvert
-m, s, freq1, labs_mode = mean_std_rand(labels_corr_sininv_all[:, scanid, :].T)
-print('scanid = ' + str(scanid) + ' roi = ' + str(roiregion) +
-      ' labels_corr_sininv_all mean =' + str(m) + ' std = ' + str(s))
-labels[ind] = labs_mode.squeeze()
+mean_rnd = sp.zeros((4, 4))
+std_rnd = sp.zeros((4, 4))
 
-freq[ind] = freq1
+for scanid in range(4):
+    # labels_corr_sininv_all is nsub x nsession x nvert
+    m, s, freq1, labs_mode = mean_std_rand(labels_corr_sininv_all
+                                           [:, scanid, :].T)
+    mean_rnd[scanid, 0] = m
+    std_rnd[scanid, 0] = s
+    print('scanid = ' + str(scanid) + ' roi = ' + str(roiregion) +
+          ' labels_corr_sininv_all mean =' + str(m) + ' std = ' + str(s))
+    labels[ind] = labs_mode.squeeze()
 
-dfs_left_sm.labels = labels
-dfs_left_sm = patch_color_labels(dfs_left_sm, freq=freq, cmap='jet')
-view_patch_vtk(dfs_left_sm)
+    freq[ind] = freq1
 
-# labels_corr_corr_exp_all is nsub x nsession x nvert
-m, s, freq1, labs_mode = mean_std_rand(labels_corr_corr_exp_all[:, 0, :].T)
-print('scanid = ' + str(scanid) + ' roi = ' + str(roiregion) +
-      ' labels_corr_corr_exp_all mean =' + str(m) + ' std = ' + str(s))
-labels[ind] = labs_mode.squeeze()
+    dfs_left_sm.labels = labels
+#    dfs_left_sm = patch_color_labels(dfs_left_sm, freq=freq, cmap='jet')
+#    view_patch_vtk(dfs_left_sm)
 
-freq[ind] = freq1
+    # labels_corr_corr_exp_all is nsub x nsession x nvert
+    m, s, freq1, labs_mode = mean_std_rand(labels_corr_corr_exp_all[:, 0, :].T)
+    mean_rnd[scanid, 1] = m
+    std_rnd[scanid, 1] = s
+    print('scanid = ' + str(scanid) + ' roi = ' + str(roiregion) +
+          ' labels_corr_corr_exp_all mean =' + str(m) + ' std = ' + str(s))
+    labels[ind] = labs_mode.squeeze()
 
-dfs_left_sm.labels = labels
-dfs_left_sm = patch_color_labels(dfs_left_sm, freq=freq, cmap='jet')
-view_patch_vtk(dfs_left_sm)
+    freq[ind] = freq1
 
-# labels_corr_dist_all is nsub x nsession x nvert
-m, s, freq1, labs_mode = mean_std_rand(labels_corr_dist_all[:, 0, :].T)
-print('scanid = ' + str(scanid) + ' roi = ' + str(roiregion) +
-      ' labels_corr_dist_all mean =' + str(m) + ' std = ' + str(s))
-labels[ind] = labs_mode.squeeze()
+    dfs_left_sm.labels = labels
+#    dfs_left_sm = patch_color_labels(dfs_left_sm, freq=freq, cmap='jet')
+#    view_patch_vtk(dfs_left_sm)
 
-freq[ind] = freq1
+    # labels_corr_dist_all is nsub x nsession x nvert
+    m, s, freq1, labs_mode = mean_std_rand(labels_corr_dist_all[:, 0, :].T)
+    mean_rnd[scanid, 2] = m
+    std_rnd[scanid, 2] = s
+    print('scanid = ' + str(scanid) + ' roi = ' + str(roiregion) +
+          ' labels_corr_dist_all mean =' + str(m) + ' std = ' + str(s))
+    labels[ind] = labs_mode.squeeze()
 
-dfs_left_sm.labels = labels
-dfs_left_sm = patch_color_labels(dfs_left_sm, freq=freq, cmap='jet')
-view_patch_vtk(dfs_left_sm)
+    freq[ind] = freq1
 
+    dfs_left_sm.labels = labels
+#    dfs_left_sm = patch_color_labels(dfs_left_sm, freq=freq, cmap='jet')
+#    view_patch_vtk(dfs_left_sm)
 
-# labels_corr_corr_exp_all is nsub x nsession x nvert
-m, s, freq1, labs_mode = mean_std_rand(labels_corr_exp_all[:, 0, :].T)
-print('scanid = ' + str(scanid) + ' roi = ' + str(roiregion) +
-      ' labels_corr_exp_all mean =' + str(m) + ' std = ' + str(s))
+    # labels_corr_corr_exp_all is nsub x nsession x nvert
+    m, s, freq1, labs_mode = mean_std_rand(labels_corr_exp_all[:, 0, :].T)
+    mean_rnd[scanid, 3] = m
+    std_rnd[scanid, 3] = s
+    print('scanid = ' + str(scanid) + ' roi = ' + str(roiregion) +
+          ' labels_corr_exp_all mean =' + str(m) + ' std = ' + str(s))
 
-labels[ind] = labs_mode.squeeze()
+    labels[ind] = labs_mode.squeeze()
 
-freq[ind] = freq1
+    freq[ind] = freq1
 
-dfs_left_sm.labels = labels
-dfs_left_sm = patch_color_labels(dfs_left_sm, freq=freq, cmap='jet')
-view_patch_vtk(dfs_left_sm)
+    dfs_left_sm.labels = labels
+#    dfs_left_sm = patch_color_labels(dfs_left_sm, freq=freq, cmap='jet')
+#    view_patch_vtk(dfs_left_sm)
+
+print 'ACROSS SUBJECT COMPARISON of RAND SCORES'
+print 'corr_sininv mean :' +\
+    str(sp.mean(mean_rnd[:, 0])) + 'std:' + str(sp.mean(std_rnd[:, 0]))
+print 'corr_corr_exp mean :' +\
+    str(sp.mean(mean_rnd[:, 1])) + 'std:' + str(sp.mean(std_rnd[:, 1]))
+print 'corr_dist mean :' +\
+    str(sp.mean(mean_rnd[:, 2])) + 'std:' + str(sp.mean(std_rnd[:, 2]))
+print 'corr_exp mean :' +\
+    str(sp.mean(mean_rnd[:, 3])) + 'std:' + str(sp.mean(std_rnd[:, 3]))
+
+# %% Across session comparison
+nsub = labels_corr_sininv_all.shape[0]
+mean_rnd = sp.zeros((nsub, 4))
+std_rnd = sp.zeros((nsub, 4))
+
+for subno in range(nsub):
+    # labels_corr_sininv_all is nsub x nsession x nvert
+    m, s, freq1, labs_mode = mean_std_rand(labels_corr_sininv_all
+                                           [subno, :, :].T)
+    mean_rnd[subno, 0] = m
+    std_rnd[subno, 0] = s
+    print('subno = ' + str(subno) + ' roi = ' + str(roiregion) +
+          ' labels_corr_sininv_all mean =' + str(m) + ' std = ' + str(s))
+    labels[ind] = labs_mode.squeeze()
+
+    freq[ind] = freq1
+
+#    dfs_left_sm.labels = labels
+#    dfs_left_sm = patch_color_labels(dfs_left_sm, freq=freq, cmap='jet')
+#    view_patch_vtk(dfs_left_sm)
+
+    # labels_corr_corr_exp_all is nsub x nsession x nvert
+    m, s, freq1, labs_mode = mean_std_rand(labels_corr_corr_exp_all
+                                           [subno, :, :].T)
+    mean_rnd[subno, 1] = m
+    std_rnd[subno, 1] = s
+    print('subno = ' + str(subno) + ' roi = ' + str(roiregion) +
+          ' labels_corr_corr_exp_all mean =' + str(m) + ' std = ' + str(s))
+    labels[ind] = labs_mode.squeeze()
+
+    freq[ind] = freq1
+
+#    dfs_left_sm.labels = labels
+#    dfs_left_sm = patch_color_labels(dfs_left_sm, freq=freq, cmap='jet')
+#    view_patch_vtk(dfs_left_sm)
+
+    # labels_corr_dist_all is nsub x nsession x nvert
+    m, s, freq1, labs_mode = mean_std_rand(labels_corr_dist_all[subno, :, :].T)
+    mean_rnd[subno, 2] = m
+    std_rnd[subno, 2] = s
+    print('subno = ' + str(subno) + ' roi = ' + str(roiregion) +
+          ' labels_corr_dist_all mean =' + str(m) + ' std = ' + str(s))
+    labels[ind] = labs_mode.squeeze()
+
+    freq[ind] = freq1
+
+#    dfs_left_sm.labels = labels
+#    dfs_left_sm = patch_color_labels(dfs_left_sm, freq=freq, cmap='jet')
+#    view_patch_vtk(dfs_left_sm)
+
+    # labels_corr_corr_exp_all is nsub x nsession x nvert
+    m, s, freq1, labs_mode = mean_std_rand(labels_corr_exp_all[subno, :, :].T)
+    mean_rnd[subno, 3] = m
+    std_rnd[subno, 3] = s
+    print('subno = ' + str(subno) + ' roi = ' + str(roiregion) +
+          ' labels_corr_exp_all mean =' + str(m) + ' std = ' + str(s))
+
+    labels[ind] = labs_mode.squeeze()
+
+    freq[ind] = freq1
+
+#    dfs_left_sm.labels = labels
+#    dfs_left_sm = patch_color_labels(dfs_left_sm, freq=freq, cmap='jet')
+#    view_patch_vtk(dfs_left_sm)
+
+print 'ACROSS SCANS COMPARISON of RAND SCORES'
+print 'corr_sininv mean :' +\
+    str(sp.mean(mean_rnd[:, 0])) + 'std:' + str(sp.mean(std_rnd[:, 0]))
+print 'corr_corr_exp mean :' +\
+    str(sp.mean(mean_rnd[:, 1])) + 'std:' + str(sp.mean(std_rnd[:, 1]))
+print 'corr_dist mean :' +\
+    str(sp.mean(mean_rnd[:, 2])) + 'std:' + str(sp.mean(std_rnd[:, 2]))
+print 'corr_exp mean :' +\
+    str(sp.mean(mean_rnd[:, 3])) + 'std:' + str(sp.mean(std_rnd[:, 3]))

@@ -79,7 +79,8 @@ def parcellate_region(roilist, sub, nClusters, scan, scan_type, savepng=0, sessi
 class sc:
     pass
 
-rlist = [21]
+rlist = [21]  # precuneus
+rlist = [10]  # middle temporal gyrus
 right_hemisphere=np.array([226,168,184,446,330,164,442,328,172,444,130,424,166,326,342,142,146,144,222,170,
 150,242,186,120,422,228,224,322,310,162,324,500])
 
@@ -104,6 +105,7 @@ fadd_1='.rfMRI_REST'
 fadd_2='.reduce3.ftdata.NLM_11N_hvar_25.mat'
 
 #%%Across session study
+
 for sub in lst:
     for scan in range(0,4):
         if (sub not in old_lst) and (os.path.isfile(os.path.join(p_dir, sub, sub + fadd_1 + str(session_type[scan%2]) + sdir[scan/2] + fadd_2))):
