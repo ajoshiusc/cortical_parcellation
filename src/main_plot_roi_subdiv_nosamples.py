@@ -19,6 +19,8 @@ from sklearn.cluster import KMeans
 from sklearn.metrics.pairwise import pairwise_distances
 from sklearn.utils.linear_assignment_ import linear_assignment
 from sklearn.metrics import adjusted_rand_score
+import seaborn as sns
+import matplotlib.pyplot as plt
 
 
 def mean_std_rand(labels_all):
@@ -87,7 +89,7 @@ labels_corr_dist_all = sp.zeros((len(lst), 4, msksize[0]))
 labels_corr_exp_all = sp.zeros((len(lst), 4, msksize[0]))
 subno = 0
 
-l = sp.load('temp.npz')
+l = sp.load('temp100.npz')
 
 labels_corr_sininv_all = l['labels_corr_sininv_all']
 labels_corr_corr_exp_all = l['labels_corr_corr_exp_all']
@@ -110,4 +112,11 @@ for ind in range(labels_corr_sininv_all.shape[0]):
         rnd_ind[ind, nosamples,3] = adjusted_rand_score(labels_corr_exp_all[ind, -1 , :],
                                  labels_corr_exp_all[ind, nosamples, :])
 
-rnd_ind_mean = sp.mean(rnd_ind, axis=0)
+#rnd_ind_mean = sp.stats.trim_mean(rnd_ind, axis=0)
+
+
+
+sns_plot = sns.tsplot(data=rnd_ind,  value = "adj rand score", condition = ['$\sin^{-1}$','conn','$\exp$', '$L^2$'], ci = 95, err_style='ci_band')
+
+plt.savefig('perf_samples.pdf')
+
