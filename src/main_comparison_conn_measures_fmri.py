@@ -80,7 +80,9 @@ class sc:
     pass
 
 rlist = [21]  # precuneus
-rlist = [10]  # middle temporal gyrus
+rlist = [10]  # middle frontal gyrus
+rlist = [13]  # middle temporal gyrus
+
 right_hemisphere=np.array([226,168,184,446,330,164,442,328,172,444,130,424,166,326,342,142,146,144,222,170,
 150,242,186,120,422,228,224,322,310,162,324,500])
 

@@ -48,10 +48,14 @@ dfs_left_sm = readdfs(os.path.join(p_dir_ref, 'reference',
 very_smooth.left.dfs'))
 
 
-rlist = [21]
-msksize = [507]
+#rlist = [21]  # Precuneus
+#msksize = [507]
 
-# rlist = [10]
+#rlist = [10]
+#msksize = [545]
+rlist = [13]
+msksize = [577]
+
 # right_hemisphere=np.array([226,168,184,446,330,164,442,328,172,444,130,424,166,326,342,142,146,144,222,170,
 # 150,242,186,120,422,228,224,322,310,162,324,500])
 
