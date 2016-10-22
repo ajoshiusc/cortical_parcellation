@@ -43,7 +43,7 @@ def mean_std_rand(labels_all):
     return ars.mean(), ars.std(), freq1, labs_mode
 
 
-p_dir_ref = '/home/ajoshi/data/HCP_data'
+p_dir_ref = '/big_disk/ajoshi/HCP_data'
 ref = '100307'
 dfs_left_sm = readdfs(os.path.join(p_dir_ref, 'reference',
                                    ref + '.aparc.a2009s.32k_fs.reduce3.\

@@ -198,6 +198,38 @@ def reorder_labels(labels):
         labels[:,i] = ind1[sp.int16(labels[:,i]),1]
         
     return labels
+
+        
+
+def region_growing_fmri(seeds, affinity, conn):
+    lab = sp.zeros(affinity.shape[0])
+
+    for ind in range(len(seeds)):
+        lab[seeds] = ind + 1
+
+    while sp.sum(lab==0) > 0:
+        maxaff=-999
+        can_aff=[]
+        for seedno in range(len(seeds)):
+            all_vert = (sp.sum(conn[lab==seedno,:]>0,axis=1)>0)            
+            can_vert = sp.where(all_vert - (lab == seedno))            
+            # affinity of candidate vertices to labeled vertices
+            can_aff[seedno] = affinity[can_vert,seeds[seedno]]
+            maxaff = sp.amax(maxaff,sp.amax(can_aff[seedno]))
+        
+        for seedno in range(len(seeds)):
+            lab[can_aff[seedno]>0.9*maxaff] = seeds[seedno]+1;
+
+        labels = lab - 1
+    return labels
+
+
+            
+            
+            
+            
+        
+        
         
 import numpy as np
 from scipy.stats import f as f_distrib
