@@ -159,7 +159,7 @@ def box_plot(temp,temp1,fig_name):
 
     ax.set_title("VALIDATION PLOT", fontsize=53, fontweight='bold')
     plt.subplots_adjust(left=0.06, right=0.96, top=0.90, bottom=0.09)
-    ax.set_xlabel("SUBJECTS "+"( Direct_to_session followed by session_to_session )", fontsize=30, fontweight='bold')
+    ax.set_xlabel("nSubjects "+str(fig_name)+"( Direct_to_session followed by session_to_session )", fontsize=30, fontweight='bold')
     ax.set_ylabel("RAND INDEX", fontsize=20, fontweight='bold')
     ax.set_ylim(0, 1.3)
     #colors = ['cyan','cyan', 'lightblue','lightblue', 'lightgreen','lightgreen', 'tan','tan', 'pink','pink','#7570b3','#7570b3', '#F78F1E','#F78F1E', '#BE3224','#BE3224',
