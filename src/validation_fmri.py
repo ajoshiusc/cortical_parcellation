@@ -148,8 +148,8 @@ nClusters=np.array([3,1,3,2,2,2,3,3,2,2,2,3,1,4,1,2,1,3,2,1,4,2,1,2,2,2,2,3,1,2,
 
 p_dir = '/big_disk/ajoshi/HCP100-fMRI-NLM/HCP100-fMRI-NLM'
 lst = os.listdir(p_dir) #{'100307'}
-old_lst = os.listdir('/home/ajoshi/data/HCP_data/data')
-old_lst+=['reference','zip1','100408','101107','139637','106016','127933','366446','144832','100408','101915','108828','110411','366446','111312','113922','115320','122317','124422','125525','128632','414229','149539','135225','136833','138534','147737','148335','149337','156637','160123','161731','178950','189450','208226','211417','211720','212318','239944','245333','280739','298051','654754','672756','856766']
+old_lst = os.listdir('/big_disk/ajoshi/HCP_data/data')
+old_lst+=['reference','zip1']
 save_dir= '/home/sgaurav/Documents/git_sandbox/cortical_parcellation/src/validation'
 
 sdir=['_RL','_LR']

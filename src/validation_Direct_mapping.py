@@ -55,7 +55,6 @@ for hemi in range(0,2):
     #view_patch(s,show=1,colormap='Paired',colorbar=0)
     save_dir = '/home/sgaurav/Documents/git_sandbox/cortical_parcellation/src/validation'
     import scipy as sp
-    sorted(refined_list)
     sp.savez(os.path.join(save_dir, 'direct_mapping'+scan_type[hemi] + '.npz'),
              labels=s.labels, vertices=s.vertices,
-             faces=s.faces,roilists=lab,label=refined_list)
+             faces=s.faces,label=lab,roilists=sorted(refined_list))

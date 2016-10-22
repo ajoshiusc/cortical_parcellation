@@ -53,6 +53,13 @@ for hemi in range(0,2):
         labels[msk_small_region] = roilist*10 + data['labs_all'].flatten()[msk_small_region]
         #plot_figure(dfs_left,labels)
         #fun(data)
-    sp.savez(
+    if hemi ==0:
+        sp.savez(
         'very_smooth_data_'+scan_type[hemi],
-        labels=labels, vertices=dfs_left.vertices,faces=dfs_left.faces,vColor=np.zeros([dfs_left.vertices.shape[0]]))
+        labels=labels, vertices=dfs_left.vertices,faces=dfs_left.faces,vColor=np.zeros([dfs_left.vertices.shape[0]]),roilists=sorted(left_hemisphere))
+    else :
+        sp.savez(
+            'very_smooth_data_' + scan_type[hemi],
+            labels=labels, vertices=dfs_left.vertices, faces=dfs_left.faces,
+            vColor=np.zeros([dfs_left.vertices.shape[0]]), roilists=sorted(right_hemisphere))
+
