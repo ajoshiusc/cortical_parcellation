@@ -180,61 +180,70 @@ def show_slices(slices,vmax=None,vmin=None):
 
 
 def reorder_labels(labels):
-    
-    nClusters=sp.int32(sp.amax(labels.flatten())+1)
-    labels0_vec = sp.zeros((labels.shape[0],nClusters),'bool')
+
+    nClusters = sp.int32(sp.amax(labels.flatten()) + 1)
+    labels0_vec = sp.zeros((labels.shape[0], nClusters), 'bool')
     labelsi_vec = labels0_vec.copy()
     for i in range(nClusters):
-        labels0_vec[:,i] = (labels[:,0]==i)
-        
-        
+        labels0_vec[:, i] = (labels[:, 0] == i)
+
     for i in range(labels.shape[1]):
         for j in range(nClusters):
-            labelsi_vec[:,j] = (labels[:,i]==j)
-    
-        D=pairwise_distances(labelsi_vec.T, labels0_vec.T, metric='dice')
-        D[~sp.isfinite(D)]=1
+            labelsi_vec[:, j] = (labels[:, i] == j)
+        D = pairwise_distances(labelsi_vec.T, labels0_vec.T, metric='dice')
+        D[~sp.isfinite(D)] = 1
         ind1 = linear_assignment(D)
-        labels[:,i] = ind1[sp.int16(labels[:,i]),1]
-        
+        labels[:, i] = ind1[sp.int16(labels[:, i]), 1]
+
     return labels
 
-        
 
 def region_growing_fmri(seeds, affinity, conn):
     lab = sp.zeros(affinity.shape[0])
-
     for ind in range(len(seeds)):
-        lab[seeds] = ind + 1
+        lab[seeds[ind]] = ind + 1
 
-    while sp.sum(lab==0) > 0:
-        maxaff=-999
-        can_aff=[]
+    prevsum = sp.sum(lab == 0) + 1
+    while prevsum - sp.sum(lab == 0) > 0:
+        maxaff = -999
+        prevsum = sp.sum(lab == 0)
+        can_aff = [None]*len(seeds)  # empty list
+        can_vert = [None]*len(seeds)
         for seedno in range(len(seeds)):
-            all_vert = (sp.sum(conn[lab==seedno,:]>0,axis=1)>0)            
-            can_vert = sp.where(all_vert - (lab == seedno))            
+            all_vert = sp.sum(conn[lab == seedno+1, :] > 0, axis=0) > 0
+            can_vert[seedno] = sp.where(all_vert & (lab == 0))
+            cv = sp.array(can_vert[seedno]).squeeze()
+            if cv.size == 0:
+                continue
+#            print len(cv), seeds[seedno]
             # affinity of candidate vertices to labeled vertices
-            can_aff[seedno] = affinity[can_vert,seeds[seedno]]
-            maxaff = sp.amax(maxaff,sp.amax(can_aff[seedno]))
-        
-        for seedno in range(len(seeds)):
-            lab[can_aff[seedno]>0.9*maxaff] = seeds[seedno]+1;
+            can_aff[seedno] = affinity[cv, seeds[seedno]]
+            maxaff = sp.amax([maxaff, sp.amax(can_aff[seedno])])
 
-        labels = lab - 1
+        for seedno in range(len(seeds)):
+            A = sp.array(can_vert[seedno]).squeeze()
+            ind = lab[A] == 0
+            A = A[ind]
+            if len(A) == 0:
+                continue
+            if sp.sum(lab == 0) <= 1:
+                frac = 1.0
+            else:
+                frac = 0.9
+            B = can_aff[seedno] >= frac*maxaff
+            B = B.squeeze()
+            B = B[ind]
+            print sp.sum(lab == 0),
+            lab[A[B]] = seedno + 1
+
+    labels = lab - 1
     return labels
 
-
-            
-            
-            
-            
-        
-        
-        
 import numpy as np
 from scipy.stats import f as f_distrib
 
-def hotelling_t2(X,Y):
+
+def hotelling_t2(X, Y):
     """X and Y are n_features x n_subjects x n_voxels"""
     nx=X.shape[1];ny=Y.shape[1];p=X.shape[0];
     Xbar=X.mean(1);Ybar=Y.mean(1);
