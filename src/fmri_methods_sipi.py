@@ -233,7 +233,6 @@ def region_growing_fmri(seeds, affinity, conn):
             B = can_aff[seedno] >= frac*maxaff
             B = B.squeeze()
             B = B[ind]
-            print sp.sum(lab == 0),
             lab[A[B]] = seedno + 1
 
     labels = lab - 1

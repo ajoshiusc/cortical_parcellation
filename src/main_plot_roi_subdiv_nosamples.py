@@ -114,9 +114,10 @@ for ind in range(labels_corr_sininv_all.shape[0]):
 
 #rnd_ind_mean = sp.stats.trim_mean(rnd_ind, axis=0)
 
+n_samples = range(20, 1200, 20)
+n_samples.extend([1200])
 
-
-sns_plot = sns.tsplot(data=rnd_ind,  value = "adj rand score", condition = ['$\sin^{-1}$','conn','$\exp$', '$L^2$'], ci = 95, err_style='ci_band')
+sns_plot = sns.tsplot(data=rnd_ind, time=n_samples, value = "adj rand score", condition = ['$\sin^{-1}$','conn','$\exp$', '$L^2$'], ci = 95, err_style='ci_band')
 
 plt.savefig('perf_samples.pdf')
 
