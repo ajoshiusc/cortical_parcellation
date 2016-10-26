@@ -10,12 +10,15 @@ import networkx as nx
 from sklearn.mixture import GMM
 import random
 from surfproc import patch_color_labels, view_patch_vtk
+from fmri_methods_sipi import region_growing_fmri
 
 
 def parcellate_region(roilist, sub, nClusters, scan, scan_type, savepng=0, session=1, algo=0, type_cor=0, n_samples=0):
+    '''algo = 0:Spectral Clustering, 1: region growing '''
     p_dir = '/big_disk/ajoshi/HCP100-fMRI-NLM/HCP100-fMRI-NLM'
     out_dir = '/big_disk/ajoshi/out_dir'
     r_factor = 3
+    seeds = sp.zeros(nClusters)
     ref_dir = os.path.join(p_dir, 'reference')
     ref = '100307'
     fn1 = ref + '.reduce' + str(r_factor) + '.LR_mask.mat'
@@ -59,24 +62,53 @@ def parcellate_region(roilist, sub, nClusters, scan, scan_type, savepng=0, sessi
     B[~np.isfinite(B)] = 0
     SC = SpectralClustering(n_clusters=nClusters, affinity='precomputed')
     affinity_matrix = np.arcsin(rho)
-    labels_corr_sininv = SC.fit_predict(np.abs(affinity_matrix))
 
+    if algo == 1:
+        s_a = readdfs('100307.reduce3.very_smooth.' + scan_type +
+                      '.refined.dfs')
+        conn = sp.eye(dfs_left.vertices.shape[0])
+
+        conn[dfs_left.faces[:, 0], dfs_left.faces[:, 1]] = 1
+        conn[dfs_left.faces[:, 1], dfs_left.faces[:, 2]] = 1
+        conn[dfs_left.faces[:, 0], dfs_left.faces[:, 2]] = 1
+        conn = conn + conn.T
+        conn = conn > 0
+        conn = conn[msk_small_region, ]
+        conn = conn[:, msk_small_region]
+
+        for ind in range(nClusters):
+            lind = s_a.labels[msk_small_region] == roilist * 10 + ind + 1
+            lind = sp.where(lind)[0]
+            vert = s_a.vertices[msk_small_region, ]
+            m = sp.mean(vert[lind, ], axis=0)
+            dist = vert[lind, ] - m
+            diff = sp.sum(dist**2, axis=1)
+            indc = sp.argmin(diff)
+            seeds[ind] = lind[indc]
+    
+    if algo == 0:
+        labels_corr_sininv = SC.fit_predict(np.abs(affinity_matrix))
+    else:
+        labels_corr_sininv = region_growing_fmri(seeds,
+                                                 np.abs(affinity_matrix), conn)
     affinity_matrix = sp.exp((-2.0*(1-rho))/(.72 ** 2))
-    labels_corr_exp = SC.fit_predict(np.abs(affinity_matrix))
-
+    if algo == 0:
+        labels_corr_exp = SC.fit_predict(np.abs(affinity_matrix))
+    else:
+        labels_corr_exp = region_growing_fmri(seeds,
+                                              np.abs(affinity_matrix), conn)
     affinity_matrix = sp.sqrt(2.0 + 2.0*rho)
-    labels_corr_dist = SC.fit_predict(np.abs(affinity_matrix))
-
+    if algo == 0:
+        labels_corr_dist = SC.fit_predict(np.abs(affinity_matrix))
+    else:
+        labels_corr_dist = region_growing_fmri(seeds,
+                                               np.abs(affinity_matrix), conn)
     B1 = sp.exp((-2.0*(1.0-B))/(0.72 ** 2.0))
-    labels_corr_corr_exp = SC.fit_predict(B1)
+    if algo == 0:
+        labels_corr_corr_exp = SC.fit_predict(B1)
+    else:
+        labels_corr_corr_exp = region_growing_fmri(seeds, B1, conn)
 
-#    sp.savez(os.path.join(out_dir, sub + '.rfMRI_REST' + str(session) +
-#                          scan + str(roilist) + '.labs.npz'),
-#             labels_corr_sininv=labels_corr_sininv,
-#             labels_corr_corr_exp=labels_corr_corr_exp,
-#             labels_corr_dist=labels_corr_dist,
-#             labels_corr_exp=labels_corr_exp,
-#             msk_small_region=msk_small_region)
     return labels_corr_sininv, labels_corr_exp, labels_corr_dist,\
         labels_corr_corr_exp, msk_small_region, dfs_left_sm
 
@@ -148,7 +180,8 @@ for rep in range(n_rep):
                                            sdir[scan / 2],
                                            scan_type[i], 1,
                                            session_type[scan % 2],
-                                           0, 0, n_samples=n_samples[ind])
+                                           algo=1, type_cor=0,
+                                           n_samples=n_samples[ind])
 
         labels_corr_sininv_all[rep, ind, :] = labels_corr_sininv
         labels_corr_exp_all[rep, ind, :] = labels_corr_exp
@@ -157,21 +190,8 @@ for rep in range(n_rep):
 
         print str(ind) + ' out of ' + str(len(n_samples)) + 'rep = ' + str(rep)
 
-sp.savez('temp100.npz', labels_corr_sininv_all=labels_corr_sininv_all,
+sp.savez('temp100_algo1_MTG.npz', labels_corr_sininv_all=labels_corr_sininv_all,
          labels_corr_exp_all=labels_corr_exp_all,
          labels_corr_dist_all=labels_corr_dist_all,
          labels_corr_corr_exp_all=labels_corr_corr_exp_all)
-
-#                sc.labels = labs_all
-#                sc.vertices = r.vertices
-#                sc.faces = r.faces
-#                sc.vColor = np.zeros([r.vertices.shape[0]])
-#
-#                c = patch_color_labels(sc, cmap='Paired', shuffle=True)
-#                view_patch_vtk(sc, show=1)
-#
-#
-#                sp.savez(os.path.join(save_dir, str(sub) + '_' + scan_type[i]  + sdir[scan/2] + '_' + str(session_type[scan%2]) + '.npz'),
-#                    labels=sc.labels, vertices=sc.vertices,
-#                    faces=sc.faces)
 
