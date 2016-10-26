@@ -3,6 +3,17 @@ import os
 
 from dfsio import readdfs
 from surfproc import patch_color_labels, view_patch
+roiregion=['angular gyrus','anterior orbito-frontal gyrus','cingulate','cuneus','fusiforme gyrus','gyrus rectus','inferior occipital gyrus','inferior temporal gyrus','lateral orbito-frontal gyrus','lingual gyrus',
+           'middle frontal gyrus','middle occipital gyrus','middle orbito-frontal gyrus','middle temporal gyrus','parahippocampal gyrus','pars opercularis','pars orbitalis','pars triangularis','post-central gyrus',
+           'posterior orbito-frontal gyrus','pre-central gyrus','precuneus','subcallosal gyrus','superior frontal gyrus','superior occipital gyrus','superior parietal gyrus','supramarginal gyrus','superior temporal gyrus',
+           'temporal pole','transvers frontal gyrus','transverse temporal gyrus','Insula']
+right_hemisphere=np.array([226,168,184,446,330,164,442,328,172,444,130,424,166,326,342,142,146,144,222,170,
+150,242,186,120,422,228,224,322,310,162,324,500])
+
+left_hemisphere =np.array([227,169,185,447,331,165,443,329,173,445,131,425,167,327,343,143,147,145,223,171,
+151,243,187,121,423,229,225,323,311,163,325,501])
+#143,
+nClusters=np.array([3,1,3,2,2,2,3,3,2,2,2,3,1,4,1,2,1,3,2,1,4,2,1,2,2,2,2,3,1,2,1,2])
 
 def plot_histogram(nsub,temp,lst):
     import matplotlib.pyplot as plt
@@ -132,7 +143,7 @@ def plot_fmri_subject(lst):
             sc = patch_color_labels(sc, cmap='Paired', shuffle=True)
             view_patch(sc, show=1, colormap='Paired', colorbar=0)
 
-def box_plot(temp,temp1,fig_name):
+def box_plot(temp,temp1,map_roilists,fig_name):
     ## numpy is used for creating fake data
     import numpy as np
     import matplotlib as mpl
@@ -155,35 +166,36 @@ def box_plot(temp,temp1,fig_name):
     ax = fig.add_subplot(111)
 
     # Create the boxplot
-    bp = ax.boxplot(data_to_plot, patch_artist=True, showmeans=True)
+    bp = ax.boxplot(data_to_plot[:32], patch_artist=True, showmeans=True)
 
-    ax.set_title("VALIDATION PLOT", fontsize=53, fontweight='bold')
+    ax.set_title("VALIDATION PLOT  RIGHT HEMISPHERE", fontsize=53, fontweight='bold')
     plt.subplots_adjust(left=0.06, right=0.96, top=0.90, bottom=0.09)
     ax.set_xlabel("nSubjects "+str(fig_name)+"( Direct_to_session followed by session_to_session )", fontsize=30, fontweight='bold')
     ax.set_ylabel("RAND INDEX", fontsize=20, fontweight='bold')
     ax.set_ylim(0, 1.3)
     #colors = ['cyan','cyan', 'lightblue','lightblue', 'lightgreen','lightgreen', 'tan','tan', 'pink','pink','#7570b3','#7570b3', '#F78F1E','#F78F1E', '#BE3224','#BE3224',
              #'#F78F1E','#F78F1E', '#BE3224','#BE3224','#A78F1E','#A78F1E','m','m' ]
-    colors = ['cyan','#F78F1E', 'lightblue','y', 'lightgreen','#F78F1E', 'tan','#AEF2F4', 'pink', '#A78F1E', '#7570b3',  'm', ]
+    Colors = ['cyan','#F78F1E', 'lightblue','y', 'lightgreen','#F78F1E', 'tan','#AEF2F4', 'pink', '#A78F1E', '#7570b3',  'm', 'k','#E78F1E','#BEF2F4','blue']
+    Colors=np.tile(Colors,2)
+    colors=[0 for i in range(2*Colors.__len__())]
+    cnt=0
+    for c in range(Colors.__len__()):
+        colors[cnt]=Colors[c]
+        colors[cnt+1]=Colors[c]
+        cnt+=2
     colors = np.tile(colors, 6)
     for patch, color in zip(bp['boxes'], colors):
         patch.set_facecolor(color)
     import matplotlib.patches as mpatches
-    NA = mpatches.Patch(color='cyan', label='Direct-session superior frontal gyrus')
-    NA1 = mpatches.Patch(color='#F78F1E', label='Session-Session superior frontal gyrus')
-    EU = mpatches.Patch(color='lightblue', label='Direct-session pre-central gyrus')
-    EU1 = mpatches.Patch(color='y', label='Session-Session pre-central gyrus')
-    AP = mpatches.Patch(color='lightgreen', label='Direct-session angular gyrus')
-    AP1 = mpatches.Patch(color='#F78F1E', label='Session-Session angular gyrus')
-    SA = mpatches.Patch(color='tan', label='Direct-session cingulate gyrus')
-    SA1 = mpatches.Patch(color='#AE3224', label='Session-Session cingulate gyrus')
-    AA = mpatches.Patch(color='pink', label='Direct-session pre-cuneus')
-    AA1 = mpatches.Patch(color='#A78F1E', label='Session-Session pre-cuneus')
-    AU1 = mpatches.Patch(color='#7570b3', label='Direct-session Insula')
-    AU = mpatches.Patch(color='m', label='Session-Session Insula')
-    AU2 = mpatches.Patch(color='red', label='Mean')
-    AU3 = mpatches.Patch(color='green', label='Median')
-    ## change outline color, fill color and linewidth of the boxes
+    cnt=0
+    for roilist in map_roilists.viewkeys():
+        if cnt == 0:
+            handles = [mpatches.Patch(color=Colors[cnt], label=map_roilists[roilist])]
+            # handles += [mpatches.Patch(color=colors[cnt], label= map_roilists[roilist])]
+        else:
+            handles += [mpatches.Patch(color=Colors[cnt], label=map_roilists[roilist])]
+            # handles += [mpatches.Patch(color=colors[cnt], label= map_roilists[roilist])]
+        cnt += 1
 
 
     ## change color and linewidth of the whiskers
@@ -217,7 +229,8 @@ def box_plot(temp,temp1,fig_name):
                 size='x-small')
     plt.figtext(0.815, 0.010, 'Insula', color='#7570b3', weight='roman',
                 size='x-small')'''
-    plt.legend(handles=[NA, NA1,EU,EU1, AP,AP1, SA,SA1,AA, AA1, AU1,AU,AU2,AU3], loc=2, ncol=4)
+    #plt.legend(handles=[NA, NA1,EU,EU1, AP,AP1, SA,SA1,AA, AA1, AU1,AU,AU2,AU3], loc=2, ncol=4)
+    plt.legend(handles=handles[:16], loc=2, ncol=5)
     plt.show()
     fig.savefig('fig'+str(fig_name)+'.png', bbox_inches='tight')
     plt.close()
@@ -228,7 +241,7 @@ def session_to_session(msk,scan_type,sub_lst):
     count=[3,2,1,4]
     sub_lst=sorted(sub_lst)
     for sub in sub_lst:
-        if not ((sub.startswith('direct_mapping')) or sub[7:8] =='r'):
+        if not ((sub.startswith('direct_mapping')) or sub[7:8] =='l'):
             #print sub[:6]
             if cnt%4 ==0:
                 cnt=0
@@ -238,14 +251,14 @@ def session_to_session(msk,scan_type,sub_lst):
             for scan2 in range(cnt , 4):
                 fmri2 = np.load(os.path.join(save_dir, str(sub_lst[sub_lst.index(sub)+1])))
                 fmri2_labels = fmri2['labels'][msk]
-                if adjusted_rand_score(fmri1_labels, fmri2_labels) > 0:
-                    lst.append(adjusted_rand_score(fmri1_labels, fmri2_labels))
-    a=np.arange(lst.__len__())
+                lst.append(adjusted_rand_score(fmri1_labels, fmri2_labels))
+    ''''a=np.arange(lst.__len__())
     lst1=[[]]
     for i in range(6):
         msk=a%6 ==i
         lst1.append(np.array(lst)[msk])
-    return np.array(lst1[1:])
+    return np.array(lst1[1:])'''
+    return np.array(lst)
 
 def dir_session(msk,scan_type,sub_lst):
     lst1=[[]]
@@ -255,28 +268,30 @@ def dir_session(msk,scan_type,sub_lst):
     dir_labels = direct['labels'][msk]
     for sub in sub_lst:
         cnt+=1
-        if not ((sub.startswith('direct_mapping')) or sub[7:8] =='r'):
+        if not ((sub.startswith('direct_mapping')) or sub[7:8] =='l'):
             fmri = np.load(os.path.join(save_dir, str(sub) ))
             fmri_labels = fmri['labels'][msk]
             lst.append(adjusted_rand_score(dir_labels, fmri_labels))
-    a = np.arange(lst.__len__())
+    '''a = np.arange(lst.__len__())
     for i in range(4):
         msk = a % 4 == i
         lst1.append(np.array(lst)[msk])
-    return np.array(lst1[1:])
+    return np.array(lst1[1:])'''
+    return np.array(lst)
 
 def RI_mean(lst):
     import scipy as sp
     roilists=[]
     scan_type = ['left', 'right']
-    for hemi in range(0,1):
+    for hemi in range(1,2):
         direct = np.load('very_smooth_data_'+scan_type[hemi]+'.npz')
         if roilists.__len__() ==  0:
             roilists=direct['roilists'].tolist()
         else :
             roilists += direct['roilists'].tolist()
-        roilists=[121,151,185,227,501,243]
-    dir_roilists=sorted(np.array(roilists))
+    map_roilists={}
+    for i in range (right_hemisphere.shape[0]):
+        map_roilists[right_hemisphere[i]]=roiregion[i]
     refined_left=readdfs(os.path.join('/home/ajoshi/for_gaurav', '100307.BCI2reduce3.very_smooth.left.dfs'))
     refined_left=refined_left.labels
     refined_right = readdfs(os.path.join('/home/ajoshi/for_gaurav', '100307.BCI2reduce3.very_smooth.right.dfs'))
@@ -284,21 +299,22 @@ def RI_mean(lst):
     temp = []
     temp1 = []
     cnt=0
-    for roilist in dir_roilists:
+    for roilist in map_roilists.viewkeys():
+        #print roilist
         cnt += 1
         # msk_small_region = np.in1d(refined_right,roilist)
-        msk_small_region = np.in1d(refined_left, roilist)
+        msk_small_region = np.in1d(refined_right, roilist)
         if temp.__len__() > 0:
             # temp = sp.vstack([calculate_mean(msk_small_region, sub, scan_type[1]), temp])
-            temp = sp.vstack([dir_session(msk_small_region, scan_type[0],lst), temp])
-            temp1 = sp.vstack([session_to_session(msk_small_region, scan_type[0],lst), temp1])
+            temp = sp.vstack([dir_session(msk_small_region, scan_type[1],lst), temp])
+            temp1 = sp.vstack([session_to_session(msk_small_region, scan_type[1],lst), temp1])
         else:
             # temp=calculate_mean(msk_small_region,sub,scan_type[1])
-            temp = dir_session(msk_small_region, scan_type[0],lst)
-            temp1 = session_to_session(msk_small_region, scan_type[0],lst)
+            temp = dir_session(msk_small_region, scan_type[1],lst)
+            temp1 = session_to_session(msk_small_region, scan_type[1],lst)
             # msk_small_region = np.in1d(refined_left, roilist+1)
             # temp=sp.vstack([calculate_mean(msk_small_region,sub,scan_type[0]),temp])
-    box_plot(temp.tolist(),temp1.tolist(),'60')
+    box_plot(temp.tolist(),temp1.tolist(),map_roilists,'60')
 
 from sklearn.metrics import adjusted_rand_score ,adjusted_mutual_info_score
 save_dir = '/home/sgaurav/Documents/git_sandbox/cortical_parcellation/src/validation'

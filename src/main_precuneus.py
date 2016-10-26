@@ -19,7 +19,7 @@ roilist =  np.array([[443],[442]])
 roiregion=['inferior occipital gyrus','motor','temporal','precuneus','semato','visual']
 nClusters=np.array([3])
 
-p_dir = '/home/ajoshi/data/HCP_data/data'
+p_dir = '/big_disk/ajoshi/HCP_data/data'
 lst = os.listdir(p_dir) #{'100307'}
 
 sdir=['_LR','_RL']

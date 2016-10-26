@@ -16,7 +16,7 @@ from sklearn.mixture import GMM
 
 
 def parcellate_region(roilist, sub, nClusters, scan,scan_type,savepng=0, session=1, algo=0,type_cor=0):
-    p_dir = '/home/ajoshi/data/HCP_data'
+    p_dir = '/big_disk/ajoshi/HCP_data'
     r_factor = 3
     ref_dir = os.path.join(p_dir, 'reference')
     ref = '100307'
