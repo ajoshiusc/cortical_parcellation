@@ -179,12 +179,6 @@ We separately consider each anatomical region in the cortex and subdivide
  First, we select an anatomical ROI for which we want subparcellation.
  Then the mean was removed and variance normalized for each time series
  in the data to 1.
- If X and Y are two random variables (X and Y are vector with samples from
- the two RVs) representing time series from two points in the brain, then
- dot product of X and Y yields correlation between them.
- If we consider X and Y as points on hypersphere due to unit variance, then
- the distance between them is a true metric given by πα=π cos^(-1) (figure
- 1) and therefore a measure of similarity can be defined as sin^(-1).
  This similarity measure is used to compute similarity matrix between every
  pair of nodes in the selected ROI.
  The similarity matrix is then inputted to the spectral clustering algorithm.
@@ -201,11 +195,25 @@ Geodesic distance
 
 \begin_layout Standard
 Since we assume that the input time series as variance normalized to 1,
- we can represent each of the time series as points on sphere.
+ we can represent each of the time series as points on a hypersphere.
+ If X and Y are two random variables (X and Y are vector with samples from
+ the two RVs) representing time series from two points in the brain, then
+ dot product of X and Y yields correlation between them.
+ If we consider X and Y as points on hypersphere due to unit variance, then
+ the geodesic distance between them is a metric given by 
+\begin_inset Formula $\sin^{-1}(X\cdot Y)$
+\end_inset
+
+ and therefore a measure of similarity can be defined as sin^(-1).
 \end_layout
 
 \begin_layout Subsection
 Connectivity based distance
+\end_layout
+
+\begin_layout Standard
+Connectivity of a given signal to the rest of the brain can be computed
+ by measuring correlation 
 \end_layout
 
 \begin_layout Subsection
@@ -224,10 +232,6 @@ Exponential function
 wide true
 sideways false
 status collapsed
-
-\begin_layout Plain Layout
-
-\end_layout
 
 \begin_layout Plain Layout
 \align center
@@ -259,6 +263,10 @@ status collapsed
 
 \end_layout
 
+\begin_layout Section
+Results
+\end_layout
+
 \begin_layout Standard
 We analyzed the data from HCP dataset for 100 subjects filtered using tNLM
  [3] filtering.
@@ -266,6 +274,86 @@ We analyzed the data from HCP dataset for 100 subjects filtered using tNLM
  on functional connectivity from resting fMRI state.
  The optimal number of cluster based on silhouette analysis shows that there
  are 3 subdivisions of precuneus and 3 subdivisions of cingulate.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float table
+wide true
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename figs/tab1.svg
+	width 100text%
+
+\end_inset
+
+
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Comparison of Rand Score
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Wrap figure
+lines 0
+placement L
+overhang 0in
+width "50col%"
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename figs/perf_samples.pdf
+	lyxscale 30
+	width 100col%
+
+\end_inset
+
+
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+a
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
