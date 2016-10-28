@@ -41,18 +41,18 @@ def mean_std_rand(labels_all):
     return ars.mean(), ars.std(), freq1, labs_mode
 
 
-p_dir_ref = '/home/ajoshi/data/HCP_data'
+p_dir_ref = '/big_disk/ajoshi/HCP_data'
 ref = '100307'
 dfs_left_sm = readdfs(os.path.join(p_dir_ref, 'reference',
                                    ref + '.aparc.a2009s.32k_fs.reduce3.\
 very_smooth.left.dfs'))
 
 
-#rlist = [21]  # Precuneus
-#msksize = [507]
+rlist = [21]  # Precuneus
+msksize = [507]
 
-#rlist = [10]
-#msksize = [545]
+rlist = [10]
+msksize = [545]
 rlist = [13]
 msksize = [577]
 
@@ -79,7 +79,7 @@ scan_type = ['left', 'right']
 session_type = [1, 2]
 fadd_1 = '.rfMRI_REST'
 fadd_2 = '.reduce3.ftdata.NLM_11N_hvar_25.mat'
-
+algo = 1
 # %% Across session study
 labels_corr_sininv_all = sp.zeros((len(lst), 4, msksize[0]))
 labels_corr_corr_exp_all = sp.zeros((len(lst), 4, msksize[0]))
@@ -99,7 +99,7 @@ for sub in lst:
             session = session_type[scan % 2]
             scan1 = sdir[scan/2]
             l = sp.load(os.path.join(out_dir, sub + '.rfMRI_REST' +
-                        str(session) + scan1 + str(roiregion) + '.labs.npz'))
+                        str(session) + scan1 + str(roiregion) + str(algo) + '.labs.npz'))
 
             labels_corr_sininv_all[subno, scan, :] = l['labels_corr_sininv']
             labels_corr_corr_exp_all[subno, scan, :] = \
@@ -126,8 +126,8 @@ for scanid in range(4):
                                            [:, scanid, :].T)
     mean_rnd[scanid, 0] = m
     std_rnd[scanid, 0] = s
-    print('scanid = ' + str(scanid) + ' roi = ' + str(roiregion) +
-          ' labels_corr_sininv_all mean =' + str(m) + ' std = ' + str(s))
+#    print('scanid = ' + str(scanid) + ' roi = ' + str(roiregion) +
+#          ' labels_corr_sininv_all mean =' + str(m) + ' std = ' + str(s))
     labels[ind] = labs_mode.squeeze()
 
     freq[ind] = freq1
@@ -137,11 +137,11 @@ for scanid in range(4):
 #    view_patch_vtk(dfs_left_sm)
 
     # labels_corr_corr_exp_all is nsub x nsession x nvert
-    m, s, freq1, labs_mode = mean_std_rand(labels_corr_corr_exp_all[:, 0, :].T)
+    m, s, freq1, labs_mode = mean_std_rand(labels_corr_corr_exp_all[:, scanid, :].T)
     mean_rnd[scanid, 1] = m
     std_rnd[scanid, 1] = s
-    print('scanid = ' + str(scanid) + ' roi = ' + str(roiregion) +
-          ' labels_corr_corr_exp_all mean =' + str(m) + ' std = ' + str(s))
+#    print('scanid = ' + str(scanid) + ' roi = ' + str(roiregion) +
+#          ' labels_corr_corr_exp_all mean =' + str(m) + ' std = ' + str(s))
     labels[ind] = labs_mode.squeeze()
 
     freq[ind] = freq1
@@ -151,11 +151,11 @@ for scanid in range(4):
 #    view_patch_vtk(dfs_left_sm)
 
     # labels_corr_dist_all is nsub x nsession x nvert
-    m, s, freq1, labs_mode = mean_std_rand(labels_corr_dist_all[:, 0, :].T)
+    m, s, freq1, labs_mode = mean_std_rand(labels_corr_dist_all[:, scanid, :].T)
     mean_rnd[scanid, 2] = m
     std_rnd[scanid, 2] = s
-    print('scanid = ' + str(scanid) + ' roi = ' + str(roiregion) +
-          ' labels_corr_dist_all mean =' + str(m) + ' std = ' + str(s))
+#    print('scanid = ' + str(scanid) + ' roi = ' + str(roiregion) +
+#          ' labels_corr_dist_all mean =' + str(m) + ' std = ' + str(s))
     labels[ind] = labs_mode.squeeze()
 
     freq[ind] = freq1
@@ -165,11 +165,11 @@ for scanid in range(4):
 #    view_patch_vtk(dfs_left_sm)
 
     # labels_corr_corr_exp_all is nsub x nsession x nvert
-    m, s, freq1, labs_mode = mean_std_rand(labels_corr_exp_all[:, 0, :].T)
+    m, s, freq1, labs_mode = mean_std_rand(labels_corr_exp_all[:, scanid, :].T)
     mean_rnd[scanid, 3] = m
     std_rnd[scanid, 3] = s
-    print('scanid = ' + str(scanid) + ' roi = ' + str(roiregion) +
-          ' labels_corr_exp_all mean =' + str(m) + ' std = ' + str(s))
+#    print('scanid = ' + str(scanid) + ' roi = ' + str(roiregion) +
+#          ' labels_corr_exp_all mean =' + str(m) + ' std = ' + str(s))
 
     labels[ind] = labs_mode.squeeze()
 
@@ -200,8 +200,8 @@ for subno in range(nsub):
                                            [subno, :, :].T)
     mean_rnd[subno, 0] = m
     std_rnd[subno, 0] = s
-    print('subno = ' + str(subno) + ' roi = ' + str(roiregion) +
-          ' labels_corr_sininv_all mean =' + str(m) + ' std = ' + str(s))
+#    print('subno = ' + str(subno) + ' roi = ' + str(roiregion) +
+#          ' labels_corr_sininv_all mean =' + str(m) + ' std = ' + str(s))
     labels[ind] = labs_mode.squeeze()
 
     freq[ind] = freq1
@@ -215,8 +215,8 @@ for subno in range(nsub):
                                            [subno, :, :].T)
     mean_rnd[subno, 1] = m
     std_rnd[subno, 1] = s
-    print('subno = ' + str(subno) + ' roi = ' + str(roiregion) +
-          ' labels_corr_corr_exp_all mean =' + str(m) + ' std = ' + str(s))
+#    print('subno = ' + str(subno) + ' roi = ' + str(roiregion) +
+#          ' labels_corr_corr_exp_all mean =' + str(m) + ' std = ' + str(s))
     labels[ind] = labs_mode.squeeze()
 
     freq[ind] = freq1
@@ -229,8 +229,8 @@ for subno in range(nsub):
     m, s, freq1, labs_mode = mean_std_rand(labels_corr_dist_all[subno, :, :].T)
     mean_rnd[subno, 2] = m
     std_rnd[subno, 2] = s
-    print('subno = ' + str(subno) + ' roi = ' + str(roiregion) +
-          ' labels_corr_dist_all mean =' + str(m) + ' std = ' + str(s))
+#    print('subno = ' + str(subno) + ' roi = ' + str(roiregion) +
+#          ' labels_corr_dist_all mean =' + str(m) + ' std = ' + str(s))
     labels[ind] = labs_mode.squeeze()
 
     freq[ind] = freq1
@@ -243,8 +243,8 @@ for subno in range(nsub):
     m, s, freq1, labs_mode = mean_std_rand(labels_corr_exp_all[subno, :, :].T)
     mean_rnd[subno, 3] = m
     std_rnd[subno, 3] = s
-    print('subno = ' + str(subno) + ' roi = ' + str(roiregion) +
-          ' labels_corr_exp_all mean =' + str(m) + ' std = ' + str(s))
+#    print('subno = ' + str(subno) + ' roi = ' + str(roiregion) +
+#          ' labels_corr_exp_all mean =' + str(m) + ' std = ' + str(s))
 
     labels[ind] = labs_mode.squeeze()
 
