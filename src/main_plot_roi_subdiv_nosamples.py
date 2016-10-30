@@ -89,7 +89,8 @@ labels_corr_dist_all = sp.zeros((len(lst), 4, msksize[0]))
 labels_corr_exp_all = sp.zeros((len(lst), 4, msksize[0]))
 subno = 0
 
-l = sp.load('temp100.npz')
+l = sp.load('temp100_algo1_MTG_tmp.npz')
+#l = sp.load('temp100.npz')
 
 labels_corr_sininv_all = l['labels_corr_sininv_all']
 labels_corr_corr_exp_all = l['labels_corr_corr_exp_all']
@@ -117,7 +118,7 @@ for ind in range(labels_corr_sininv_all.shape[0]):
 n_samples = range(20, 1200, 20)
 n_samples.extend([1200])
 
-sns_plot = sns.tsplot(data=rnd_ind, time=n_samples, value = "adj rand score", condition = ['$\sin^{-1}$','conn','$\exp$', '$L^2$'], ci = 95, err_style='ci_band')
+sns_plot = sns.tsplot(data=rnd_ind, time=n_samples, value = "adj rand score", condition = ['$\sin^{-1}$','conn','$L^2$','$\exp$'], ci = 95, err_style='ci_band')
 
-plt.savefig('perf_samples.pdf')
+plt.savefig('perf_samples_algo1_MTG_tmp.pdf')
 

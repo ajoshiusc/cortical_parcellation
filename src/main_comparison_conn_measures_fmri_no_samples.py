@@ -97,7 +97,7 @@ def parcellate_region(roilist, sub, nClusters, scan, scan_type, savepng=0, sessi
     else:
         labels_corr_exp = region_growing_fmri(seeds,
                                               np.abs(affinity_matrix), conn)
-    affinity_matrix = sp.sqrt(2.0 + 2.0*rho)
+    affinity_matrix = 2.0 - sp.sqrt(2.0 - 2.0*rho)
     if algo == 0:
         labels_corr_dist = SC.fit_predict(np.abs(affinity_matrix))
     else:
@@ -190,7 +190,7 @@ for rep in range(n_rep):
 
         print str(ind) + ' out of ' + str(len(n_samples)) + 'rep = ' + str(rep)
 
-sp.savez('temp100_algo1_MTG.npz', labels_corr_sininv_all=labels_corr_sininv_all,
+sp.savez('temp100_algo1_MTG_tmp.npz', labels_corr_sininv_all=labels_corr_sininv_all,
          labels_corr_exp_all=labels_corr_exp_all,
          labels_corr_dist_all=labels_corr_dist_all,
          labels_corr_corr_exp_all=labels_corr_corr_exp_all)
