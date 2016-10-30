@@ -160,6 +160,9 @@ def box_plot(temp,temp1,map_roilists,fig_name):
         data_to_plot.append(temp[i])
         data_to_plot.append(temp1[i])
     # Create a figure instance
+    save_dir = '/home/sgaurav/Documents/git_sandbox/cortical_parcellation/src'
+    import scipy as sp
+    sp.savez(os.path.join(save_dir, 'rand_index'+scan_type[0] + '.npz'),rand_index=data_to_plot,roilists=map_roilists.values())
     fig = plt.figure(1 )
 
     # Create an axes instance
@@ -241,7 +244,7 @@ def session_to_session(msk,scan_type,sub_lst):
     count=[3,2,1,4]
     sub_lst=sorted(sub_lst)
     for sub in sub_lst:
-        if not ((sub.startswith('direct_mapping')) or sub[7:8] =='l'):
+        if not ((sub.startswith('direct_mapping')) or sub[7:8] =='r'):
             #print sub[:6]
             if cnt%4 ==0:
                 cnt=0
@@ -268,7 +271,7 @@ def dir_session(msk,scan_type,sub_lst):
     dir_labels = direct['labels'][msk]
     for sub in sub_lst:
         cnt+=1
-        if not ((sub.startswith('direct_mapping')) or sub[7:8] =='l'):
+        if not ((sub.startswith('direct_mapping')) or sub[7:8] =='r'):
             fmri = np.load(os.path.join(save_dir, str(sub) ))
             fmri_labels = fmri['labels'][msk]
             lst.append(adjusted_rand_score(dir_labels, fmri_labels))
@@ -283,15 +286,15 @@ def RI_mean(lst):
     import scipy as sp
     roilists=[]
     scan_type = ['left', 'right']
-    for hemi in range(1,2):
+    for hemi in range(0,1):
         direct = np.load('very_smooth_data_'+scan_type[hemi]+'.npz')
         if roilists.__len__() ==  0:
             roilists=direct['roilists'].tolist()
         else :
             roilists += direct['roilists'].tolist()
     map_roilists={}
-    for i in range (right_hemisphere.shape[0]):
-        map_roilists[right_hemisphere[i]]=roiregion[i]
+    for i in range (left_hemisphere.shape[0]):
+        map_roilists[left_hemisphere[i]]=roiregion[i]
     refined_left=readdfs(os.path.join('/home/ajoshi/for_gaurav', '100307.BCI2reduce3.very_smooth.left.dfs'))
     refined_left=refined_left.labels
     refined_right = readdfs(os.path.join('/home/ajoshi/for_gaurav', '100307.BCI2reduce3.very_smooth.right.dfs'))
@@ -303,15 +306,15 @@ def RI_mean(lst):
         #print roilist
         cnt += 1
         # msk_small_region = np.in1d(refined_right,roilist)
-        msk_small_region = np.in1d(refined_right, roilist)
+        msk_small_region = np.in1d(refined_left, roilist)
         if temp.__len__() > 0:
             # temp = sp.vstack([calculate_mean(msk_small_region, sub, scan_type[1]), temp])
-            temp = sp.vstack([dir_session(msk_small_region, scan_type[1],lst), temp])
-            temp1 = sp.vstack([session_to_session(msk_small_region, scan_type[1],lst), temp1])
+            temp = sp.vstack([dir_session(msk_small_region, scan_type[0],lst), temp])
+            temp1 = sp.vstack([session_to_session(msk_small_region, scan_type[0],lst), temp1])
         else:
             # temp=calculate_mean(msk_small_region,sub,scan_type[1])
-            temp = dir_session(msk_small_region, scan_type[1],lst)
-            temp1 = session_to_session(msk_small_region, scan_type[1],lst)
+            temp = dir_session(msk_small_region, scan_type[0],lst)
+            temp1 = session_to_session(msk_small_region, scan_type[0],lst)
             # msk_small_region = np.in1d(refined_left, roilist+1)
             # temp=sp.vstack([calculate_mean(msk_small_region,sub,scan_type[0]),temp])
     box_plot(temp.tolist(),temp1.tolist(),map_roilists,'60')
