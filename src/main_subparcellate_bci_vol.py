@@ -51,7 +51,7 @@ X, Y, Z = sp.meshgrid(sp.arange(vol_lab.shape[0]), sp.arange(vol_lab.shape[1]),
 X = X*xres
 Y = Y*yres
 Z = Z*zres
-vol_img = sp.mod(vol_img, 1000)
+#vol_img = sp.mod(vol_img, 1000)
 ind = (vol_img >= 120) & (vol_img < 600)
 Xc = X[ind]
 Yc = Y[ind]
