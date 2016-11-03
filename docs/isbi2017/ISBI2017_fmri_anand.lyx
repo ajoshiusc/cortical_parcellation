@@ -533,9 +533,10 @@ Consistency with subsampled data
 \begin_layout Itemize
 Show brain figure showing modulated plot of labels for across session.
  TODO make a figure with all ROIs
-\end_layout
+\begin_inset Note Note
+status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 \begin_inset Float table
 wide true
 sideways false
@@ -543,13 +544,6 @@ status collapsed
 
 \begin_layout Plain Layout
 \align center
-\begin_inset Graphics
-	filename figs/tab1.svg
-	width 100text%
-
-\end_inset
-
-
 \begin_inset Caption Standard
 
 \begin_layout Plain Layout
@@ -561,22 +555,18 @@ Comparison of Rand Score
 
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
 \end_inset
 
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 \begin_inset Wrap figure
 lines 0
 placement L
 overhang 0in
 width "50col%"
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \begin_inset Graphics
@@ -598,21 +588,22 @@ a
 
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
 \end_inset
 
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 \begin_inset Note Note
 status open
 
 \begin_layout Plain Layout
 Figure showing subdivisions
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -628,6 +619,16 @@ Conclusion
 Ours is the best method.
  Correlation of correlation does not give more information that the original
  time series 
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "key-1"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
