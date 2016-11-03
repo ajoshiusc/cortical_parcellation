@@ -291,93 +291,39 @@ Materials and Methods
 \end_layout
 
 \begin_layout Standard
-correlations of time series.
+In this section, the four connectivity measures are described first.
+ This is followed by their analysis and description of methods used for
+ comparing their performance.
+ As an input, we assume preprocessed fMRI data mapped to the cortical surface.
+ We assume that the data is zero mean and variance normalized.
 \end_layout
 
 \begin_layout Subsection
-Geodesic Distance 
+Geodesic distance 
 \end_layout
 
 \begin_layout Standard
-Since we assume that the input time series as variance normalized to 1,
- we can represent each of the time series as points on a hypersphere.
- If X and Y are two random variables (X and Y are vector with samples from
- the two RVs) representing time series from two points in the brain, then
- dot product of X and Y yields correlation between them.
- If we consider X and Y as points on hypersphere due to unit variance, then
- the geodesic distance between them is a metric given by 
-\begin_inset Formula $\sin^{-1}(X\cdot Y)$
+First, we describe the proposed geodesic distance measure for connectivity
+ analysis in fMRI time series.
+ Since we assume that the input time series are variance normalized, we
+ can represent each of the time series as points on a hypersphere 
+\begin_inset Formula $\mathbb{S}^{T-1}$
 \end_inset
 
- and therefore a measure of similarity can be defined as sin^(-1).
-\end_layout
-
-\begin_layout Standard
-Is a real distance.
-\end_layout
-
-\begin_layout Subsection
-Connectivity-based Distance
-\end_layout
-
-\begin_layout Standard
-Connectivity of a given signal to the rest of the brain can be computed
- by measuring correlation of each voxel to the rest of the brain.
- Efficient way for computing correlation of correlation.
-\end_layout
-
-\begin_layout Standard
-Not a real distance
-\end_layout
-
-\begin_layout Subsection
-Exponential Kernel Distance 
-\end_layout
-
-\begin_layout Standard
-Not a real distance.
-\end_layout
-
-\begin_layout Subsection
-\begin_inset Formula $L^{2}$
+ of dimension 
+\begin_inset Formula $T-1$
 \end_inset
 
- Distance
-\end_layout
-
-\begin_layout Standard
-We can consider the usual 
-\begin_inset Formula $L^{2}$
+, where 
+\begin_inset Formula $T$
 \end_inset
 
- distance between two vectors representing time series as a metric between
- the two.
+ is the number of time samples.
  
-\begin_inset Formula 
-\begin{align*}
-d_{L^{2}}(X,Y) & =\|X-Y\|^{2}\\
-= & \|X\|^{2}+\|Y\|^{2}-2\rho_{XY}\\
-= & 2-2\rho_{XY}
-\end{align*}
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-Is a real distance.
-\end_layout
-
-\begin_layout Subsection
-Comparison of the Measures
-\end_layout
-
-\begin_layout Standard
 \begin_inset Float figure
 wide true
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \align center
@@ -400,13 +346,254 @@ status open
 
 \end_layout
 
-\begin_layout Plain Layout
+\end_inset
 
+ If 
+\begin_inset Formula $X$
+\end_inset
+
+ and 
+\begin_inset Formula $Y$
+\end_inset
+
+ represent time series from two points in the brain, then dot product of
+ 
+\begin_inset Formula $X$
+\end_inset
+
+ and 
+\begin_inset Formula $Y$
+\end_inset
+
+ yields Pearson correlation 
+\begin_inset Formula $\rho_{XY}$
+\end_inset
+
+ between them.
+ If we consider X and Y as points on hypersphere due to unit variance, then
+ the geodesic distance between them is a metric given by 
+\begin_inset Formula $\cos^{-1}(X\cdot Y)$
+\end_inset
+
+ and therefore a similarity measure measuring connectivity can be defined
+ as:
 \end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{align*}
+S_{G}(X,Y)= & \sin^{-1}(X\cdot Y)=\sin^{-1}(\rho_{XY}).
+\end{align*}
+
+\end_inset
+
+This measure is based on a true metric since it represents a real distance
+ measure.
+\end_layout
+
+\begin_layout Subsection
+Connectivity-based distance
+\end_layout
+
+\begin_layout Standard
+One of the most popular approach for connectivity is to first compute correlatio
+n of time series at the given points on the cortex to the time series for
+ all the points in the brain 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "fan2015functional,craddock2012whole"
+
+\end_inset
+
+.
+ Let 
+\begin_inset Formula $N_{v}$
+\end_inset
+
+denote the number of vertices on the cortical surface mesh.
+ Then, a similarity measure is computed using Pearson's correlation coefficient
+ that evaluates similarity between the spatial functional connectivity maps
+ of each pair of points on the cortex.
+ Let 
+\begin_inset Formula $B$
+\end_inset
+
+ denote the data matrix for the whole cortex of size 
+\begin_inset Formula $N_{v}\times T$
+\end_inset
+
+ .
+ Then 
+\begin_inset Formula $BB^{T}$
+\end_inset
+
+ is the matrix of spatial connectivity maps denoting correlation between
+ every pair of vertices on the cortex.
+ If we use this spatial map of connectivity as a feature, and compute similarity
+ between the spatial maps using correlation, then we get 
+\begin_inset Formula $(BB^{T})(BB^{T})^{T}=(BB^{T})^{2}$
+\end_inset
+
+ due to symmetry.
+ Therefore, it is worth noting that, this popularly used connectivity based
+ measure does not contain any additional information than the usual correlation.
+ However, it is worth noting that the dimension of the spatial correlation
+ maps is 
+\begin_inset Formula $N_{v}\times N_{v}$
+\end_inset
+
+ which could be very large for a high resolution representation of the cortex.
+ Therefore, often this mesh is subsampled for this computation resulting
+ in loss of information.
+ Therefore, we note that this popular approach is not only computationally
+ expensive, but also has less information than simpler approaches.
+ Here, we evaluate a version of connectivity based approach.
+ 
+\end_layout
+
+\begin_layout Standard
+For a given pair of vertices on the cortex with their corresponding time
+ series 
+\begin_inset Formula $X$
+\end_inset
+
+ and 
+\begin_inset Formula $Y$
+\end_inset
+
+, we compute their spatial connectivity maps by measuring correlation of
+ these to the whole brain data, 
+\begin_inset Formula $XB^{T}$
+\end_inset
+
+and 
+\begin_inset Formula $YB^{T}$
+\end_inset
+
+.
+ In order to normalize this data, we compute the Fischer-z transformation
+ of this connectivity feature given by 
+\begin_inset Formula $f_{X}=\tan^{-1}(XB^{T}),$
+\end_inset
+
+ 
+\begin_inset Formula $f_{Y}=\tan^{-1}(YB^{T})$
+\end_inset
+
+ and compute Pearson's correlation between them 
+\begin_inset Formula $\rho_{f_{X}f_{Y}}$
+\end_inset
+
+.
+ This is then followed by an exponential transformation to emphasize high
+ connectivity.
+ The similarity measure with this approach is given by:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+S_{C}(X,Y)=\exp\frac{-2(1-\rho_{f_{X}f_{Y}})}{h^{2}}
+\]
 
 \end_inset
 
 
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Efficient way for computing correlation of correlation.
+ 
+\end_layout
+
+\end_inset
+
+ where we chose the scale parameter 
+\begin_inset Formula $h=0.72$
+\end_inset
+
+ based on our previous evaluation 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "bhushan2016temporal"
+
+\end_inset
+
+.
+ It should be noted that this approach is not based on a metric and does
+ not define a real distance measure.
+\end_layout
+
+\begin_layout Subsection
+Exponential kernel distance 
+\end_layout
+
+\begin_layout Standard
+A simple distance measure between two time series 
+\begin_inset Formula $X$
+\end_inset
+
+ and 
+\begin_inset Formula $Y$
+\end_inset
+
+ can be computed by first evaluating the Pearson's correlation coefficient
+ and then computing an exponential transformation to emphasize high correlations.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+S_{E}(X,Y)=\exp\frac{-2(1-\rho_{XY})}{h^{2}}.
+\]
+
+\end_inset
+
+ This measure is a nonlinear transformation on the correlation and do not
+ define a metric and therefore is not a real distance based measure.
+\end_layout
+
+\begin_layout Subsection
+Euclidean 
+\begin_inset Formula $L^{2}$
+\end_inset
+
+ distance
+\end_layout
+
+\begin_layout Standard
+We can consider the usual 
+\begin_inset Formula $L^{2}$
+\end_inset
+
+ distance between two vectors representing time series as a metric between
+ the two 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "bhushan2016temporal"
+
+\end_inset
+
+.
+ This measure uses the time series directly and does not take into account
+ the fact that the time series are variance normalized.
+\begin_inset Formula 
+\begin{align*}
+d_{L^{2}}(X,Y) & =\|X-Y\|^{2}\\
+= & \|X\|^{2}+\|Y\|^{2}-2\rho_{XY}\\
+= & 2-2\rho_{XY}.
+\end{align*}
+
+\end_inset
+
+While this measure is the simplest measure of similarity, it is based on
+ a metric and is a real distance based measure.
+\end_layout
+
+\begin_layout Subsection
+Comparison of the measures
 \end_layout
 
 \begin_layout Itemize
@@ -422,11 +609,23 @@ Which are distance metric and which are not
 \end_layout
 
 \begin_layout Subsection
-Clustering Method
+Clustering method
 \end_layout
 
 \begin_layout Standard
-We separately consider each anatomical region in the cortex and subdivide
+As an input, we assume preprocessed rsfMRI data from HCP that is also processed
+ using tNLM filtering 
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+say a few words about tNLM filtering
+\end_layout
+
+\end_inset
+
+.
+ We separately consider each anatomical region in the cortex and subdivide
  them based on the resting fMRI time-series.
  Specifically, (1) Precuneus (PC) (2) Cingulate Gyrus (CG), (3) Middle Frontal
  Gyrus (MFG), (4) Middle Temporal Gyrus (MTG) from the BCI_DNI_brain atlas
@@ -441,19 +640,8 @@ http://brainsuite.org/svreg_atlas_description
 
 \end_inset
 
-) from BrainSuite software.
- As an input, we assume preprocessed rsfMRI data from HCP that is also processed
- using tNLM filtering 
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-say a few words about tNLM filtering
-\end_layout
-
-\end_inset
-
-.
+) from BrainSuite software were coregistered to the HCP data using freesurfer
+ based registration.
  First, we select an anatomical ROI for which we want subparcellation.
  Then the mean was removed and variance normalized for each time series
  in the data to 1.
@@ -471,7 +659,10 @@ key "rousseeuw1987silhouettes"
  Once the parcellation is done, the color coded maps of cross subject consistenc
 y were generated.
  Additionally, we also generated connectivity maps from centroid of each
- cluster to the whole brain by computing 
+ cluster to the whole brain by computing.
+ We analyzed cross subject consistency of parcellation by measuring adjusted
+ Rand index to measure the similarity between two parcellations.
+ 
 \end_layout
 
 \begin_layout Itemize
@@ -492,8 +683,43 @@ Data
 \end_layout
 
 \begin_layout Standard
-We removed mean normalized by variance 100 subjects and 4 sessions.
- we used minimal processed data [borrow from Minqi's paper].
+All of the in vivo results below used the minimally preprocessed (ICA-FIX
+ denoised) resting fMRI data from 100 unrelated subjects, with 4 scan sessions
+ each, which are publicly available from the Human Connectome Project (HCP)
+ 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "glasser2013minimal"
+
+\end_inset
+
+.
+ The resting fMRI data were resampled onto the individuals’ cortical surfaces,
+ which were coregistered using FreeSurfer.
+ The functional MRI data sets were acquired for four independent resting
+ fMRI sessions of 15 minutes each (TR=720ms, TE=33.1ms, 2 mm x 2 mm x 2 mm
+ voxels) and the subjects were asked to relax and fixate on a projected
+ bright cross-hair on a dark background.
+ HCP's minimal preprocessing primarily corrects the fMRI data for acquisition
+ artifacts, resamples the data on the cortical surface and performs a non-aggres
+sive spatio-temporal cleanup.
+ The data are then resampled for each subject onto a common standard cortical
+ surface mesh representation (32K Conte-69) in the native subject space.
+ Additional spatial-temporal processing is then used to remove scanner,
+ motion and other artifacts.
+ In addition to this processing, we also applied temporal non-local means
+ (tNLM) filter 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "bhushan2016temporal"
+
+\end_inset
+
+.
+ The tNLM filtering is shown to improve the performance of parcellation
+ algorithms by improving local correlations between the datasets.
+ Additionally, we normalized the resting fMRI time series at each vertex
+ to zero mean and unit variance.
 \end_layout
 
 \begin_layout Section
@@ -619,16 +845,6 @@ Conclusion
 Ours is the best method.
  Correlation of correlation does not give more information that the original
  time series 
-\end_layout
-
-\begin_layout Bibliography
-\begin_inset CommandInset bibitem
-LatexCommand bibitem
-key "key-1"
-
-\end_inset
-
-
 \end_layout
 
 \begin_layout Standard
