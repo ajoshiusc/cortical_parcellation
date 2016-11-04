@@ -323,12 +323,12 @@ First, we describe the proposed geodesic distance measure for connectivity
 \begin_inset Float figure
 wide true
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \align center
 \begin_inset Graphics
-	filename figs/fig1.svg
+	filename figs/fig1.pdf
 	lyxscale 30
 	width 100text%
 
@@ -609,7 +609,14 @@ Which are distance metric and which are not
 \end_layout
 
 \begin_layout Subsection
-Clustering method
+Clustering method 
+\begin_inset CommandInset label
+LatexCommand label
+name "subsec:Clustering-method"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -645,10 +652,23 @@ http://brainsuite.org/svreg_atlas_description
  First, we select an anatomical ROI for which we want subparcellation.
  Then the mean was removed and variance normalized for each time series
  in the data to 1.
- This similarity measure is used to compute similarity matrix between every
- pair of nodes in the selected ROI.
- The similarity matrix is then inputted to the spectral clustering algorithm.
- The optimal number of clusters is selected based on Silhouette Score 
+ The similarity matrix is then computed using the four measures described
+ in the methods section.
+ The similarity matrix defines connectivity between every pair of nodes
+ in the selected ROI.
+ This similarity matrix is then inputted to the clustering algorithms.
+ In this paper, we used two clustering algorithms (1) region growing, and
+ (2) spectral clustering 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "thirion2014fmri"
+
+\end_inset
+
+ since they represent the most popular clustering algorithms for cortical
+ clustering.
+ The optimal number of clusters for each ROI is selected based on Silhouette
+ score 
 \begin_inset CommandInset citation
 LatexCommand cite
 key "rousseeuw1987silhouettes"
@@ -658,12 +678,40 @@ key "rousseeuw1987silhouettes"
 .
  Once the parcellation is done, the color coded maps of cross subject consistenc
 y were generated.
- Additionally, we also generated connectivity maps from centroid of each
- cluster to the whole brain by computing.
  We analyzed cross subject consistency of parcellation by measuring adjusted
  Rand index to measure the similarity between two parcellations.
- 
+ The adjusted Rand index ranges from 0 to 1 with value of 0 for random label
+ assignment and 1 for complete agreement of labels, upto permutation of
+ label ids, between the two clustering schemes.
 \end_layout
+
+\begin_layout Standard
+We did Rand index analysis for cross subject comparison as well as cross
+ session analysis.
+ For cross subject analysis, for a given clustering algorithm and given
+ connectivity measure, we computed pairwise Rand indices for each pair of
+ subject.
+ These rand indices were averaged over all the subjects and sessions.
+ Conversely, for cross session Rand analysis, for a given clustering algorithm
+ and given connectivity measure, we computed pairwise Rand indices for all
+ pairs of sessions for each subject.
+ These rand indices were again averaged over all the subjects and sessions.
+\end_layout
+
+\begin_layout Standard
+Additionally, we also studied the effect of length of time series on the
+ accuracy of clustering.
+ Each of the time series in HCP data has 1200 time points.
+ We performed clusterings using the full sample of 1200 and compared the
+ labeling results to the subsampled data of length <1200.
+ For each of the sample size, we downsampled the time series by sampling
+ randomly, without replacement, from the full length time series.
+ The agreement of labeling was computed for subsampled data to the full
+ length data using adjusted Rand index.
+ This computation was repeated 100 times to obtain a confidence interval.
+ 
+\begin_inset Note Note
+status open
 
 \begin_layout Itemize
 We compare using two clustering algorithms 1) spectral clustering, 2) region
@@ -676,6 +724,15 @@ Cross subject and cross session consistency analysis
 
 \begin_layout Itemize
 Consistency with subsampled data
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Results
 \end_layout
 
 \begin_layout Subsection
@@ -704,7 +761,7 @@ key "glasser2013minimal"
  artifacts, resamples the data on the cortical surface and performs a non-aggres
 sive spatio-temporal cleanup.
  The data are then resampled for each subject onto a common standard cortical
- surface mesh representation (32K Conte-69) in the native subject space.
+ surface mesh representation in the native subject space.
  Additional spatial-temporal processing is then used to remove scanner,
  motion and other artifacts.
  In addition to this processing, we also applied temporal non-local means
@@ -722,24 +779,89 @@ key "bhushan2016temporal"
  to zero mean and unit variance.
 \end_layout
 
-\begin_layout Section
-Results
+\begin_layout Subsection
+Comparison of connectivity measures
 \end_layout
 
 \begin_layout Standard
-We analyzed the data from HCP dataset for 100 subjects filtered using tNLM
+The Silhouette analysis described in Sec.
  
-\begin_inset CommandInset citation
-LatexCommand cite
-key "bhushan2016temporal"
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "subsec:Clustering-method"
 
 \end_inset
 
- filtering.
- In this paper we present the subdivision for precuneus and cingulate based
- on functional connectivity from resting fMRI state.
- The optimal number of cluster based on silhouette analysis shows that there
- are 3 subdivisions of precuneus and 3 subdivisions of cingulate.
+ resulted in optimal number of clusters to be 2,3,3,4 for PC, CG,MFG and
+ MTG respectively.
+ Fig.
+ # shows modulated plots of labels across the study population of 100 subjects,
+ where the proportional of color is frequency of agreement of labels across
+ the study population.
+ A table of Rand indices for is shown in Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:Rand-Index-Analysis"
+
+\end_inset
+
+.
+ It can be seen that in both the cross subject and cross session comparisons,
+ geodesic distance based measure resulted in the most consistent labeling.
+ Among the clustering algorithms, region growing performed better than the
+ spectral clustering.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float table
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Rand Index Analysis 
+\begin_inset CommandInset label
+LatexCommand label
+name "tab:Rand-Index-Analysis"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Next, we compared the performance of the connectivity measures for different
+ number of samples by measuring agreement of labeling for different size
+ of subsample to the full sample.
+ Here again, the geodesic distance based connectivity measure showed best
+ performance, followed by Euclidean 
+\begin_inset Formula $L^{2}$
+\end_inset
+
+distance based measure, exponential kernel based and spatial connectivity
+ based measures in that order.
+ This order of performance was consistently observed for both region growing
+ and spectral clustering methods respectively.
+ Again among the two clustering algorithms the region growing method showed
+ slightly better performance.
 \end_layout
 
 \begin_layout Itemize
@@ -842,9 +964,20 @@ Conclusion
 \end_layout
 
 \begin_layout Standard
-Ours is the best method.
- Correlation of correlation does not give more information that the original
- time series 
+This paper presents a comparison of correlation based connectivity measures
+ and addresses the question what connectivity measure should be used for
+ fMRI based connectivity analysis.
+ It is also pointed out in this paper that the popularly used spatial connectivi
+ty based similarity measure does not provide good performance and is also
+ computationally more expensive.
+ The spatial connectivity map used in that method as a feature in fact does
+ not contain any additional information than the original time series, despite
+ being a very high dimensional feature compared to the original time series.
+ A new measure of connectivity is suggested and evaluated in this paper
+ based on geodesic distance.
+ A quantitative performance provides evidence that the proposed geodesic
+ distance measure performs best for connectivity studies.
+ 
 \end_layout
 
 \begin_layout Standard
