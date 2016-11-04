@@ -815,11 +815,19 @@ reference "tab:Rand-Index-Analysis"
 
 \begin_layout Standard
 \begin_inset Float table
-wide false
+wide true
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename figs/table1.pdf
+	width 100text%
+
+\end_inset
+
+
 \begin_inset Caption Standard
 
 \begin_layout Plain Layout
