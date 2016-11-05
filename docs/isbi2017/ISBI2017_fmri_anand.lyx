@@ -125,15 +125,6 @@ Which connectivity measure is best for fMRI based cortical clustering?
 \end_layout
 
 \begin_layout Abstract
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-[TBD] 
-\end_layout
-
-\end_inset
-
 Resting state fMRI (rsfMRI) provides complementary information to the sulcal
  brain anatomy about the cytoarchitecture and function of the human brain
  and therefore parcellation based on rsfMRI is becoming increasingly popular.
@@ -142,6 +133,9 @@ Resting state fMRI (rsfMRI) provides complementary information to the sulcal
  of fMRI time series from a ROI or point to the rest of the brain.
  In this paper, we present a new connectivity measure based on geodesic
  distance on unit sphere.
+ We also point out that the popularly used connectivity feature based on
+ spatial correlation, even though expensive in terms of computation, contains
+ redundancies and does not perform well in quantitative evaluation.
  Additionally, we compare the proposed and other connectivity measures,
  and analyze their relationships to each other.
  We demonstrate that the connectivity measure based on geodesic distance
@@ -190,8 +184,8 @@ key "raichle2001default,sporns2005human,rousseeuw1987silhouettes,smith2013functi
 \end_inset
 
 .
- These application require pairwise connectivity measure between every pair
- of points on the cortical surface.
+ These applications require pairwise connectivity measures between every
+ pair of points on the cortical surface.
  Most of the existing methods on fMRI based brain connectivity use correlation
  in fMRI signals as a measures of connectivity.
  
@@ -299,7 +293,7 @@ In this section, the four connectivity measures are described first.
 \end_layout
 
 \begin_layout Subsection
-Geodesic distance 
+Geodesic measure 
 \end_layout
 
 \begin_layout Standard
@@ -391,7 +385,7 @@ This measure is based on a true metric since it represents a real distance
 \end_layout
 
 \begin_layout Subsection
-Connectivity-based distance
+Connectivity-based measure
 \end_layout
 
 \begin_layout Standard
@@ -472,11 +466,11 @@ and
 .
  In order to normalize this data, we compute the Fischer-z transformation
  of this connectivity feature given by 
-\begin_inset Formula $f_{X}=\tan^{-1}(XB^{T}),$
+\begin_inset Formula $f_{X}=\tanh^{-1}(XB^{T}),$
 \end_inset
 
  
-\begin_inset Formula $f_{Y}=\tan^{-1}(YB^{T})$
+\begin_inset Formula $f_{Y}=\tanh^{-1}(YB^{T})$
 \end_inset
 
  and compute Pearson's correlation between them 
@@ -525,7 +519,7 @@ key "bhushan2016temporal"
 \end_layout
 
 \begin_layout Subsection
-Exponential kernel distance 
+Exponential kernel measure 
 \end_layout
 
 \begin_layout Standard
@@ -559,7 +553,7 @@ Euclidean
 \begin_inset Formula $L^{2}$
 \end_inset
 
- distance
+ measure
 \end_layout
 
 \begin_layout Standard
@@ -568,7 +562,7 @@ We can consider the usual
 \end_inset
 
  distance between two vectors representing time series as a metric between
- the two 
+ the two signals 
 \begin_inset CommandInset citation
 LatexCommand cite
 key "bhushan2016temporal"
@@ -639,9 +633,48 @@ say a few words about tNLM filtering
 .
  We separately consider each anatomical region in the cortex and subdivide
  them based on the resting fMRI time-series.
- Specifically, (1) Precuneus (PC) (2) Cingulate Gyrus (CG), (3) Middle Frontal
- Gyrus (MFG), (4) Middle Temporal Gyrus (MTG) from the BCI_DNI_brain atlas
- (described at 
+ 
+\begin_inset Float figure
+wide true
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename figs/brains1.pdf
+	lyxscale 30
+	width 100text%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+The ROIs considered in this study: precuneus (PC), middle temporal gyrus
+ (MTG) and middle frontal gyrus (MFG), with their subdivisions 
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:The-ROIs-considered"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+ Specifically, (1) Precuneus (PC), (2) Middle Frontal Gyrus (MFG), (3) Middle
+ Temporal Gyrus (MTG) from the BCI_DNI_brain atlas (described at 
 \begin_inset Flex URL
 status open
 
@@ -688,6 +721,7 @@ y were generated.
  The adjusted Rand index ranges from 0 to 1 with value of 0 for random label
  assignment and 1 for complete agreement of labels, upto permutation of
  label ids, between the two clustering schemes.
+ 
 \end_layout
 
 \begin_layout Standard
@@ -716,7 +750,7 @@ Additionally, we also studied the effect of length of time series on the
  This computation was repeated 100 times to obtain a confidence interval.
  
 \begin_inset Note Note
-status open
+status collapsed
 
 \begin_layout Itemize
 We compare using two clustering algorithms 1) spectral clustering, 2) region
@@ -782,6 +816,7 @@ key "bhushan2016temporal"
  algorithms by improving local correlations between the datasets.
  Additionally, we normalized the resting fMRI time series at each vertex
  to zero mean and unit variance.
+ 
 \end_layout
 
 \begin_layout Subsection
@@ -797,8 +832,8 @@ reference "subsec:Clustering-method"
 
 \end_inset
 
- resulted in optimal number of clusters to be 2,3,3,4 for PC, CG,MFG and
- MTG respectively.
+ resulted in optimal number of clusters to be 2,3,4 for PC, MFG and MTG
+ respectively.
  Fig.
  # shows modulated plots of labels across the study population of 100 subjects,
  where the proportional of color is frequency of agreement of labels across
@@ -815,7 +850,6 @@ reference "tab:Rand-Index-Analysis"
  geodesic distance based measure resulted in the most consistent labeling.
  Among the clustering algorithms, region growing performed better than the
  spectral clustering.
- 
 \begin_inset Float table
 wide true
 sideways false
@@ -850,27 +884,10 @@ name "tab:Rand-Index-Analysis"
 
 \end_inset
 
-
+ 
 \end_layout
 
 \begin_layout Standard
-Next, we compared the performance of the connectivity measures for different
- number of samples by measuring agreement of labeling for different size
- of subsample to the full sample.
- Here again, the geodesic distance based connectivity measure showed best
- performance, followed by Euclidean 
-\begin_inset Formula $L^{2}$
-\end_inset
-
-distance based measure, exponential kernel based and spatial connectivity
- based measures in that order.
- This order of performance was consistently observed for both region growing
- and spectral clustering methods respectively, except Euclidean distance
- performed better in spectral clustering than exponential kernel, while
- their performance was comparable in region growing.
- Again among the two clustering algorithms the region growing method showed
- better performance.
- 
 \begin_inset Float figure
 wide true
 sideways false
@@ -903,8 +920,28 @@ Agreement of clustering based on subsampled fMRI signals to the full length
 
 \end_inset
 
+ Next, we compared the performance of the connectivity measures for different
+ number of samples by measuring agreement of labeling for different size
+ of subsample to the full sample.
+ Here again, the geodesic distance based connectivity measure showed best
+ performance, followed by Euclidean 
+\begin_inset Formula $L^{2}$
+\end_inset
 
+distance based measure, exponential kernel based and spatial connectivity
+ based measures in that order.
+ This order of performance was consistently observed for both region growing
+ and spectral clustering methods respectively, except Euclidean distance
+ performed better in spectral clustering than exponential kernel, while
+ their performance was comparable in region growing.
+ Again among the two clustering algorithms the region growing method showed
+ better performance.
+ 
 \end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status collapsed
 
 \begin_layout Itemize
 We compare using two clustering algorithms 1) spectral clustering, 2) region
@@ -923,6 +960,11 @@ Consistency with subsampled data
 \begin_layout Itemize
 Show brain figure showing modulated plot of labels for across session.
  TODO make a figure with all ROIs
+\end_layout
+
+\end_inset
+
+
 \begin_inset Note Note
 status open
 
