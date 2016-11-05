@@ -338,7 +338,7 @@ status open
 \begin_inset Caption Standard
 
 \begin_layout Plain Layout
-(a) Geodesic distance on Sphere; (b) different functions
+(a) Geodesic distance on Sphere; (b) different functions of correlation
 \end_layout
 
 \end_inset
@@ -375,14 +375,13 @@ status open
 \begin_inset Formula $\cos^{-1}(X\cdot Y)$
 \end_inset
 
- and therefore a similarity measure measuring connectivity can be defined
- as:
+ and therefore a similarity measure for connectivity can be defined as:
 \end_layout
 
 \begin_layout Standard
 \begin_inset Formula 
 \begin{align*}
-S_{G}(X,Y)= & \sin^{-1}(X\cdot Y)=\sin^{-1}(\rho_{XY}).
+S_{G}(X,Y)= & \frac{\pi}{2}+\sin^{-1}(X\cdot Y)=\frac{\pi}{2}+\sin^{-1}(\rho_{XY}).
 \end{align*}
 
 \end_inset
@@ -581,16 +580,17 @@ key "bhushan2016temporal"
  the fact that the time series are variance normalized.
 \begin_inset Formula 
 \begin{align*}
-d_{L^{2}}(X,Y) & =\|X-Y\|^{2}\\
-= & \|X\|^{2}+\|Y\|^{2}-2\rho_{XY}\\
-= & 2-2\rho_{XY}.
+S_{L^{2}}(X,Y) & =4-\|X-Y\|^{2}\\
+= & 4-\|X\|^{2}-\|Y\|^{2}+2\rho_{XY}\\
+= & 2+2\rho_{XY}.
 \end{align*}
 
 \end_inset
 
 While this measure is the simplest measure of similarity, it is based on
  a metric and is a real distance based measure.
-\end_layout
+\begin_inset Note Note
+status open
 
 \begin_layout Subsection
 Comparison of the measures
@@ -606,6 +606,11 @@ on
 
 \begin_layout Itemize
 Which are distance metric and which are not 
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Subsection
@@ -811,13 +816,10 @@ reference "tab:Rand-Index-Analysis"
  Among the clustering algorithms, region growing performed better than the
  spectral clustering.
  
-\end_layout
-
-\begin_layout Standard
 \begin_inset Float table
 wide true
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \align center
@@ -846,10 +848,6 @@ name "tab:Rand-Index-Analysis"
 
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
 \end_inset
 
 
@@ -867,9 +865,49 @@ Next, we compared the performance of the connectivity measures for different
 distance based measure, exponential kernel based and spatial connectivity
  based measures in that order.
  This order of performance was consistently observed for both region growing
- and spectral clustering methods respectively.
+ and spectral clustering methods respectively, except Euclidean distance
+ performed better in spectral clustering than exponential kernel, while
+ their performance was comparable in region growing.
  Again among the two clustering algorithms the region growing method showed
- slightly better performance.
+ better performance.
+ 
+\begin_inset Float figure
+wide true
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename figs/nosample_fig.pdf
+	width 100text%
+
+\end_inset
+
+
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Agreement of clustering based on subsampled fMRI signals to the full length
+ of fMRI as measured by adjusted Rand index.
+ The analysis is repeated for the four measures (shown as curves with different
+ colors) and two clustering algorithms, spectral clustering (left) and region
+ growing (right).
+ The 95% confidence intervals are shown as shaded regions.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Itemize
