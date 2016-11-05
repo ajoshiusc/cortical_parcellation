@@ -819,7 +819,7 @@ reference "tab:Rand-Index-Analysis"
 \begin_inset Float table
 wide true
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \align center
@@ -874,11 +874,7 @@ distance based measure, exponential kernel based and spatial connectivity
 \begin_inset Float figure
 wide true
 sideways false
-status collapsed
-
-\begin_layout Plain Layout
-
-\end_layout
+status open
 
 \begin_layout Plain Layout
 \align center
