@@ -293,12 +293,71 @@ In this section, the four connectivity measures are described first.
 \end_layout
 
 \begin_layout Subsection
-Geodesic measure 
+Distance measures
+\end_layout
+
+\begin_layout Paragraph*
+Correlation based distance measures: 
 \end_layout
 
 \begin_layout Standard
-First, we describe the proposed geodesic distance measure for connectivity
- analysis in fMRI time series.
+We can consider the usual 
+\emph on
+Euclidean 
+\begin_inset Formula $L^{2}$
+\end_inset
+
+ measure
+\emph default
+ between two vectors representing time series as a metric between the two
+ signals 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "bhushan2016temporal"
+
+\end_inset
+
+.
+ This measure uses the time series directly and does not take into account
+ the fact that the time series are variance normalized.
+\begin_inset Formula 
+\begin{align*}
+S_{L^{2}}(X,Y) & =4-\|X-Y\|^{2}\\
+= & 4-\|X\|^{2}-\|Y\|^{2}+2\rho_{XY}\\
+= & 2+2\rho_{XY}.
+\end{align*}
+
+\end_inset
+
+While this measure is the simplest measure of similarity, it is based on
+ a metric and is a real distance based measure.
+ In order to emphasize high correlations, a transformed version of this
+ measure referred to as 
+\emph on
+exponential kernel measure
+\emph default
+ is often considered.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+S_{E}(X,Y)=\exp\frac{-S_{L^{2}}(X,Y)}{h^{2}}=\exp\frac{-2(1-\rho_{XY})}{h^{2}}.
+\]
+
+\end_inset
+
+ This measure is a nonlinear transformation on the correlation and do not
+ define a metric and therefore is not a real distance based measure.
+\end_layout
+
+\begin_layout Standard
+In this paper, we propose a 
+\emph on
+geodesic distance measure
+\emph default
+.
  Since we assume that the input time series are variance normalized, we
  can represent each of the time series as points on a hypersphere 
 \begin_inset Formula $\mathbb{S}^{T-1}$
@@ -308,7 +367,15 @@ First, we describe the proposed geodesic distance measure for connectivity
 \begin_inset Formula $T-1$
 \end_inset
 
-, where 
+ (Fig.
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:(a)-Geodesic-distance"
+
+\end_inset
+
+), where 
 \begin_inset Formula $T$
 \end_inset
 
@@ -333,6 +400,14 @@ status open
 
 \begin_layout Plain Layout
 (a) Geodesic distance on Sphere; (b) different functions of correlation
+ 
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:(a)-Geodesic-distance"
+
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -384,14 +459,17 @@ This measure is based on a true metric since it represents a real distance
  measure.
 \end_layout
 
-\begin_layout Subsection
-Connectivity-based measure
+\begin_layout Paragraph*
+Correlations of Correlations measure:
 \end_layout
 
 \begin_layout Standard
-One of the most popular approach for connectivity is to first compute correlatio
-n of time series at the given points on the cortex to the time series for
- all the points in the brain 
+One of the most popular approach for connectivity, referred to as 
+\emph on
+spatial connectivity-based measure
+\emph default
+ is to first compute correlation of time series at the given points on the
+ cortex to the time series for all the points in the brain 
 \begin_inset CommandInset citation
 LatexCommand cite
 key "fan2015functional,craddock2012whole"
@@ -518,71 +596,7 @@ key "bhushan2016temporal"
  not define a real distance measure.
 \end_layout
 
-\begin_layout Subsection
-Exponential kernel measure 
-\end_layout
-
 \begin_layout Standard
-A simple distance measure between two time series 
-\begin_inset Formula $X$
-\end_inset
-
- and 
-\begin_inset Formula $Y$
-\end_inset
-
- can be computed by first evaluating the Pearson's correlation coefficient
- and then computing an exponential transformation to emphasize high correlations.
- 
-\end_layout
-
-\begin_layout Standard
-\begin_inset Formula 
-\[
-S_{E}(X,Y)=\exp\frac{-2(1-\rho_{XY})}{h^{2}}.
-\]
-
-\end_inset
-
- This measure is a nonlinear transformation on the correlation and do not
- define a metric and therefore is not a real distance based measure.
-\end_layout
-
-\begin_layout Subsection
-Euclidean 
-\begin_inset Formula $L^{2}$
-\end_inset
-
- measure
-\end_layout
-
-\begin_layout Standard
-We can consider the usual 
-\begin_inset Formula $L^{2}$
-\end_inset
-
- distance between two vectors representing time series as a metric between
- the two signals 
-\begin_inset CommandInset citation
-LatexCommand cite
-key "bhushan2016temporal"
-
-\end_inset
-
-.
- This measure uses the time series directly and does not take into account
- the fact that the time series are variance normalized.
-\begin_inset Formula 
-\begin{align*}
-S_{L^{2}}(X,Y) & =4-\|X-Y\|^{2}\\
-= & 4-\|X\|^{2}-\|Y\|^{2}+2\rho_{XY}\\
-= & 2+2\rho_{XY}.
-\end{align*}
-
-\end_inset
-
-While this measure is the simplest measure of similarity, it is based on
- a metric and is a real distance based measure.
 \begin_inset Note Note
 status open
 
