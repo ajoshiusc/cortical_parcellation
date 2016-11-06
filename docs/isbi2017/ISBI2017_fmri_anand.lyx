@@ -296,7 +296,7 @@ In this section, the four connectivity measures are described first.
 Distance measures
 \end_layout
 
-\begin_layout Paragraph*
+\begin_layout Subsubsection
 Correlation based distance measures: 
 \end_layout
 
@@ -459,7 +459,7 @@ This measure is based on a true metric since it represents a real distance
  measure.
 \end_layout
 
-\begin_layout Paragraph*
+\begin_layout Subsubsection
 Correlations of Correlations measure:
 \end_layout
 
@@ -477,48 +477,6 @@ key "fan2015functional,craddock2012whole"
 \end_inset
 
 .
- Let 
-\begin_inset Formula $N_{v}$
-\end_inset
-
-denote the number of vertices on the cortical surface mesh.
- Then, a similarity measure is computed using Pearson's correlation coefficient
- that evaluates similarity between the spatial functional connectivity maps
- of each pair of points on the cortex.
- Let 
-\begin_inset Formula $B$
-\end_inset
-
- denote the data matrix for the whole cortex of size 
-\begin_inset Formula $N_{v}\times T$
-\end_inset
-
- .
- Then 
-\begin_inset Formula $BB^{T}$
-\end_inset
-
- is the matrix of spatial connectivity maps denoting correlation between
- every pair of vertices on the cortex.
- If we use this spatial map of connectivity as a feature, and compute similarity
- between the spatial maps using correlation, then we get 
-\begin_inset Formula $(BB^{T})(BB^{T})^{T}=(BB^{T})^{2}$
-\end_inset
-
- due to symmetry.
- Therefore, it is worth noting that, this popularly used connectivity based
- measure does not contain any additional information than the usual correlation.
- However, it is worth noting that the dimension of the spatial correlation
- maps is 
-\begin_inset Formula $N_{v}\times N_{v}$
-\end_inset
-
- which could be very large for a high resolution representation of the cortex.
- Therefore, often this mesh is subsampled for this computation resulting
- in loss of information.
- Therefore, we note that this popular approach is not only computationally
- expensive, but also has less information than simpler approaches.
- Here, we evaluate a version of connectivity based approach.
  
 \end_layout
 
@@ -596,9 +554,326 @@ key "bhushan2016temporal"
  not define a real distance measure.
 \end_layout
 
+\begin_layout Subparagraph*
+Mathematical Analysis:
+\end_layout
+
+\begin_layout Standard
+Let us consider the brain data represented as a random vector 
+\begin_inset Formula $X=[X,X_{2,}...,X_{N_{vert}}]$
+\end_inset
+
+ where 
+\begin_inset Formula $X_{i}$
+\end_inset
+
+ represents a random variable denoting the fMRI signal at vertex 
+\begin_inset Formula $i$
+\end_inset
+
+.
+ Let 
+\begin_inset Formula $p_{X}(x_{1},x_{2,...,}x_{n})$
+\end_inset
+
+ denote the joint probability distribution of these random variables and
+ therefore all the relationships between them are encoded in the joint distribut
+ion 
+\begin_inset Formula $p_{X}$
+\end_inset
+
+.
+ We are interested in a relationship between pairs of vertices, WLOG say
+ 
+\begin_inset Formula $1$
+\end_inset
+
+ and 
+\begin_inset Formula $2$
+\end_inset
+
+, i.e.
+ in other words, we are interested in 
+\begin_inset Formula $P_{X_{1}X_{2}}(x_{1},x_{2})$
+\end_inset
+
+, which has all the information about the relationship in 
+\begin_inset Formula $X_{1}$
+\end_inset
+
+ and 
+\begin_inset Formula $X_{2},$
+\end_inset
+
+ which can be determined by samples at node 
+\begin_inset Formula $i$
+\end_inset
+
+ and 
+\begin_inset Formula $j$
+\end_inset
+
+.
+ Moreover, even if we assume that the data at rest of the nodes is give,
+ since there is no 
+\emph on
+a priori
+\emph default
+ knowledge about the relationship between 
+\begin_inset Formula $X_{1},X_{2}$
+\end_inset
+
+ and 
+\begin_inset Formula $\{X_{3},...,X_{n}\}$
+\end_inset
+
+, we have 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+
+\begin_inset Formula 
+\[
+P_{X_{1}X_{2}|X\backslash\{X_{1},X_{2}\}}(x_{1},x_{2}|\{x_{3}..,x_{n}\})=P_{X_{1}X_{2}}(x_{1},x_{2})
+\]
+
+\end_inset
+
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph on
+\bar default
+\strikeout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+a priori
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+.
+ In other words, if we are interested in understanding relationship between
+ node 
+\begin_inset Formula $i$
+\end_inset
+
+ and node 
+\begin_inset Formula $j$
+\end_inset
+
+, then we only need to know 
+\begin_inset Formula $P_{X_{i}X_{j}}$
+\end_inset
+
+ and data at those nodes is sufficient for estimating it and data at other
+ nodes is irrelevant.
+ This is not true if we know the joint distribution 
+\begin_inset Formula $P_{X}$
+\end_inset
+
+ a-priori.
+ 
+\end_layout
+
+\begin_layout Standard
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+For a multivariate Gaussian case we get even stronger results.
+ Let 
+\begin_inset Formula $U=\{X_{1},X_{2}\}$
+\end_inset
+
+ and 
+\begin_inset Formula $V=\{X_{3,}...X_{n}\}$
+\end_inset
+
+.
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+We can perform a maximum likelihood estimate of 
+\begin_inset Formula $C_{UU}$
+\end_inset
+
+ directly from observed values of 
+\begin_inset Formula $U$
+\end_inset
+
+, or we could alternatively perform a maximum likelihood of estimate of
+ 
+\begin_inset Formula $C_{X}$
+\end_inset
+
+ from observed values of 
+\begin_inset Formula $X$
+\end_inset
+
+, and then extract the submatrix corresponding to 
+\begin_inset Formula $X$
+\end_inset
+
+.
+ These results will always give the same estimate.
+ In other words, knowledge of 
+\begin_inset Formula $V$
+\end_inset
+
+ is irrelevant to the ML estimation of 
+\begin_inset Formula $C_{UU}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+Now let us consider the case where we know 
+\begin_inset Formula $P_{X}$
+\end_inset
+
+, e.g.
+ we learnt in from a large dataset and now want to update the estimates
+ for a specific subject.
+ The conditional distribution 
+\begin_inset Formula 
+\[
+P_{U|V}(u|v=a)=\frac{1}{(2\pi)^{n/2}|\Sigma|^{-\frac{1}{2}}}\exp\left(-\frac{1}{2}x^{T}\Sigma^{-1}x\right)
+\]
+
+\end_inset
+
+ where 
+\begin_inset Formula 
+\[
+\Sigma=C_{uu}-C_{uv}C_{vv}^{-1}C_{vu}
+\]
+
+\end_inset
+
+ which does not depend on 
+\begin_inset Formula $a$
+\end_inset
+
+.
+ So again, the data at the rest of the nodes is irrelevant for determining
+ relationship between nodes 
+\begin_inset Formula $\{X_{1},X_{2}\}$
+\end_inset
+
+, for this special case, even in the case where we know the joint distribution
+ of the data.
+ Interestingly, conditional mean is a function of 
+\begin_inset Formula $a$
+\end_inset
+
+, but we are not interested in it for the purpose of connectivity.
+\end_layout
+
+\begin_layout Standard
+Now lets look at the numerical method to gain further insight, for simplicity
+ without the Fischer-z and exponential transformation.
+ Let 
+\begin_inset Formula $N_{v}$
+\end_inset
+
+ denote the number of vertices on the cortical surface mesh.
+ Then, a similarity measure is computed using Pearson's correlation coefficient
+ that evaluates similarity between the spatial functional connectivity maps
+ of each pair of points on the cortex.
+ Let 
+\begin_inset Formula $B$
+\end_inset
+
+ denote the data matrix for the whole cortex of size 
+\begin_inset Formula $N_{v}\times T$
+\end_inset
+
+ .
+ Then 
+\begin_inset Formula $BB^{T}$
+\end_inset
+
+ is the matrix of spatial connectivity maps denoting correlation between
+ every pair of vertices on the cortex.
+ If we use this spatial map of connectivity as a feature, and compute similarity
+ between the spatial maps using correlation, then we get 
+\begin_inset Formula $(BB^{T})(BB^{T})^{T}=(BB^{T})^{2}$
+\end_inset
+
+ which is simply square of the covariance estimates.
+ 
+\end_layout
+
+\begin_layout Standard
+Therefore, it can be seen that the correlations of correlations measure
+ does not contain any additional information than the usual correlation.
+ However, it is worth noting that the dimension of the spatial correlation
+ maps is 
+\begin_inset Formula $N_{v}\times N_{v}$
+\end_inset
+
+ which could be very large for a high resolution representation of the cortex.
+ Therefore, often this mesh is subsampled for this computation resulting
+ in loss of information.
+ Therefore, we note that this popular approach is not only computationally
+ expensive, but also has less information than simpler approaches.
+ Here, we evaluated this approach on a real data to demonstrate this.
+ 
+\end_layout
+
 \begin_layout Standard
 \begin_inset Note Note
-status open
+status collapsed
 
 \begin_layout Subsection
 Comparison of the measures
