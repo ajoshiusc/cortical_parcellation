@@ -297,7 +297,7 @@ Distance measures
 \end_layout
 
 \begin_layout Subsubsection
-Correlation based distance measures: 
+Correlation based distance measures 
 \end_layout
 
 \begin_layout Standard
@@ -336,7 +336,14 @@ While this measure is the simplest measure of similarity, it is based on
 \emph on
 exponential kernel measure
 \emph default
- is often considered.
+ is considered 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "bhushan2016temporal"
+
+\end_inset
+
+.
  
 \end_layout
 
@@ -460,7 +467,7 @@ This measure is based on a true metric since it represents a real distance
 \end_layout
 
 \begin_layout Subsubsection
-Correlations of Correlations measure:
+Correlations of Correlations measure
 \end_layout
 
 \begin_layout Standard
@@ -501,6 +508,13 @@ and
 
 .
  In order to normalize this data, we compute the Fischer-z transformation
+ 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "wang2006changes"
+
+\end_inset
+
  of this connectivity feature given by 
 \begin_inset Formula $f_{X}=\tanh^{-1}(XB^{T}),$
 \end_inset
@@ -782,8 +796,8 @@ Now let us consider the case where we know
 \end_inset
 
 , e.g.
- we learnt in from a large dataset and now want to update the estimates
- for a specific subject.
+ we learn in from a large dataset and now want to get the estimates for
+ a specific subject.
  The conditional distribution 
 \begin_inset Formula 
 \[
@@ -795,7 +809,7 @@ P_{U|V}(u|v=a)=\frac{1}{(2\pi)^{n/2}|\Sigma|^{-\frac{1}{2}}}\exp\left(-\frac{1}{
  where 
 \begin_inset Formula 
 \[
-\Sigma=C_{uu}-C_{uv}C_{vv}^{-1}C_{vu}
+\Sigma=C_{UU}-C_{UV}C_{VV}^{-1}C_{VU}
 \]
 
 \end_inset
@@ -975,25 +989,60 @@ http://brainsuite.org/svreg_atlas_description
 \end_inset
 
 ) from BrainSuite software were coregistered to the HCP data using freesurfer
- based registration.
+ based registration (Fig.
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:The-ROIs-considered"
+
+\end_inset
+
+).
  First, we select an anatomical ROI for which we want subparcellation.
  Then the mean was removed and variance normalized for each time series
- in the data to 1.
+ in the data.
  The similarity matrix is then computed using the four measures described
  in the methods section.
  The similarity matrix defines connectivity between every pair of nodes
  in the selected ROI.
  This similarity matrix is then inputted to the clustering algorithms.
- In this paper, we used two clustering algorithms (1) region growing, and
- (2) spectral clustering 
+ In this paper, we used two clustering algorithms (1) region growing 
 \begin_inset CommandInset citation
 LatexCommand cite
-key "thirion2014fmri"
+key "blumensath2012resting"
+
+\end_inset
+
+, and (2) spectral clustering 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "bhushan2016temporal,thirion2014fmri"
 
 \end_inset
 
  since they represent the most popular clustering algorithms for cortical
  clustering.
+ The region growing starts with seeds transferred from an atlas and are
+ grown into different clusters.
+ Neighbouring vertices are joined to a seed’s cluster if their similarity
+ measure is within 90% of the maximal similarity found within this iteration
+ 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "blumensath2012resting"
+
+\end_inset
+
+.
+ The spectral clustering algorithm is the standard implementation of n-cuts
+ algorithm 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "shi2000normalized"
+
+\end_inset
+
+.
  The optimal number of clusters for each ROI is selected based on Silhouette
  score 
 \begin_inset CommandInset citation
@@ -1142,7 +1191,7 @@ reference "tab:Rand-Index-Analysis"
 \begin_inset Float table
 wide true
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \align center
@@ -1177,10 +1226,27 @@ name "tab:Rand-Index-Analysis"
 \end_layout
 
 \begin_layout Standard
+Next, we compared the performance of the connectivity measures for different
+ number of samples by measuring agreement of labeling for different size
+ of subsample to the full sample.
+ Here again, the geodesic distance based connectivity measure showed best
+ performance, followed by Euclidean 
+\begin_inset Formula $L^{2}$
+\end_inset
+
+distance based measure, exponential kernel based and spatial connectivity
+ based measures in that order.
+ This order of performance was consistently observed for both region growing
+ and spectral clustering methods respectively, except Euclidean distance
+ performed better in spectral clustering than exponential kernel, while
+ their performance was comparable in region growing.
+ Again among the two clustering algorithms the region growing method showed
+ better performance.
+ 
 \begin_inset Float figure
 wide true
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \align center
@@ -1209,23 +1275,7 @@ Agreement of clustering based on subsampled fMRI signals to the full length
 
 \end_inset
 
- Next, we compared the performance of the connectivity measures for different
- number of samples by measuring agreement of labeling for different size
- of subsample to the full sample.
- Here again, the geodesic distance based connectivity measure showed best
- performance, followed by Euclidean 
-\begin_inset Formula $L^{2}$
-\end_inset
 
-distance based measure, exponential kernel based and spatial connectivity
- based measures in that order.
- This order of performance was consistently observed for both region growing
- and spectral clustering methods respectively, except Euclidean distance
- performed better in spectral clustering than exponential kernel, while
- their performance was comparable in region growing.
- Again among the two clustering algorithms the region growing method showed
- better performance.
- 
 \end_layout
 
 \begin_layout Standard
