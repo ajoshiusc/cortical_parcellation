@@ -205,9 +205,9 @@ key "rubinov2010complex,smith2011network"
 .
  A large number of network estimation methods have been used in the neuroimaging
  literature ranging from simple measures that consider correlation between
- two nodes' timeseries, ICA based methods to more sophisticated approaches
- that consider the whole cortex simultaneously and estimate a global Bayes
- net models 
+ two nodes' timeseries, information theoretic measures, time-lag correlations,
+ ICA based methods to more sophisticated approaches that consider the whole
+ cortex simultaneously and estimate a global Bayes net models 
 \begin_inset CommandInset citation
 LatexCommand cite
 key "smith2011network"
@@ -222,11 +222,11 @@ key "smith2011network"
 \end_layout
 
 \begin_layout Standard
-This paper proposes a new geodesic distance connectivity measure.
+This paper explores a new geodesic distance connectivity measure.
  We also analyze various know correlation based connectivity measures and
  relationships between them.
- Specifically, we compare (1) geodesic distance (proposed), (2) connectivity-bas
-ed distance, (3) exponential kernel distance and (4) Euclidean or 
+ Specifically, we compare (1) geodesic distance, (2) functional connectivity
+ measure, (3) exponential kernel and (4) Euclidean or 
 \begin_inset Formula $L^{2}$
 \end_inset
 
@@ -257,27 +257,6 @@ In the following sections, the four connectivity measures are described
  presented.
  Finally, in the conclusion section, we summarize the findings of these
  studies.
-\end_layout
-
-\begin_layout Standard
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-* Lit Survey
-\end_layout
-
-\begin_layout Plain Layout
-* Motivation
-\end_layout
-
-\begin_layout Plain Layout
-* Outline
-\end_layout
-
-\end_inset
-
-
 \end_layout
 
 \begin_layout Section
@@ -313,7 +292,7 @@ Euclidean
  signals 
 \begin_inset CommandInset citation
 LatexCommand cite
-key "bhushan2016temporal"
+key "blumensath2012resting,biswal1995functional,bhushan2016temporal"
 
 \end_inset
 
@@ -345,18 +324,32 @@ key "bhushan2016temporal"
 
 .
  
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+more citations needed
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
 \begin_inset Formula 
 \[
-S_{E}(X,Y)=\exp\frac{-S_{L^{2}}(X,Y)}{h^{2}}=\exp\frac{-2(1-\rho_{XY})}{h^{2}}.
+S_{E}(X,Y)=\exp\frac{-\|X-Y\|^{2}}{h^{2}}=\exp\frac{-2(1-\rho_{XY})}{h^{2}}.
 \]
 
 \end_inset
 
- This measure is a nonlinear transformation on the correlation and do not
- define a metric and therefore is not a real distance based measure.
+ This measure is a Gaussian transformation on the 
+\begin_inset Formula $L^{2}$
+\end_inset
+
+distance and do not define a metric and therefore is not a real distance
+ based measure.
 \end_layout
 
 \begin_layout Standard
@@ -389,7 +382,7 @@ reference "fig:(a)-Geodesic-distance"
  is the number of time samples.
  
 \begin_inset Float figure
-wide true
+wide false
 sideways false
 status open
 
@@ -398,7 +391,7 @@ status open
 \begin_inset Graphics
 	filename figs/fig1.pdf
 	lyxscale 30
-	width 100text%
+	width 70col%
 
 \end_inset
 
@@ -406,8 +399,7 @@ status open
 \begin_inset Caption Standard
 
 \begin_layout Plain Layout
-(a) Geodesic distance on Sphere; (b) different functions of correlation
- 
+Geodesic distance on Hypersphere 
 \begin_inset CommandInset label
 LatexCommand label
 name "fig:(a)-Geodesic-distance"
@@ -467,7 +459,7 @@ This measure is based on a true metric since it represents a real distance
 \end_layout
 
 \begin_layout Subsubsection
-Correlations of Correlations measure
+Functional connectivity measure
 \end_layout
 
 \begin_layout Standard
@@ -488,7 +480,16 @@ key "fan2015functional,craddock2012whole"
 \end_layout
 
 \begin_layout Standard
-For a given pair of vertices on the cortex with their corresponding time
+Let 
+\begin_inset Formula $B$
+\end_inset
+
+ denote 
+\begin_inset Formula $N_{vert}\times T$
+\end_inset
+
+ data matrix for the whole brain.
+ For a given pair of vertices on the cortex with their corresponding time
  series 
 \begin_inset Formula $X$
 \end_inset
@@ -938,7 +939,7 @@ say a few words about tNLM filtering
  them based on the resting fMRI time-series.
  
 \begin_inset Float figure
-wide true
+wide false
 sideways false
 status open
 
@@ -947,7 +948,7 @@ status open
 \begin_inset Graphics
 	filename figs/brains1.pdf
 	lyxscale 30
-	width 100text%
+	width 100col%
 
 \end_inset
 
@@ -1105,7 +1106,7 @@ Consistency with subsampled data
 
 \end_inset
 
-
+ 
 \end_layout
 
 \begin_layout Section
@@ -1173,7 +1174,14 @@ reference "subsec:Clustering-method"
  resulted in optimal number of clusters to be 2,3,4 for PC, MFG and MTG
  respectively.
  Fig.
- # shows modulated plots of labels across the study population of 100 subjects,
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Agreement-of-clustering"
+
+\end_inset
+
+ shows modulated plots of labels across the study population of 100 subjects,
  where the proportional of color is frequency of agreement of labels across
  the study population.
  A table of Rand indices for is shown in Table 
@@ -1188,6 +1196,7 @@ reference "tab:Rand-Index-Analysis"
  geodesic distance based measure resulted in the most consistent labeling.
  Among the clustering algorithms, region growing performed better than the
  spectral clustering.
+ 
 \begin_inset Float table
 wide true
 sideways false
@@ -1242,11 +1251,20 @@ distance based measure, exponential kernel based and spatial connectivity
  their performance was comparable in region growing.
  Again among the two clustering algorithms the region growing method showed
  better performance.
+ For the purpose of statistical analysis, we compared rand indices given
+ by geodesic measure to the functional connectivity measure using nonparametric
+ ranksum test.
+ In all cases, the geodesic measure showed statistically significant better
+ performance with 
+\begin_inset Formula $p<0.01$
+\end_inset
+
+.
  
 \begin_inset Float figure
 wide true
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \align center
@@ -1266,6 +1284,13 @@ Agreement of clustering based on subsampled fMRI signals to the full length
  colors) and two clustering algorithms, spectral clustering (left) and region
  growing (right).
  The 95% confidence intervals are shown as shaded regions.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Agreement-of-clustering"
+
+\end_inset
+
+
 \end_layout
 
 \end_inset
