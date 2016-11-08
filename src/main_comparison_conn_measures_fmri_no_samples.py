@@ -180,7 +180,7 @@ for rep in range(n_rep):
                                            sdir[scan / 2],
                                            scan_type[i], 1,
                                            session_type[scan % 2],
-                                           algo=1, type_cor=0,
+                                           algo=0, type_cor=0,
                                            n_samples=n_samples[ind])
 
         labels_corr_sininv_all[rep, ind, :] = labels_corr_sininv
@@ -190,7 +190,7 @@ for rep in range(n_rep):
 
         print str(ind) + ' out of ' + str(len(n_samples)) + 'rep = ' + str(rep)
 
-sp.savez('temp100_algo1_MTG_tmp.npz', labels_corr_sininv_all=labels_corr_sininv_all,
+sp.savez('temp100_algo0_MTG_tmp.npz', labels_corr_sininv_all=labels_corr_sininv_all,
          labels_corr_exp_all=labels_corr_exp_all,
          labels_corr_dist_all=labels_corr_dist_all,
          labels_corr_corr_exp_all=labels_corr_corr_exp_all)
