@@ -1107,9 +1107,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.98994949"
-     inkscape:cx="174.51649"
-     inkscape:cy="90.358689"
+     inkscape:zoom="1.4"
+     inkscape:cx="503.78832"
+     inkscape:cy="180.8166"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -1142,7 +1142,7 @@
      transform="translate(-16.830041,-114.07776)">
     <g
        id="surface2648"
-       transform="matrix(0.7344013,0,0,0.7344013,-50.686918,107.62926)">
+       transform="matrix(0.7344013,0,0,0.7344013,-34.686918,107.62926)">
       <rect
          id="rect4323"
          style="fill:#ffffff;fill-opacity:1;stroke:none"
@@ -1960,74 +1960,6 @@
          d="m 149.26298,61.851785 18.53046,0"
          style="fill:none;stroke:#54a666;stroke-width:1.6214143;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;stroke-opacity:1"
          inkscape:connector-curvature="0" />
-      <g
-         id="g4623"
-         style="fill:#232323;fill-opacity:1"
-         transform="matrix(0.92652245,0,0,0.92652245,74.2146,0.07155544)">
-        <use
-           id="use4625"
-           y="70.178123"
-           x="109"
-           xlink:href="#glyph0-17"
-           width="100%"
-           height="100%" />
-        <use
-           id="use4627"
-           y="70.178123"
-           x="115.67"
-           xlink:href="#glyph0-18"
-           width="100%"
-           height="100%" />
-        <use
-           id="use4629"
-           y="70.178123"
-           x="121.23"
-           xlink:href="#glyph0-6"
-           width="100%"
-           height="100%" />
-        <use
-           id="use4631"
-           y="70.178123"
-           x="124.01"
-           xlink:href="#glyph0-19"
-           width="100%"
-           height="100%" />
-        <use
-           id="use4633"
-           y="70.178123"
-           x="126.79"
-           xlink:href="#glyph0-20"
-           width="100%"
-           height="100%" />
-        <use
-           id="use4635"
-           y="70.178123"
-           x="134.00999"
-           xlink:href="#glyph0-12"
-           width="100%"
-           height="100%" />
-        <use
-           id="use4637"
-           y="70.178123"
-           x="139.57001"
-           xlink:href="#glyph0-21"
-           width="100%"
-           height="100%" />
-        <use
-           id="use4639"
-           y="70.178123"
-           x="145.13"
-           xlink:href="#glyph0-21"
-           width="100%"
-           height="100%" />
-        <use
-           id="use4641"
-           y="70.178123"
-           x="150.69"
-           xlink:href="#glyph0-6"
-           width="100%"
-           height="100%" />
-      </g>
       <path
          id="path4643"
          d="m 149.26298,75.12711 18.53046,0"
@@ -2188,10 +2120,22 @@
            width="100%"
            height="100%" />
       </g>
+      <text
+         xml:space="preserve"
+         style="font-style:normal;font-weight:normal;font-size:11.86924934px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         x="172.78928"
+         y="64.33316"
+         id="text4738"
+         sodipodi:linespacing="125%"><tspan
+           sodipodi:role="line"
+           id="tspan4740"
+           x="172.78928"
+           y="64.33316"
+           style="font-size:8.90193748px">Func. conn.</tspan></text>
     </g>
     <g
        id="surface81397"
-       transform="matrix(0.67371861,0,0,0.67371861,392.93681,106.47653)">
+       transform="matrix(0.67371861,0,0,0.67371861,368.93681,108.47653)">
       <rect
          id="rect5188"
          style="fill:#ffffff;fill-opacity:1;stroke:none"
@@ -3051,73 +2995,6 @@
          d="m 81,82.835938 20,0"
          style="fill:none;stroke:#54a666;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;stroke-opacity:1"
          inkscape:connector-curvature="0" />
-      <g
-         id="g5502"
-         style="fill:#232323;fill-opacity:1">
-        <use
-           id="use5504"
-           y="316.66562"
-           x="109"
-           xlink:href="#glyph0-17-8"
-           width="100%"
-           height="100%" />
-        <use
-           id="use5506"
-           y="316.66562"
-           x="115.67"
-           xlink:href="#glyph0-18-2"
-           width="100%"
-           height="100%" />
-        <use
-           id="use5508"
-           y="316.66562"
-           x="121.23"
-           xlink:href="#glyph0-6-9"
-           width="100%"
-           height="100%" />
-        <use
-           id="use5510"
-           y="316.66562"
-           x="124.01"
-           xlink:href="#glyph0-19-4"
-           width="100%"
-           height="100%" />
-        <use
-           id="use5512"
-           y="316.66562"
-           x="126.79"
-           xlink:href="#glyph0-20-8"
-           width="100%"
-           height="100%" />
-        <use
-           id="use5514"
-           y="316.66562"
-           x="134.00999"
-           xlink:href="#glyph0-12-1"
-           width="100%"
-           height="100%" />
-        <use
-           id="use5516"
-           y="316.66562"
-           x="139.57001"
-           xlink:href="#glyph0-21-9"
-           width="100%"
-           height="100%" />
-        <use
-           id="use5518"
-           y="316.66562"
-           x="145.13"
-           xlink:href="#glyph0-21-9"
-           width="100%"
-           height="100%" />
-        <use
-           id="use5520"
-           y="316.66562"
-           x="150.69"
-           xlink:href="#glyph0-6-9"
-           width="100%"
-           height="100%" />
-      </g>
       <path
          id="path5522"
          transform="matrix(1,0,0,-1,0,396)"
@@ -3282,76 +3159,88 @@
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:25px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="128.49767"
+       x="144.49767"
        y="126.41526"
        id="text5887"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan5889"
-         x="128.49767"
+         x="144.49767"
          y="126.41526"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:17.5px;font-family:'Latin Modern Roman';-inkscape-font-specification:'Latin Modern Roman, '">Spectral Clustering</tspan></text>
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12.5px;font-family:'Latin Modern Roman';-inkscape-font-specification:'Latin Modern Roman, '">Spectral Clustering</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:25px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="524.61963"
-       y="126.41526"
+       x="519.19104"
+       y="127.12955"
        id="text5891"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan5893"
-         x="524.61963"
-         y="126.41526"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:17.5px;font-family:'Latin Modern Roman';-inkscape-font-specification:'Latin Modern Roman, '">Region Growing</tspan></text>
+         x="519.19104"
+         y="127.12955"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12.5px;font-family:'Latin Modern Roman';-inkscape-font-specification:'Latin Modern Roman, '">Region Growing</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:25px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="153.39427"
+       x="169.39427"
        y="371.41534"
        id="text5895"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan5897"
-         x="153.39427"
+         x="169.39427"
          y="371.41534"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:15px;font-family:'Latin Modern Roman';-inkscape-font-specification:'Latin Modern Roman, '">No. of Samples</tspan></text>
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12.5px;font-family:'Latin Modern Roman';-inkscape-font-specification:'Latin Modern Roman, '">No. of Samples</tspan></text>
     <text
        xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:25px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="537.30127"
-       y="371.41534"
+       style="font-style:normal;font-weight:normal;font-size:18.53911209px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="532.65729"
+       y="369.02441"
        id="text5895-8"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan5897-1"
-         x="537.30127"
-         y="371.41534"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:15px;font-family:'Latin Modern Roman';-inkscape-font-specification:'Latin Modern Roman, '">No. of Samples</tspan></text>
+         x="532.65729"
+         y="369.02441"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12.5px;font-family:'Latin Modern Roman';-inkscape-font-specification:'Latin Modern Roman, '">No. of Samples</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:25px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="-309.03336"
-       y="29.360041"
+       x="-287.03336"
+       y="49.360039"
        id="text5917"
        sodipodi:linespacing="125%"
        transform="matrix(0,-1,1,0,0,0)"><tspan
          sodipodi:role="line"
          id="tspan5919"
-         x="-309.03336"
-         y="29.360041"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:17.5px;font-family:'Latin Modern Roman';-inkscape-font-specification:'Latin Modern Roman, '">Adj. Rand Index</tspan></text>
+         x="-287.03336"
+         y="49.360039"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12.5px;font-family:'Latin Modern Roman';-inkscape-font-specification:'Latin Modern Roman, '">Adj. Rand Index</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:25px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="-308.15912"
-       y="415.60333"
+       x="-286.15912"
+       y="395.60333"
        id="text5917-9"
        sodipodi:linespacing="125%"
        transform="matrix(0,-1,1,0,0,0)"><tspan
          sodipodi:role="line"
          id="tspan5919-9"
-         x="-308.15912"
-         y="415.60333"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:17.5px;font-family:'Latin Modern Roman';-inkscape-font-specification:'Latin Modern Roman, '">Adj. Rand Index</tspan></text>
+         x="-286.15912"
+         y="395.60333"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12.5px;font-family:'Latin Modern Roman';-inkscape-font-specification:'Latin Modern Roman, '">Adj. Rand Index</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:8.71679211px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="442.66434"
+       y="322.22388"
+       id="text4738-7"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4740-6"
+         x="442.66434"
+         y="322.22388"
+         style="font-size:6.53759432px">Func. conn.</tspan></text>
   </g>
 </svg>
