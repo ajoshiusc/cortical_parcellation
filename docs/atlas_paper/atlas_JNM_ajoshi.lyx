@@ -148,8 +148,8 @@ Keep this empty!
 \end_layout
 
 \begin_layout Title
-BCI-DNI Brain Atlas: A New High Resolution Brain Atlas Delineated by Anatomical
- and Functional MR Imaging
+BCI-DNI Brain Atlas: A New High Resolution Hybrid Brain Atlas Delineated
+ by Anatomical and Functional MR Imaging
 \begin_inset Flex Titlenotemark
 status open
 
@@ -802,64 +802,237 @@ s to minimize extraneous inclusion of meninges or exclusion of cortex and
 Materials and Methods
 \end_layout
 
+\begin_layout Subsection
+Image Acquisition:
+\end_layout
+
 \begin_layout Standard
-Image Acquisition: BCI-DNI Brain Atlas A high-resolution 3D MPRAGE scan
- (TE=??? TR=???; resolution=0.5x0.5x0.8mm) was acquired on a 3T Siemens MAGNETOM
- Tim Trio using an 8 channel head coil.
- The subject is a right-handed woman in her mid-thirties.
- T1-weighted images were processed using BrainSuite (brainsuite.org ) in
- a semi-automated fashion to classify tissue types, extract and render the
- surfaces of the inner and pial cortices.
- Manual correction was performed on cortical boundaries and grey-white boundarie
-s to minimize extraneous inclusion of meninges or exclusion of cortex and
- to correct occipito-cerebellar boundaries.
- Gyral white matter boundaries were defined on the atlas by the two opposing
+BCI-DNI Brain Atlas A high-resolution 3D MPRAGE scan (TE=??? TR=???; resolution=
+0.5x0.5x0.8mm) was acquired on a 3T Siemens MAGNETOM Tim Trio using an 8 channel
+ head coil.
+ The subject is a “typical” right-handed woman in her mid-thirties.
+ Her brain is brachieocephalic with no rare anomalies.
+ Brain Extraction T1-weighted images were processed using BrainSuite (brainsuite.
+org ) in a semi-automated fashion to classify tissue types, extract and
+ render the surfaces of the inner , mid and pial cortices.
+ Bias field was corrected by both automatic processing and manual guidance
+ to maximize grey-white tissue contrast and ensure accurate tissue classificatio
+n.
+ Manual correction was performed on the cortical boundaries to remove inclusion
+ of meninges or exclusion of cortex, the occipito-cerebellar boundaries
+ to remove inclusion of cerebellum or tentorium or exclusion of the occipital
+ tissue and the grey-white boundary to preserve fine sulcal and gyral detail.
+ Anatomical Labeling Anatomical labeling was performed manually on coronal
+ single-slice images.
+ Cortical ROIs were guided by sulcal and gyral landmarks as detailed in
+ “Human brain anatomy in computerized images” authored by Hanna Damasio.(Damasio,
+ 2005) Gyral deep-boundaries were defined on the atlas by the two opposing
  sulcal edges of the gyrus from the coronal view.
- The sulcal and gyral boundaries were transferred from atlas to subject
- using BrainSuite.34 BrainSuite performed cortically constrained volumetric
- brain registration using curvature based alignment of the cortical surface
- followed by coregistration of subcortical areas using intensity based elastic
- registration.
- This was subject to a cortical matching constraint.
- This resulted in atlas-to-subject matching that was consistently accurate
- throughout the brain, both at the cortical and subcortical regions.
+ Cortical volume labels were transferred onto mid cortical surfaces and
+ then refined so that sulcal boundaries would follow the sulcal fundi more
+ closely.(Joshi et al., 2012) Volume labels were adjusted according to these
+ refinements.
+ Subcortical nuclei, corpus callosum, ventricles, brainstem and cerebellum
+ were all labeled manually based on with no automated refinements.
+\end_layout
+
+\begin_layout Subsection
+fMRI based subparcellation 
+\begin_inset CommandInset label
+LatexCommand label
+name "subsec:fMRI-based-subparcellation"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Subparcellation of Cortical ROIs based on Resting State fMRI Resting state
+ fMRI (rsfMRI) provides complementary information to the sulcal brain anatomy
+ about the cytoarchitecture and function of the human brain and therefore
+ parcellation based on rsfMRI is becoming increasingly popular.
+ Our purpose for this project is to generate a finer subparcellation of
+ the anatomical atlas of brain by performing this subdivision on the basis
+ of fMRI.
+ Generating maps of inter-subject variability of functional parcellation
+ and obtaining functional atlas of the human brain will allow us to understand
+ the association between sulcal anatomy and function in the human brain
+ and the stability of this relationship across individuals.
+ The atlas with this finer parcellation based on both anatomy and function
+ that we propose to produce using the proposed method will also serve as
+ a better reference for fMRI based studies.
+\end_layout
+
+\begin_layout Standard
+We separately consider each anatomical region in the cortex and subdivide
+ them based on the resting fMRI time-series.
+ As an input, we assume preprocessed rsfMRI data from HCP that is also processed
+ using tNLM filtering.
+ First, we select an anatomical ROI for which we want subparcellation.
+ Then the mean was removed and variance normalized for each time series
+ in the data to 1.
+ If X and Y are two random variables (X and Y are vector with samples from
+ the two RVs) representing time series from two points in the brain, then
+ dot product of X and Y yields correlation between them.
+ If we consider X and Y as points on hypersphere due to unit variance, then
+ the distance between them is a true metric given by πα=π cos^(-1)ρ_XY 
+ (figure 1) and therefore a measure of similarity can be defined as sin^(-1)ρ_XY
+ .
+ This similarity measure is used to compute similarity matrix between every
+ pair of nodes in the selected ROI.
+ The similarity matrix is then inputted to the spectral clustering algorithm.
  
 \end_layout
 
 \begin_layout Standard
-Here we present the BCI-DNI brain atlas using a high-resolution (0.5 mm ×
- 0.5 mm × 0.8 mm) 3D MPRAGE scan of a right-handed adult woman in her mid-thirties
-, acquired at USC’s Dornsife Cognitive Neuroscience Imaging Center on a
- 3T Siemens MAGNETOM Tim Trio scanner.
- It is a brachicephalic brain.
- The MPRAGE image was processed in a semi-automatic fashion using BrainSuite
- (brainsuite.org) with meticulous manual corrections of the skull-stripping,
- cerebrum, and white-matter masks using the BrainSuite GUI interface and
- included a semi-automated bias field correction using the BFC Correction
- tool (http://neuroimage.usc.edu/neuro/Resources/bfc_correction_tool).
- All volumetric labels and sulci were drawn manually by Hanna Damasio, author
- of the human brain atlas, “Human Brain Anatomy in Computerized Images”
- (Oxford University Press, 2005) and Director of the Dornsife Cognitive
- Neuroscience Imaging Center (DNI) at the University of Southern California.
- The Sulcal Tracing Protocol [1] can be found here http://neuroimage.usc.edu/Curve
-Protocol.html.
- The transfer of the volume labels to the surface mesh was done automatically
- using SVReg processes and hand-perfected using a Sulci-Surface Correction
- tool.
- All manual corrections were performed by Soyoung Choi and overseen by Hanna
- Damasio.
+The number of We computed Silhouette plots [##] for different number of
+ clusters .
+ Once the parcellation is done, the color coded maps of cross subject consistenc
+y were generated.
+ Additionally, we also generated connectivity maps from centroid of each
+ cluster to the whole brain by computing correlations of time series.
+ 
+\end_layout
+
+\begin_layout Subsection
+Validation
+\end_layout
+
+\begin_layout Standard
+As we discussed in Sec.
+ 1, we used 40 subjects for generating the atlas and a separate set of 60
+ subjects, 4 sessions each, for validation of the results.
+ The subparcellated atlas was generated based on the 40 subjects as discussed
+ in Sec.
+ ##, in the HCP grayordinate space.
+ Since our goal is to use this atlas as a reference for anatomical registration
+ and transfer the labels to the subject anatomy, we want to see if the subparcel
+lation based on fMRI this way is realistic.
+ In other words, the subparcellation generated by the atlas should be similar
+ to the subparcellation generated by using subjects own data as measured
+ by the adjusted rand index similarity score.
+ For this purpose, the initial coarse ROIs were transferred from the BCI-DNI
+ atlas to the 60 validation subjects using the HCP grayordinate space as
+ the reference.
+ For each subject, each of the ROI was subdivided based on fMRI data.
+ The number of subdivisions were chosen to be same as the refined atlas
+ in order to be consistent.
+ Next, the refined atlas with subdivisions was also transferred to the HCP
+ grayordinate space.
+ We compareed these two subparcellations: results of subparcellation due
+ to anatomically registered subparcellated atlas to the subparcellation
+ based on subjects own fMRI data using adjusted Rand index as the metric.
+ This procedure is repeated for the 60 subjects and 4 sessions for each
+ of them (60*4=240) comparisons.
+ This statistic indicates the consistency between atlas-based subparcellation
+ and fMRI based subparcellation.
+ 
+\end_layout
+
+\begin_layout Standard
+As a baseline, we also computed across session consistency of the sub-parcellati
+ons.
+ For each subject and for each session, we computed subparcellations of
+ the coarse ROIs based on subjects own fMRI data.
+ To compute across session consistency of subparcellations, for each subject,
+ we compared all pairs of sessions (4C2=6) for 60 subjects = 6*60=360 adj
+ Rand scores.
+ This procedure is repeated for each of the coarse ROIs.
+\end_layout
+
+\begin_layout Standard
+In order to test if there is a statistically significant difference between
+ consistency of (a) direct mapping to fMRI based subparcellations, and (b)
+ subparcellations for different fMRI sessions, we performed a ranksum test.
+ This test is performed separately for each of the coarse ROIs.
 \end_layout
 
 \begin_layout Section
 Results
 \end_layout
 
+\begin_layout Subsection
+Data for fMRI based subparcellation
+\end_layout
+
 \begin_layout Standard
-ABCD
+We used the minimally preprocessed (ICA-FIX denoised) resting fMRI data
+ from 100 unrelated subjects, which are publicly available from the Human
+ Connectome Project (HCP) (Van Essen et al., 2013; Glasser et al., 2013; Smith
+ et al., 2013; Barch et al., 2013; Woolrich et al., 2013).
+ Out of the 100 subjects, we used 40 subjects for creating the atlas and
+ 60 subjects for validation.
+ The resting fMRI data were resampled onto the individuals’ cortical surfaces,
+ which were coregistered using FreeSurfer.
+ The functional MRI data sets were acquired for four independent resting
+ fMRI sessions of 15 minutes each (TR=720ms, TE=33.1ms, 2 mm x 2 mm x 2 mm
+ voxels) and the subjects were asked to relax and fixate on a projected
+ bright cross-hair on a dark background.
+ HCP's minimal preprocessing primarily corrects the fMRI data for acquisition
+ artifacts, resamples the data on the cortical surface and performs a non-aggres
+sive spatio-temporal cleanup (Glasser et al., 2013; Smith et al., 2013).
+ The data are then resampled for each subject onto a common standard cortical
+ surface mesh representation (32K Conte-69) in the native subject space
+ (Smith et al., 2013; Van Essen et al., 2012).
+ Additional spatial-temporal processing is then used to remove scanner,
+ motion and other artifacts (Smith et al., 2013).
+ Our only additional preprocessing prior to application of the parcellation
+ algorithm was to normalize the resting fMRI time series at each vertex
+ to zero mean and unit variance.
+ In addition to this processing, we also applied temporal nonlocal means
+ (tNLM) filter [11].
+ The tNLM filtering is shown to improve the performance of parcellation
+ algorithms by enhancing local correlations between the datasets.
+ Additionally, we normalized the resting fMRI time series at each vertex
+ to zero mean and unit variance.
+ 
+\end_layout
+
+\begin_layout Subsection
+Anatomical Atlas
+\end_layout
+
+\begin_layout Subsection
+Anatomical and Functional Atlas
+\end_layout
+
+\begin_layout Standard
+We used 40 subjects for generating the subparcellation as described in Sec.
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "subsec:fMRI-based-subparcellation"
+
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Subsection
+Validation
+\end_layout
+
+\begin_layout Standard
+Figure ## shows bar charts for each of the ROIs for these Rand Scores along
+ with their ##% confidence intervals.
+ 
+\end_layout
+
+\begin_layout Standard
+There were ## coarse ROIs which showed statistically significant difference
+ between the 
 \end_layout
 
 \begin_layout Section
 Discussion
+\end_layout
+
+\begin_layout Standard
+It can be notes that the consistency of subparcellation is similar to the
+ consistency of the Based on the results of validation, it can be seen that
+ using the subparcellated atlas gives
 \end_layout
 
 \begin_layout Standard
