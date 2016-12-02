@@ -6,11 +6,7 @@
 \origin unavailable
 \textclass elsarticle
 \begin_preamble
-% specify here the journal
-\journal{Example: Nuclear Physics B}
-
-% use this if you need line numbers
-%\usepackage{lineno}
+\journal{Journal of Neuroscience, Methods}
 \end_preamble
 \use_default_options false
 \begin_modules
@@ -81,649 +77,79 @@ theorems-std
 
 \begin_body
 
-\begin_layout Standard
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-This is a template \SpecialChar LyX
- file for articles to be submitted to journals of the
- Elsevier publishing company.
- For general infos see 
-\begin_inset Flex URL
-status open
-
-\begin_layout Plain Layout
-
-http://wiki.lyx.org/Examples/Elsevier
-\end_layout
-
-\end_inset
-
-.
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-The Journal is specified in the document preamble! For the right document
- class options to get the page format for your journal, have a look at the
- elsarticle documentation: 
-\begin_inset Flex URL
-status collapsed
-
-\begin_layout Plain Layout
-
-http://www.ctan.org/get/macros/latex/contrib/elsarticle/elsdoc.pdf
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
 \begin_layout BeginFrontmatter
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-Keep this empty!
-\end_layout
-
-\end_inset
-
 
 \end_layout
 
 \begin_layout Title
 BCI-DNI Brain Atlas: A New High Resolution Hybrid Brain Atlas Delineated
  by Anatomical and Functional MR Imaging
-\begin_inset Flex Titlenotemark
-status open
-
-\begin_layout Plain Layout
-t1,t2
-\end_layout
-
-\end_inset
-
-
-\begin_inset Note Note
-status collapsed
-
-\begin_layout Plain Layout
-
-\size normal
-With 
-\series bold
-\size default
-
-\backslash
-tnoteref
-\series default
-\size normal
- you refer to the title footnotes.
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Title footnote
-This document is a collaborative effort.
-\begin_inset Argument 1
-status open
-
-\begin_layout Plain Layout
-t1
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Title footnote
-The second title footnote which is a longer longer than the first one and
- with an intention to fill in up more than one line while formatting.
-\begin_inset Argument 1
-status open
-
-\begin_layout Plain Layout
-t2
-\end_layout
-
-\end_inset
-
-
-\begin_inset Note Note
-status collapsed
-
-\begin_layout Plain Layout
-There are two author styles possible:
-\end_layout
-
-\begin_layout Plain Layout
-1.
- Authors side by side
-\begin_inset space \hfill{}
-\end_inset
-
-2.
- Authors below each other
-\begin_inset space \hfill{}
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-Author
-\begin_inset space \hfill{}
-\end_inset
-
-Author
-\begin_inset space \hfill{}
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-Email
-\begin_inset space \hfill{}
-\end_inset
-
-Email
-\begin_inset space \hfill{}
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-Author
-\begin_inset space \hfill{}
-\end_inset
-
-Address
-\begin_inset space \hfill{}
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-Email
-\begin_inset space \hfill{}
-\end_inset
-
-Author
-\begin_inset space \hfill{}
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-Addresses
-\begin_inset space \hfill{}
-\end_inset
-
-Email
-\begin_inset space \hfill{}
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-——-
-\begin_inset space \hfill{}
-\end_inset
-
-Address
-\begin_inset space \hfill{}
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
 \end_layout
 
 \begin_layout Author
-A.A.
+A.
 \begin_inset space ~
 \end_inset
 
-Joshi
-\begin_inset Flex Authormark
-status collapsed
-
-\begin_layout Plain Layout
-fn1
-\end_layout
-
+A.
+\begin_inset space ~
 \end_inset
 
-
-\begin_inset Flex CorAuthormark
-status open
-
-\begin_layout Plain Layout
-cor1
-\end_layout
-
+Joshi, S.
+\begin_inset space ~
 \end_inset
 
-
-\begin_inset Flex CorAuthormark
-status collapsed
-
-\begin_layout Plain Layout
-cor2
-\end_layout
-
+Y.
+\begin_inset space ~
 \end_inset
 
-
-\begin_inset Argument 1
-status open
-
-\begin_layout Plain Layout
-rvt
-\end_layout
-
+Choi, H.
+\begin_inset space ~
 \end_inset
 
-
-\end_layout
-
-\begin_layout Email
-ajoshi@usc.edu
-\begin_inset Note Note
-status collapsed
-
-\begin_layout Plain Layout
-At least one Email address is required.
-\end_layout
-
+Damasio and R.
+\begin_inset space ~
 \end_inset
 
-
-\end_layout
-
-\begin_layout Author
-R.M.
+M.
 \begin_inset space ~
 \end_inset
 
 Leahy
-\begin_inset Flex Authormark
-status open
-
-\begin_layout Plain Layout
-fn2
-\end_layout
-
-\end_inset
-
-
-\begin_inset Argument 1
-status open
-
-\begin_layout Plain Layout
-rvt,focal
-\end_layout
-
-\end_inset
-
-
-\begin_inset Note Note
-status collapsed
-
-\begin_layout Plain Layout
-
-\size normal
-With 
-\series bold
-\size default
-
-\backslash
-fnref
-\series default
-\size normal
- and you refer to the author footnotes.
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Email
-http://www.elsevier.com
-\begin_inset Argument 1
-status open
-
-\begin_layout Plain Layout
-url
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Author footnote
-This is the specimen author footnote.
-\begin_inset Argument 1
-status open
-
-\begin_layout Plain Layout
-fn1
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Author footnote
-Another author footnote, but a little more longer.
-\begin_inset Argument 1
-status open
-
-\begin_layout Plain Layout
-fn2
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Corresponding author
-Corresponding author
-\begin_inset Argument 1
-status open
-
-\begin_layout Plain Layout
-cor1
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Corresponding author
-Principal corresponding author
-\begin_inset Argument 1
-status open
-
-\begin_layout Plain Layout
-cor2
-\end_layout
-
-\end_inset
-
-
 \end_layout
 
 \begin_layout Address
 Signal and Image Processing Institute, University of Southern California,
  USA
-\begin_inset Argument 1
-status open
-
-\begin_layout Plain Layout
-rvt
-\end_layout
-
-\end_inset
-
-
 \end_layout
 
 \begin_layout Address
 Brain and Creativity Institute, University of Southern California, USA
-\begin_inset Argument 1
-status open
-
-\begin_layout Plain Layout
-focal
-\end_layout
-
-\end_inset
-
-
-\begin_inset Note Note
-status collapsed
-
-\begin_layout Plain Layout
-This is an example of the second author style:
-\end_layout
-
-\begin_layout Author
-C.V.
-\begin_inset space ~
-\end_inset
-
-Radhakrishnan
-\end_layout
-
-\begin_layout Email
-cvr@river-valley.com
-\end_layout
-
-\begin_layout Address
-River Valley Technologies, SJP Building, Cotton Hills, Trivandrum, Kerala,
- India 695014
-\end_layout
-
-\begin_layout Author
-K.
-\begin_inset space ~
-\end_inset
-
-Bazargan
-\end_layout
-
-\begin_layout Email
-http://www.elsevier.com
-\begin_inset Argument 2
-status collapsed
-
-\begin_layout Plain Layout
-url
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Address
-River Valley Technologies, 9, Browns Court, Kennford, Exeter, United Kingdom
-\end_layout
-
-\end_inset
-
-
 \end_layout
 
 \begin_layout Abstract
-Abstract, should normally be not longer than 200 words.
+We present an atlas of human brain that is based both on anatomical landmarks
+ derived from MRI and functional imaging data derived from fMRI.
+ The atlas is generated by first generating a structural subdivision of
+ the brain.
+ This parcellation is done on the basis of anatomical landmarks such as
+ sulcal and gyral patterns.
+ This coarse parcellation is then subdivided into finer parcellation based
+ on resting state fMRI data from a population.
+ This approach results in a hybrid atlas that has boundaries of major regions
+ that are consistent with the anatomical landmarks.
+ The utility of this atlas as a reference brain is validated by comparing
+ the parcellation generated by using the atlas to the subparcellation done
+ using rsfMRI.
+ The results show good consistency between these two methods indicating
+ the accuracy of the functional parcellation generated by this method.
 \end_layout
 
 \begin_layout Keywords
-quadruple exiton 
-\begin_inset ERT
-status collapsed
-
-\begin_layout Plain Layout
-
-
-\backslash
-sep
-\end_layout
-
-\end_inset
-
- polariton 
-\begin_inset ERT
-status collapsed
-
-\begin_layout Plain Layout
-
-
-\backslash
-sep
-\end_layout
-
-\end_inset
-
- WGM 
-\begin_inset ERT
-status collapsed
-
-\begin_layout Plain Layout
-
-
-\backslash
-PACS
-\end_layout
-
-\end_inset
-
- 71.35.-y 
-\begin_inset ERT
-status collapsed
-
-\begin_layout Plain Layout
-
-
-\backslash
-sep
-\end_layout
-
-\end_inset
-
- 71.35.Lk 
-\begin_inset ERT
-status collapsed
-
-\begin_layout Plain Layout
-
-
-\backslash
-sep
-\end_layout
-
-\end_inset
-
- 71.36.+c 
-\begin_inset ERT
-status collapsed
-
-\begin_layout Plain Layout
-
-
-\backslash
-MSC[2008]
-\end_layout
-
-\end_inset
-
-23-557
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-Keywords must be separated by 
-\series bold
-
-\backslash
-sep
-\series default
-.
- 
-\series bold
-
-\backslash
-PACS
-\series default
- and 
-\series bold
-
-\backslash
-MSC
-\series default
- are optional classifications.
-\end_layout
-
-\end_inset
-
-
+Brain, Atlas, MRI, fMRI, Parcellation
 \end_layout
 
 \begin_layout EndFrontmatter
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-Keep this empty!
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-Use here the command 
-\begin_inset ERT
-status collapsed
-
-\begin_layout Plain Layout
-
-
-\backslash
-linenumbers 
-\end_layout
-
-\end_inset
-
- and enable the package 
-\series bold
-lineno
-\series default
- in the preamble if you need line numbers.
-\end_layout
-
-\end_inset
-
 
 \end_layout
 
@@ -732,70 +158,68 @@ Introduction
 \end_layout
 
 \begin_layout Standard
-Magnetic Resonance Imaging 
-\begin_inset CommandInset citation
-LatexCommand citet
-key "article-crossref"
+Magnetic Resonance Imaging (MRI) is an in-vivo imaging technique whic h
+ allows us to capture the structure and function of the human brain.
+ Atlas-based registration is a necessary preprocessing step in neuroimage
+ studies to perform group analysis as it allows identification of homologous
+ regions of the brain to perform comparative analysis of brain tissue properties.
+ A brain atlas is a reference 3D computerized image used to register other
+ images.
+ It is commonly labeled into regions of interest which can be automatically
+ transferred to label ind ividual subjects registered to the atlas .
+ The reference image can be created using a single subject or an average
+ of multip le subjects registered to a common coordinate system.(Roland &
+ Zilles, 1994) The m ost widely used single-subject atlas is the Colin atlas
+ which has high SNR.(Holmes et al., 1998) Ho wever, this human subject has
+ an infrequent anomaly present in the left precentral gyrus which causes
+ misidentificat ion of the lower bound of the precentral gyrus and neighboring
+ regions.
+ A multiple sub ject atlas such as the MNI template, in contrast, is more
+ representative of the population(Grabner et al ., 2006) but has arbitrary
+ reference points as initial misregistration creates blurred boundaries.
+ Ulti mately, the type of atlas that would yield the best results in a study
+ would depend on the registration algo rithm and subject population .
+ The functional organization of the brain can be highly variable betwe en
+ individuals of a single population.(Miller et al., 2009) Therefore, it is
+ ideal to map the fu nctional topography of the brain using BOLD signal.
+ However, most studies cannot perform this type of singl e-subject functional
+ segmentation because of current challenges in BOLD imaging including low
+ resolution , SNR and signal .
+ Alternatively, most studies acquire T1-weighted images which may be reliably
+ registered onto an atlas using anatomical information.
+ Lesion analysis have allowed researchers to identify t hat there exists
+ a relationship between the structure and function of the human brain.(Damasio
+ & Damasio, 1989) Anatomical delineation for morphological characteristics
+ may serve as a surrogat e for functional localization and therefore allow
+ current researchers to map functional bound aries using anatomy based registrat
+ion with limited error.
+ Our study utilizes an algorithm called Surface Volume Registration (SVReg)
+ which is part of BrainSuite — an open-source neuroimage analysis software
+ package.
+ (brainsuite.org) SVReg performs coregi stration between the atlas and subject
+ T1-weighted images by using anatomical info rmation from both the 
+\end_layout
 
-\end_inset
-
- (MRI) is an in-vivo imaging technique which allows us to capture the structure
- and function of the human brain.
- <Structure funx relationship blurb> Anatomical delineation for morphological
- characteristics and surrogate for functional localization.
- <what atlas used for and pros of using anatomical registration> <limitations
- of atlas> The functional organization of the brain is experience dependent
- which is highly variable.
- Therefore, it is ideal to map the functional topography of the brain using
- fMRI.
- However, most studies cannot perform reliable single-subject functional
- segmentation because of low resolution and SNR.
- <alternatively we use functional atlas using anatomical reg still useful>
- The brain is determined by the genome which is broadly conserved allowing
- us to map functional boundaries using anatomy based registration with limited
- error.
- There are a variety of atlas templates available catered to registration
- algorithms.
- (average image, high SNR, probabilistic) (anatomical or functional…this
- atlas is anatomical segmentation and anatomical&funx defined atlas) While
- the Colin atlas has low SNR, this human subject has an infrequent anomaly
- present in the left precentral gyrus which causes misidentification of
- the lower bound of the precentral gyrus and neighboring regions.
- Others have developed an average atlas template…but initial misregistration
- causes blurring of boundaries which gives for arbitrary reference boundaries.
- This type of template provides good initial alignment but may lack …high
- contrast and resolution anatomical reference image along with robust a
- robust registration algorithm on a morphologically typical brain….
- <other atlases: freesurfer atlas (2) FSL (MNI: ICBM--averaged, Colin--anomoly)>
- <Our atlas> Single image, high resolution, high contrast (high SNR?) Ideal
- for a robust registration algorithm which is sensitive to fine anatomical
- features.
- Contrast to freesurfer that we have 1-1 correspondence on surface to vol
- <what we did here.
- Started with anatomical atlas and performed further parcellation using
- rs-fMRI.
- Then compared functional boundaries obtained by atlas based registration
- and segmentation guided by functional images> Methods Image Acquisition:
- BCI-DNI Brain Atlas A high-resolution 3D MPRAGE scan (TE=??? TR=???; resolution
-=0.5x0.5x0.8mm) was acquired on a 3T Siemens MAGNETOM Tim Trio using an 8 channel
- head coil.
- The subject is a right-handed woman in her mid-thirties.
- T1-weighted images were processed using BrainSuite (brainsuite.org ) in
- a semi-automated fashion to classify tissue types, extract and render the
- surfaces of the inner and pial cortices.
- Manual correction was performed on cortical boundaries and grey-white boundarie
-s to minimize extraneous inclusion of meninges or exclusion of cortex and
- to correct occipito-cerebellar boundaries.
- Gyral white matter boundaries were defined on the atlas by the two opposing
- sulcal edges of the gyrus from the coronal view.
- The sulcal and gyral boundaries were transferred from atlas to subject
- using BrainSuite.34 BrainSuite performed cortically constrained volumetric
- brain registration using curvature based alignment of the cortical surface
- followed by coregistration of subcortical areas using intensity based elastic
- registration.
- This was subject to a cortical matching constraint.
- This resulted in atlas-to-subject matching that was consistently accurate
- throughout the brain, both at the cortical and subcortical regions.
+\begin_layout Standard
+surface and volume of the brain images for accurate automated co-registration
+ .
+ BrainSuite ’ s preprocessing pipeline is unique in its ability to have
+ one- to -one correspondence between the extracted surfaces and image volume.
+ This allows SVReg to utilize more morpholog ical characteristics for robust
+ registration and consistent surface and volume mapping to a labeled atlas.(Joshi
+ , Shattuck, & Leahy, 2012) An atlas with fine anatomical detail best benefits
+ from this registration al gorithm.
+ Here we present our single-subject atlas which acquired a high resolution
+ and high tissue contrast 3D - MPRAGE image from a right-handed female in
+ her mid-thirties with a brachieo cephalic brain and no rare anomalies.
+ 90 anatomical regions of interests (ROI) were meticulously hand labeled
+ on sing le-slice images and then transferred onto extracted surfaces.
+ These labels were further subdelineated by guidance of functional information
+ from an average of 40 resting-state fun ctional MR images (rs-fMRI) provided
+ by a public database — Human Connectome Project (HCP) .
+ We further present the efficacy of using an anatomical based registration
+ and segmentation approach for functio nal parcellation.
+ 
 \end_layout
 
 \begin_layout Section
@@ -807,33 +231,67 @@ Image Acquisition:
 \end_layout
 
 \begin_layout Standard
-BCI-DNI Brain Atlas A high-resolution 3D MPRAGE scan (TE=??? TR=???; resolution=
-0.5x0.5x0.8mm) was acquired on a 3T Siemens MAGNETOM Tim Trio using an 8 channel
- head coil.
- The subject is a “typical” right-handed woman in her mid-thirties.
+A high-resolution 3D MPRAGE scan (TE=4.33 ms; TR=2070 ms; TI=11 00ms; Flip
+ angle=12 degrees; resolution=0.5 47 x0.5 47 x0.8 02 mm) was acquired on a
+ 3T Siemens MAGNETOM Tim Trio using a 32 channel head coil.
+ Fat suppression was achieved using spectrally-selective excitat ion of
+ the water protons.
+ Data was acquired 5 times and averaged to improve SNR at this resoluti
+ on.
+ The subject is a typical right- ha nded woman in her mid-thirties.
  Her brain is brachieocephalic with no rare anomalies.
- Brain Extraction T1-weighted images were processed using BrainSuite (brainsuite.
-org ) in a semi-automated fashion to classify tissue types, extract and
- render the surfaces of the inner , mid and pial cortices.
+\end_layout
+
+\begin_layout Subsection
+Brain Extraction
+\end_layout
+
+\begin_layout Standard
+T1 -weighted images were processed using BrainSuite (brainsuite.org ) in
+ a semi-autom ated fashion to classify tissue types, extract and render
+ the surfaces of the inner, mid and pial cortices.
  Bias field was corrected by both automatic processing and manual guidance
- to maximize grey-white tissue contrast and ensure accurate tissue classificatio
-n.
- Manual correction was performed on the cortical boundaries to remove inclusion
+ to maximi ze grey-white tissue contrast and ensure accurate tissue classificati
+on.
+ Manual correction was performed on the co rtical boundaries to remove inclusion
  of meninges or exclusion of cortex, the occipito-cerebellar boundaries
  to remove inclusion of cerebellum or tentorium or exclusion of the occipital
- tissue and the grey-white boundary to preserve fine sulcal and gyral detail.
- Anatomical Labeling Anatomical labeling was performed manually on coronal
- single-slice images.
- Cortical ROIs were guided by sulcal and gyral landmarks as detailed in
- “Human brain anatomy in computerized images” authored by Hanna Damasio.(Damasio,
- 2005) Gyral deep-boundaries were defined on the atlas by the two opposing
+ t issue and the grey-white boundary to preserve fine sulcal and gyral detail
+ .
+ 
+\end_layout
+
+\begin_layout Subsection
+Anatomical Labeling 
+\begin_inset CommandInset label
+LatexCommand label
+name "subsec:Anatomical-Labeling"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Anatomical labeling was performed manually on coronal single-slice ima ges.
+ Cortical ROIs were guide d by sulcal and gyral landmarks as detailed in
+ Human brain anatomy in computerized images authored by Hanna Damasio.(Damasio,
+ 2005) Gyral deep-boundaries were defined on the at las by the two opposing
  sulcal edges of the gyrus from the coronal view.
- Cortical volume labels were transferred onto mid cortical surfaces and
- then refined so that sulcal boundaries would follow the sulcal fundi more
- closely.(Joshi et al., 2012) Volume labels were adjusted according to these
- refinements.
+ Cortical volu me labels were transferred onto mid cortical surfaces and
+ then refined so that sulcal boundaries would follow t he sulcal fundi more
+ closely.
+ 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "article-full"
+
+\end_inset
+
+(Joshi et al., 2012) Volume labels were adjusted according to these refinements.
  Subcortical nuclei, corpus callosum, ventricles, brainstem and cerebellum
  were all labeled manually based on with no automated refinements.
+ 
 \end_layout
 
 \begin_layout Subsection
@@ -876,7 +334,10 @@ We separately consider each anatomical region in the cortex and subdivide
  the two RVs) representing time series from two points in the brain, then
  dot product of X and Y yields correlation between them.
  If we consider X and Y as points on hypersphere due to unit variance, then
- the distance between them is a true metric given by πα=π cos^(-1)ρ_XY 
+ the distance between them is a true metric given by 
+\begin_inset Formula $\piα=\pi-\cos^{-1}\rho_{XY}$
+\end_inset
+
  (figure 1) and therefore a measure of similarity can be defined as sin^(-1)ρ_XY
  .
  This similarity measure is used to compute similarity matrix between every
@@ -886,13 +347,147 @@ We separately consider each anatomical region in the cortex and subdivide
 \end_layout
 
 \begin_layout Standard
+\begin_inset Wrap figure
+lines 0
+placement o
+overhang 0col%
+width "50col%"
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename figures/fig1sph.pdf
+	lyxscale 30
+	width 35text%
+
+\end_inset
+
+
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Geodesic distance on Hypersphere
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
 The number of We computed Silhouette plots [##] for different number of
- clusters .
+ clusters.
  Once the parcellation is done, the color coded maps of cross subject consistenc
 y were generated.
  Additionally, we also generated connectivity maps from centroid of each
  cluster to the whole brain by computing correlations of time series.
  
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename figures/fig3.pdf
+	lyxscale 30
+	width 100text%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+PCA and Silhoutte analysis of the precuneus of the left hemisphere.
+ we can see that for the 2 parcellatiosn case, the silhoutte plots are wide
+ and even in size where as for more number of clusters, they tend to be
+ narrow and uneven in size.
+ The Silhoutte score is maximum for 2 clusters, as well as PCA plot shows
+ a good variance for this case.
+ 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename figures/fig4.pdf
+	lyxscale 30
+	width 100text%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Functional Connectivity map for the left Precuneus for the two clusters
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Subsection
@@ -998,7 +593,25 @@ Anatomical and Functional Atlas
 \end_layout
 
 \begin_layout Standard
-We used 40 subjects for generating the subparcellation as described in Sec.
+As described in Sec.
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "subsec:Anatomical-Labeling"
+
+\end_inset
+
+, first a coarse anatomical labeling of the atlas was generated (Fig.
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Anatomical-Parcellation"
+
+\end_inset
+
+).
+ This labeling consisted of We used 40 subjects for generating the subparcellati
+on as described in Sec.
  
 \begin_inset CommandInset ref
 LatexCommand ref
@@ -1008,6 +621,83 @@ reference "subsec:fMRI-based-subparcellation"
 
 .
  
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename figures/fig1.pdf
+	lyxscale 10
+	width 100text%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Anatomical Parcellation
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Anatomical-Parcellation"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename figures/fig2.pdf
+	lyxscale 10
+	width 100text%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Anatomical Parcellation
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Subsection
@@ -1023,6 +713,100 @@ Figure ## shows bar charts for each of the ROIs for these Rand Scores along
 \begin_layout Standard
 There were ## coarse ROIs which showed statistically significant difference
  between the 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename figures/val1.pdf
+	lyxscale 10
+	width 100text%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename figures/val2.pdf
+	lyxscale 10
+	width 100text%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Anatomical Parcellation
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename figures/val3.pdf
+	lyxscale 10
+	width 100text%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename figures/val4.pdf
+	lyxscale 10
+	width 100text%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Anatomical Parcellation
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Section
