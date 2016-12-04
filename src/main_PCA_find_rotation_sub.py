@@ -32,7 +32,12 @@ msk = scipy.io.loadmat(fname1)  # h5py.File(fname1);
 dfs_left = readdfs(os.path.join(p_dir_ref, 'reference', ref + '.aparc.a2009s.32k_fs.reduce3.left.dfs'))
 dfs_left_sm = readdfs(os.path.join(p_dir_ref, 'reference', ref + '.aparc.a2009s.32k_fs.reduce3.very_smooth.left.dfs'))
 count1 = 0
-roilist= [30,6,9,47] # [30, 72, 9, 47,6,7,8,9,10] #pc
+#roiregion=['motor','precuneus','temporal','cingulate','semato','visual']
+
+#roilist = np.array([[29,69,70],[(30, 72, 9, 47)],[33,34,35,36,74],[6,7,8,9,10],[28],[(2,22,11,58,59,20,43,19,45)]])
+
+#roilist= [2,6,22] # [30, 72, 9, 47,6,7,8,9,10] #pc
+roilist= [29,9,7] 
 #roilist=[6,7,8,9,10] #cing
 
 #ref=lst[11]
@@ -55,10 +60,11 @@ sub2 = sub2 - m[:, None]
 s = np.std(sub2, 1)+1e-16
 sub2 = sub2/(s[:, None]*sp.sqrt(1200))
 
-sub = sp.concatenate((sub1, sub2), axis=0)
+msk_small_region = np.in1d(dfs_left.labels, roilist)
+sub = sp.concatenate((sub1[msk_small_region,:], sub2[msk_small_region,:]), axis=0)
 pca = PCA(n_components=3)
 pca.fit(sub)
-msk_small_region = np.in1d(dfs_left.labels, roilist)
+
 
 
 sub1_3d = pca.transform(sub1)

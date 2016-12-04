@@ -14,8 +14,8 @@ from scipy.stats import trim_mean
 from sklearn.metrics.pairwise import pairwise_distances
 from sklearn.utils.linear_assignment_ import linear_assignment
 from sklearn.metrics import silhouette_score
-p_dir = '/home/ajoshi/data/HCP_data/data'
-p_dir_ref='/home/ajoshi/data/HCP_data'
+p_dir = '/big_disk/ajoshi/HCP_data/data'
+p_dir_ref='/big_disk/ajoshi/HCP_data'
 lst = os.listdir(p_dir)
 r_factor = 3
 ref_dir = os.path.join(p_dir_ref, 'reference')
@@ -33,19 +33,19 @@ dfs_left_sm = readdfs(os.path.join(p_dir_ref, 'reference', ref + '.aparc.a2009s.
 count1 = 0
 roilist=[30, 72, 9, 47] #pc
 #ref=lst[11]
-datasub = scipy.io.loadmat(os.path.join(p_dir, sub, sub + '.rfMRI_REST2_RL.reduce3.ftdata.hvar_0.mat'))
-dataref = scipy.io.loadmat(os.path.join(p_dir, ref, ref + '.rfMRI_REST1_RL.reduce3.ftdata.hvar_0.mat'))
+datasub = scipy.io.loadmat(os.path.join(p_dir, sub, sub + '.rfMRI_REST2_RL.reduce3.ftdata.NLM_11N_hvar_25.mat'))
+dataref = scipy.io.loadmat(os.path.join(p_dir, ref, ref + '.rfMRI_REST1_RL.reduce3.ftdata.NLM_11N_hvar_25.mat'))
 
 LR_flag = msk['LR_flag']
 LR_flag = np.squeeze(LR_flag) > 0
-data = dataref['ftdata']
+data = dataref['ftdata_NLM']
 sub1 = data[LR_flag, :]
 m = np.mean(sub1, 1)
 sub1 = sub1 - m[:,None]
 s = np.std(sub1, 1)+1e-16
 sub1 = sub1/s[:,None]
 
-data = datasub['ftdata']
+data = datasub['ftdata_NLM']
 sub2 = data[LR_flag, :]
 m = np.mean(sub2, 1)
 sub2 = sub2 - m[:,None]
@@ -60,6 +60,14 @@ ref_mean_pc = sp.mean(d,axis=0)
 ref_mean_pc=ref_mean_pc-sp.mean(ref_mean_pc)
 ref_mean_pc=ref_mean_pc/(sp.std(ref_mean_pc))
 
+
+d = sub2[msk_small_region, :]
+
+sub_mean_pc = sp.mean(d,axis=0)
+sub_mean_pc=sub_mean_pc-sp.mean(sub_mean_pc)
+sub_mean_pc=sub_mean_pc/(sp.std(sub_mean_pc))
+
+
 rho = np.dot(ref_mean_pc,sub1.T)/ref_mean_pc.shape[0]
 rho[~np.isfinite(rho)] = 0
 
@@ -68,18 +76,27 @@ simil_mtx=sp.pi/2.0 + sp.arcsin(rho)
 #SC = SpectralClustering(n_clusters=nClusters, affinity='precomputed')
 #labs_all = SC.fit_predict(simil_mtx)+1
 
-rho = smooth_surf_function(dfs_left_sm, rho)
+#rho = smooth_surf_function(dfs_left_sm, rho)
 dfs_left_sm.attributes = rho
-dfs_left_sm=patch_color_attrib(dfs_left_sm, rho, clim=[0,0.5])
+dfs_left_sm=patch_color_attrib(dfs_left_sm, rho, clim=[-1,1])
 view_patch_vtk(dfs_left_sm, azimuth=90,elevation=180, roll=90, outfile='sub1to1_view1_pc.png', show=1)
 view_patch_vtk(dfs_left_sm, azimuth=-90,elevation=-180, roll=-90, outfile='sub1to1_view2_pc.png', show=1)
+
+rho = np.dot(sub_mean_pc,sub2.T)/sub_mean_pc.shape[0]
+rho[~np.isfinite(rho)] = 0
+
+dfs_left_sm.attributes = rho
+dfs_left_sm=patch_color_attrib(dfs_left_sm, rho, clim=[-1,1])
+view_patch_vtk(dfs_left_sm, azimuth=90,elevation=180, roll=90, outfile='sub2to2_view1_pc.png', show=1)
+view_patch_vtk(dfs_left_sm, azimuth=-90,elevation=-180, roll=-90, outfile='sub2to2_view2_pc.png', show=1)
+
 
 
 rho = np.dot(ref_mean_pc,sub2.T)/ref_mean_pc.shape[0]
 rho[~np.isfinite(rho)] = 0
-rho = smooth_surf_function(dfs_left_sm, rho)
+#rho = smooth_surf_function(dfs_left_sm, rho)
 dfs_left.attributes = rho
-dfs_left_sm=patch_color_attrib(dfs_left_sm, rho, clim=[0,0.5])
+dfs_left_sm=patch_color_attrib(dfs_left_sm, rho, clim=[-1,1])
 view_patch_vtk(dfs_left_sm, azimuth=90,elevation=180, roll=90, outfile='sub1to2_view1_pc.png', show=1)
 view_patch_vtk(dfs_left_sm, azimuth=-90,elevation=-180, roll=-90, outfile='sub1to2_view2_pc.png', show=1)
 
@@ -92,8 +109,9 @@ sub_rot = rot_sub_data(sub1, sub2)
 rho = sp.dot(ref_mean_pc,sub_rot.T)/ref_mean_pc.shape[0]
 #rho=rho[0,1:]
 rho[~np.isfinite(rho)] = 0
-rho = smooth_surf_function(dfs_left_sm, rho)
+#rho = smooth_surf_function(dfs_left_sm, rho)
 dfs_left.attributes = rho
-dfs_left_sm=patch_color_attrib(dfs_left_sm, rho, clim=[0,0.5])
+dfs_left_sm=patch_color_attrib(dfs_left_sm, rho, clim=[-1,1])
 view_patch_vtk(dfs_left_sm, azimuth=90,elevation=180, roll=90, outfile='sub1to2_view1_pc_rot.png', show=1)
 view_patch_vtk(dfs_left_sm, azimuth=-90,elevation=-180, roll=-90, outfile='sub1to2_view2_pc_rot.png', show=1)
+

@@ -66,7 +66,7 @@ BrainSync: A Method for synchronization of fMRI Data Across Scans using
 \end_layout
 
 \begin_layout Author
-*****S
+*****
 \end_layout
 
 \begin_layout Institute
@@ -120,6 +120,80 @@ In order to check our hypothesis that the distribution of points on sphere
  3.
  For visualization map this data to usual sphere by normalizing each point
  to unit length.
+ 
+\end_layout
+
+\begin_layout Standard
+In this paper, we propose a 
+\emph on
+geodesic distance measure
+\emph default
+.
+ Since we assume that the input time series are variance normalized, we
+ can represent each of the time series as points on a hypersphere 
+\begin_inset Formula $\mathbb{S}^{T-1}$
+\end_inset
+
+ of dimension 
+\begin_inset Formula $T-1$
+\end_inset
+
+ (Fig.
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:(a)-Geodesic-distance"
+
+\end_inset
+
+), where 
+\begin_inset Formula $T$
+\end_inset
+
+ is the number of time samples.
+ 
+\end_layout
+
+\begin_layout Standard
+If 
+\begin_inset Formula $X$
+\end_inset
+
+ and 
+\begin_inset Formula $Y$
+\end_inset
+
+ represent time series from two points in the brain, then dot product of
+ 
+\begin_inset Formula $X$
+\end_inset
+
+ and 
+\begin_inset Formula $Y$
+\end_inset
+
+ yields Pearson correlation 
+\begin_inset Formula $\rho_{XY}$
+\end_inset
+
+ between them.
+ If we consider X and Y as points on hypersphere due to unit variance, then
+ the geodesic distance between them is a metric given by 
+\begin_inset Formula $\cos^{-1}(X\cdot Y)$
+\end_inset
+
+ and therefore a similarity measure for connectivity can be defined as:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{align*}
+S_{G}(X,Y)= & \frac{\pi}{2}+\sin^{-1}(X\cdot Y)=\frac{\pi}{2}+\sin^{-1}(\rho_{XY}).
+\end{align*}
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -175,6 +249,53 @@ A Method for Temporal Alignment
 \end_layout
 
 \begin_layout Standard
+Correlation was computed between time series data of Brain 1 B1 and Brain
+ 2 with permuted vertices.
+ It seems that the correlation only increases to average about .3.
+ Note that after tNLM average correlation within subject is about that.
+ So it seems to align the baseline signal only.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename figs/sync_before_after.pdf
+	width 100text%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Brain Synch
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Correlation of average signal in precuneus to the signals in brain 
+\end_layout
+
+\begin_layout Standard
 \begin_inset Float figure
 wide false
 sideways false
@@ -183,7 +304,7 @@ status open
 \begin_layout Plain Layout
 \align center
 \begin_inset Graphics
-	filename figs/sync_before_after.pdf
+	filename figs/sub2sub_pc.pdf
 	width 100text%
 
 \end_inset
@@ -264,6 +385,40 @@ key "bhushan2016temporal"
 
 \begin_layout Subsection
 Quantifying Variability of rfMRI
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename figs/sub_session_var.pdf
+	width 100text%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Variability of Resting State fMRI
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Subsection
