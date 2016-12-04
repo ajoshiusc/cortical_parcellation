@@ -1,4 +1,4 @@
-#LyX 2.2 created this file. For more info see http://www.lyx.org/
+#LyX 2.0 created this file. For more info see http://www.lyx.org/
 \lyxformat 413
 \begin_document
 \begin_header
@@ -18,6 +18,7 @@
 \font_osf false
 \font_sf_scale 100
 \font_tt_scale 100
+
 \graphics default
 \default_output_format default
 \output_sync 0
@@ -60,11 +61,20 @@
 \begin_body
 
 \begin_layout Title
-||AUM||
+BrainSync: A Method for synchronization of fMRI Data Across Scans using
+ a Patterns in its Correlation Structure
+\end_layout
+
+\begin_layout Author
+*****
+\end_layout
+
+\begin_layout Institute
+*****
 \end_layout
 
 \begin_layout Abstract
-Shree_Ganeshaya_Namaha
+Shree_Ganeshaya_Namaha 
 \end_layout
 
 \end_body
