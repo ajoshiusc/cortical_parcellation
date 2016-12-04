@@ -1,4 +1,4 @@
-#LyX 2.0 created this file. For more info see http://www.lyx.org/
+#LyX 2.2 created this file. For more info see http://www.lyx.org/
 \lyxformat 413
 \begin_document
 \begin_header
@@ -18,7 +18,6 @@
 \font_osf false
 \font_sf_scale 100
 \font_tt_scale 100
-
 \graphics default
 \default_output_format default
 \output_sync 0
@@ -74,7 +73,128 @@ BrainSync: A Method for synchronization of fMRI Data Across Scans using
 \end_layout
 
 \begin_layout Abstract
-Shree_Ganeshaya_Namaha 
+We present a method for comparing fMRI signal across scans allowing for
+ direct comparisons of functional activations in fMRI study.
+ The method allows for temporal alignment of the signal so that they can
+ be directly compared from one brain to the other.
+ 
+\end_layout
+
+\begin_layout Section
+Introduction
+\end_layout
+
+\begin_layout Standard
+Resting State fMRI signal is interesting
+\end_layout
+
+\begin_layout Standard
+Currently it is not possible to directly compare the signals across sessions
+\end_layout
+
+\begin_layout Standard
+Connectivity matrices are comparable
+\end_layout
+
+\begin_layout Section
+Materials and Methods
+\end_layout
+
+\begin_layout Subsection
+Correlation Structure in the fMRI signal
+\end_layout
+
+\begin_layout Subsection
+A Method for Temporal Alignment
+\end_layout
+
+\begin_layout Subsection
+Quantifying Variability of rfMRI
+\end_layout
+
+\begin_layout Standard
+Across subjects as well as across scans.
+\end_layout
+
+\begin_layout Subsection
+Cortical Parcellation
+\end_layout
+
+\begin_layout Section
+Results
+\end_layout
+
+\begin_layout Subsection
+Data
+\end_layout
+
+\begin_layout Standard
+We used the minimally preprocessed (ICA-FIX denoised) resting fMRI data
+ from 40 unrelated subjects, which are publicly available from the Human
+ Connectome Project (HCP) (Van Essen et al., 2013; Glasser et al., 2013; Smith
+ et al., 2013; Barch et al., 2013; Woolrich et al., 2013).
+ The resting fMRI data were resampled onto the individuals’ cortical surfaces,
+ which were coregistered using FreeSurfer.
+ The functional MRI data sets were acquired for four independent resting
+ fMRI sessions of 15 minutes each (TR=720ms, TE=33.1ms, 2 mm x 2 mm x 2 mm
+ voxels) and the subjects were asked to relax and fixate on a projected
+ bright cross-hair on a dark background.
+ HCP's minimal preprocessing primarily corrects the fMRI data for acquisition
+ artifacts, resamples the data on the cortical surface and performs a non-aggres
+sive spatio-temporal cleanup (Glasser et al., 2013; Smith et al., 2013).
+ The data are then resampled for each subject onto a common standard cortical
+ surface mesh representation (32K Conte-69) in the native subject space
+ (Smith et al., 2013; Van Essen et al., 2012).
+ Additional spatial-temporal processing is then used to remove scanner,
+ motion and other artifacts (Smith et al., 2013).In addition to this processing,
+ we also applied temporal non-local means (tNLM) filter 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "bhushan2016temporal"
+
+\end_inset
+
+.
+ The tNLM filtering is shown to improve the performance of parcellation
+ algorithms by enhancing local correlations between the datasets.
+ Additionally, we normalized the resting fMRI time series at each vertex
+ to zero mean and unit variance.
+ 
+\end_layout
+
+\begin_layout Subsection
+Quantifying Variability of rfMRI
+\end_layout
+
+\begin_layout Subsection
+Cortical Parcellation
+\end_layout
+
+\begin_layout Section
+Discussion and Conclusion
+\end_layout
+
+\begin_layout Standard
+One of the assumptions is that the correlation structure of the brain images
+ is constant over time.
+ However we know that there are subtle yet consistent changes in connectivity
+ over time.
+ changes It is possible to develop a windowed version of BrainSync.
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset bibtex
+LatexCommand bibtex
+bibfiles "fmri_bib"
+options "plain"
+
+\end_inset
+
+
 \end_layout
 
 \end_body

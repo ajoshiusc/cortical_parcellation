@@ -1,0 +1,1479 @@
+#LyX 2.2 created this file. For more info see http://www.lyx.org/
+\lyxformat 508
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\begin_preamble
+% Template for ISBI-2017 paper; to be used with:
+%          spconf.sty  - ICASSP/ICIP LaTeX style file, and
+%          IEEEbib.bst - IEEE bibliography style file.
+% --------------------------------------------------------------------------
+
+\usepackage{spconf}
+\usepackage{float}
+% Example definitions.
+% --------------------
+\def\x{{\mathbf x}}
+\def\L{{\cal L}}
+
+% Title.
+% ------
+\title{AUTHOR GUIDELINES FOR ISBI 2017 PROCEEDINGS MANUSCRIPTS}
+%
+% Single address.
+% ---------------
+\name{Anand A Joshi, Minqi Chong, Jian Li, Gaurav Sonkar and Richard M Leahy\thanks{This project is funded by NIH R01.}}
+\address{Signal and Image Processing Institute, University of Southern California, Los Angeles}
+%
+% For example:
+% ------------
+%\address{School\\
+%	Department\\
+%	Address}
+%
+% Two addresses (uncomment and modify for two-address case).
+% ----------------------------------------------------------
+%\twoauthors
+%  {A. Author-one, B. Author-two\sthanks{Thanks to XYZ agency for funding.}}
+%	{School A-B\\
+%	Department A-B\\
+%	Address A-B}
+%  {C. Author-three, D. Author-four\sthanks{The fourth author performed the work
+%	while at ...}}
+%	{School C-D\\
+%	Department C-D\\
+%	Address C-D}
+%
+% More than two addresses
+% -----------------------
+% \name{Author Name$^{\star \dagger}$ \qquad Author Name$^{\star}$ \qquad Author Name$^{\dagger}$}
+%
+% \address{$^{\star}$ Affiliation Number One \\
+%     $^{\dagger}$}Affiliation Number Two
+%
+\end_preamble
+\use_default_options false
+\maintain_unincluded_children false
+\language english
+\language_package none
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_package amsmath 2
+\use_package amssymb 2
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 0
+\use_package mathtools 1
+\use_package mhchem 0
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Which connectivity measure is best for fMRI based cortical clustering?
+\end_layout
+
+\begin_layout Abstract
+Resting state fMRI (rsfMRI) provides complementary information to the sulcal
+ brain anatomy about the cytoarchitecture and function of the human brain
+ and therefore parcellation based on rsfMRI is becoming increasingly popular.
+ A number of recent papers have presented cortical parcellation methods
+ based on functional connectivity which is measured through correlation
+ of fMRI time series from a ROI or point to the rest of the brain.
+ In this paper, we point out that this popularly used approach is not only
+ computationally expensive and contains redundancies but also it does not
+ perform well in quantitative evaluation compared to simpler approaches.
+ In this paper, we present a new connectivity measure based on geodesic
+ distance on unit sphere.
+ We compare the connectivity measures, and analyze their relationships to
+ each other.
+ We demonstrate that the proposed geodesic distance measure a to more consistent
+ parcellation acorss and within subjects.
+ The proposed measure also shows superior performance with respect to the
+ number of samples required for parcellation.
+\end_layout
+
+\begin_layout Section
+Introduction
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:intro"
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Standard
+Studies of cortical connectivity derived from in-vivo imaging based on correlati
+on in the functional magnetic resonance imaging (fMRI) signal is becoming
+ increasingly popular for human connectome analysis.
+ The correlation between fMRI BOLD signal between different regions in the
+ brain is often used as a measure of connectivity between those regions.
+ This large scale connectivity information derived from fMRI can be used
+ to identify cyto-architectonic boundaries between functionally-connected
+ regions 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "biswal1995functional"
+
+\end_inset
+
+.
+ Identification of contiguous areas of cortex that exhibit similar connectivity
+ to the rest of the brain can be used to perform a functional parcellation
+ of the cortex 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "raichle2001default,sporns2005human,rousseeuw1987silhouettes,smith2013functional,eickhoff2005new"
+
+\end_inset
+
+.
+ These applications require pairwise connectivity measures between every
+ pair of points on the cortical surface.
+ Most of the existing methods on fMRI based brain connectivity use correlation
+ in fMRI signals as a measures of connectivity.
+ 
+\end_layout
+
+\begin_layout Standard
+The performance of cortical clustering algorithms and connectivity studies
+ is critically dependent on the choice of the connectivity measure.
+ Limited data available for a single individual scan can result in instability
+ of the estimated cyto-architectonic boundaries and parcellations (
+\begin_inset CommandInset citation
+LatexCommand cite
+key "rubinov2010complex,smith2011network"
+
+\end_inset
+
+.
+ A large number of network estimation methods have been used in the neuroimaging
+ literature ranging from simple measures that consider correlation between
+ two nodes' timeseries, information theoretic measures, time-lag correlations,
+ ICA based methods to more sophisticated approaches that consider the whole
+ cortex simultaneously and estimate a global Bayes net models 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "smith2011network"
+
+\end_inset
+
+.
+ However, most neuroimaging studies use correlation and derived measures
+ as a measure of connectivity and therefore, it is important to perform
+ comparison of the correlation based connectivity measures and assess their
+ performance.
+\end_layout
+
+\begin_layout Standard
+This paper analyzes various know correlation based connectivity measures
+ and relationships between them.
+ We also propose a new 
+\emph on
+geodesic distance
+\emph default
+ connectivity measure.
+ Specifically, we compare (1) Euclidean or 
+\begin_inset Formula $L^{2}$
+\end_inset
+
+ distance, (2) exponential kernel, (3) geodesic distance, (4) functional
+ connectivity measures.
+ This paper also presents a relative the performance assessment of these
+ measures for a cortical parcellation application.
+ In order to compare the performance of these measures, we analyzed cross
+ subject consistency and cross session consistency of the parcellation generated
+ using these measures using two algorithms (1) region growing and (2) spectral
+ clustering 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "thirion2014fmri"
+
+\end_inset
+
+.
+ We also analyze the impact of number of samples on the performance of cortical
+ parcellation for these four measures.
+\end_layout
+
+\begin_layout Standard
+In the following sections, the four connectivity measures are described
+ first.
+ Then the relationships between them is analyzed followed by the description
+ of the performance analysis studies.
+ Next, in the results section, the numerical results for these studies are
+ presented.
+ Finally, in the conclusion section, we summarize the findings of these
+ studies.
+\end_layout
+
+\begin_layout Section
+Materials and Methods
+\end_layout
+
+\begin_layout Standard
+In this section, the four connectivity measures are described first.
+ This is followed by their analysis and description of methods used for
+ comparing their performance.
+ As an input, we assume preprocessed fMRI data mapped to the cortical surface.
+ We assume that the data is zero mean and variance normalized.
+\end_layout
+
+\begin_layout Subsection
+Similarity measures 
+\begin_inset CommandInset label
+LatexCommand label
+name "subsec:Distance-measures"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+Correlation based distance measures 
+\end_layout
+
+\begin_layout Standard
+We can consider the usual 
+\emph on
+Euclidean 
+\begin_inset Formula $L^{2}$
+\end_inset
+
+ measure
+\emph default
+ between two vectors representing time series as a metric between the two
+ signals 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "blumensath2012resting,biswal1995functional,bhushan2016temporal"
+
+\end_inset
+
+.
+ This measure uses the time series directly and does not take into account
+ the fact that the time series are variance normalized.
+\begin_inset Formula 
+\begin{align*}
+S_{L^{2}}(X,Y) & =4-\|X-Y\|^{2}\\
+= & 4-\|X\|^{2}-\|Y\|^{2}+2\rho_{XY}\\
+= & 2+2\rho_{XY}.
+\end{align*}
+
+\end_inset
+
+While this measure is the simplest measure of similarity, it is based on
+ a metric and is a real distance based measure.
+ In order to emphasize high correlations, a transformed version of this
+ measure referred to as 
+\emph on
+exponential kernel measure
+\emph default
+ is considered 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "bernier2014using,zuo2011effects,bhushan2016temporal"
+
+\end_inset
+
+.
+ 
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+more citations needed
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+S_{E}(X,Y)=\exp\frac{-\|X-Y\|^{2}}{h^{2}}=\exp\frac{-2(1-\rho_{XY})}{h^{2}}.
+\]
+
+\end_inset
+
+ This measure is a Gaussian transformation on the 
+\begin_inset Formula $L^{2}$
+\end_inset
+
+distance and do not define a metric and therefore is not a real distance
+ based measure.
+\end_layout
+
+\begin_layout Standard
+In this paper, we propose a 
+\emph on
+geodesic distance measure
+\emph default
+.
+ Since we assume that the input time series are variance normalized, we
+ can represent each of the time series as points on a hypersphere 
+\begin_inset Formula $\mathbb{S}^{T-1}$
+\end_inset
+
+ of dimension 
+\begin_inset Formula $T-1$
+\end_inset
+
+ (Fig.
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:(a)-Geodesic-distance"
+
+\end_inset
+
+), where 
+\begin_inset Formula $T$
+\end_inset
+
+ is the number of time samples.
+ 
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename figs/fig1.pdf
+	lyxscale 30
+	width 40col%
+
+\end_inset
+
+
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Geodesic distance on Hypersphere 
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:(a)-Geodesic-distance"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+ If 
+\begin_inset Formula $X$
+\end_inset
+
+ and 
+\begin_inset Formula $Y$
+\end_inset
+
+ represent time series from two points in the brain, then dot product of
+ 
+\begin_inset Formula $X$
+\end_inset
+
+ and 
+\begin_inset Formula $Y$
+\end_inset
+
+ yields Pearson correlation 
+\begin_inset Formula $\rho_{XY}$
+\end_inset
+
+ between them.
+ If we consider X and Y as points on hypersphere due to unit variance, then
+ the geodesic distance between them is a metric given by 
+\begin_inset Formula $\cos^{-1}(X\cdot Y)$
+\end_inset
+
+ and therefore a similarity measure for connectivity can be defined as:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{align*}
+S_{G}(X,Y)= & \frac{\pi}{2}+\sin^{-1}(X\cdot Y)=\frac{\pi}{2}+\sin^{-1}(\rho_{XY}).
+\end{align*}
+
+\end_inset
+
+This measure is based on a true metric since it represents a real distance
+ based measure.
+\end_layout
+
+\begin_layout Subsubsection
+Functional connectivity measure
+\end_layout
+
+\begin_layout Standard
+One of the most popular approach for connectivity, referred to as 
+\emph on
+spatial connectivity-based measure
+\emph default
+ is to first compute correlation of time series at the given points on the
+ cortex to the time series for all the points in the brain 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "fan2015functional,craddock2012whole"
+
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+Let 
+\begin_inset Formula $B$
+\end_inset
+
+ denote 
+\begin_inset Formula $N_{vert}\times T$
+\end_inset
+
+ data matrix for the whole brain.
+ For a given pair of vertices on the cortex with their corresponding time
+ series 
+\begin_inset Formula $X$
+\end_inset
+
+ and 
+\begin_inset Formula $Y$
+\end_inset
+
+, we compute their spatial connectivity maps by measuring correlation of
+ these to the whole brain data, 
+\begin_inset Formula $XB^{T}$
+\end_inset
+
+and 
+\begin_inset Formula $YB^{T}$
+\end_inset
+
+.
+ In order to normalize this data, we compute the Fischer-z transformation
+ 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "wang2006changes"
+
+\end_inset
+
+ of this connectivity feature given by 
+\begin_inset Formula $f_{X}=\tanh^{-1}(XB^{T}),$
+\end_inset
+
+ 
+\begin_inset Formula $f_{Y}=\tanh^{-1}(YB^{T})$
+\end_inset
+
+ and compute Pearson's correlation between them 
+\begin_inset Formula $\rho_{f_{X}f_{Y}}$
+\end_inset
+
+.
+ This is then followed by an exponential transformation to emphasize high
+ connectivity.
+ The similarity measure with this approach is given by:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+S_{C}(X,Y)=\exp\frac{-2(1-\rho_{f_{X}f_{Y}})}{h^{2}}
+\]
+
+\end_inset
+
+
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Efficient way for computing correlation of correlation.
+ 
+\end_layout
+
+\end_inset
+
+ where we chose the scale parameter 
+\begin_inset Formula $h=0.72$
+\end_inset
+
+ based on our previous evaluation 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "bhushan2016temporal"
+
+\end_inset
+
+.
+ It should be noted that this approach is not based on a metric and does
+ not define a real distance based measure.
+\end_layout
+
+\begin_layout Subparagraph*
+Mathematical Analysis:
+\end_layout
+
+\begin_layout Standard
+Let us consider the brain data represented as a random vector 
+\begin_inset Formula $X=[X,X_{2,}...,X_{N_{vert}}]$
+\end_inset
+
+ where 
+\begin_inset Formula $X_{i}$
+\end_inset
+
+ represents a random variable denoting the fMRI signal at vertex 
+\begin_inset Formula $i$
+\end_inset
+
+.
+ Let 
+\begin_inset Formula $p_{X}(x_{1},x_{2,...,}x_{n})$
+\end_inset
+
+ denote the joint probability distribution of these random variables and
+ therefore all the relationships between them are encoded in the joint distribut
+ion 
+\begin_inset Formula $p_{X}$
+\end_inset
+
+.
+ We are interested in a relationship between pairs of vertices, WLOG say
+ 
+\begin_inset Formula $1$
+\end_inset
+
+ and 
+\begin_inset Formula $2$
+\end_inset
+
+, i.e.
+ in other words, we are interested in 
+\begin_inset Formula $P_{X_{1}X_{2}}(x_{1},x_{2})$
+\end_inset
+
+, which has all the information about the relationship in 
+\begin_inset Formula $X_{1}$
+\end_inset
+
+ and 
+\begin_inset Formula $X_{2},$
+\end_inset
+
+ and can be determined by samples at node 
+\begin_inset Formula $i$
+\end_inset
+
+ and 
+\begin_inset Formula $j$
+\end_inset
+
+.
+ Moreover, even if we assume that the data at rest of the nodes is give,
+ since there is no 
+\emph on
+a priori
+\emph default
+ knowledge about the relationship between 
+\begin_inset Formula $X_{1},X_{2}$
+\end_inset
+
+ and 
+\begin_inset Formula $\{X_{3},...,X_{n}\}$
+\end_inset
+
+, we have 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+
+\begin_inset Formula 
+\[
+P_{X_{1}X_{2}|X\backslash\{X_{1},X_{2}\}}(x_{1},x_{2}|\{x_{3}..,x_{n}\})=P_{X_{1}X_{2}}(x_{1},x_{2})
+\]
+
+\end_inset
+
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph on
+\bar default
+\strikeout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+a priori
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+.
+ In other words, if we are interested in understanding relationship between
+ node 
+\begin_inset Formula $i$
+\end_inset
+
+ and node 
+\begin_inset Formula $j$
+\end_inset
+
+, then we only need to know 
+\begin_inset Formula $P_{X_{i}X_{j}}$
+\end_inset
+
+ and data at those nodes is sufficient for estimating it and data at other
+ nodes is irrelevant.
+ This is not true if we know the joint distribution 
+\begin_inset Formula $P_{X}$
+\end_inset
+
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph on
+\bar default
+\strikeout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+a priori
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+.
+ 
+\end_layout
+
+\begin_layout Standard
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+For a multivariate Gaussian case we get even stronger results.
+ Let 
+\begin_inset Formula $U=\{X_{1},X_{2}\}$
+\end_inset
+
+ and 
+\begin_inset Formula $V=\{X_{3,}...X_{n}\}$
+\end_inset
+
+.
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+We can perform a maximum likelihood estimate of 
+\begin_inset Formula $C_{UU}$
+\end_inset
+
+ directly from observed values of 
+\begin_inset Formula $U$
+\end_inset
+
+, or we could alternatively perform a maximum likelihood of estimate of
+ 
+\begin_inset Formula $C_{X}$
+\end_inset
+
+ from observed values of 
+\begin_inset Formula $X$
+\end_inset
+
+, and then extract the submatrix corresponding to 
+\begin_inset Formula $X$
+\end_inset
+
+.
+ These results will always give the same estimate.
+ In other words, knowledge of 
+\begin_inset Formula $V$
+\end_inset
+
+ is irrelevant to the ML estimation of 
+\begin_inset Formula $C_{UU}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+Now let us consider the case where we know 
+\begin_inset Formula $P_{X}$
+\end_inset
+
+, e.g.
+ we learn in from a large dataset and now want to get the estimates for
+ a specific subject.
+ The conditional distribution 
+\begin_inset Formula 
+\[
+P_{U|V}(u|v=a)=\frac{1}{(2\pi)^{n/2}|\Sigma|^{-\frac{1}{2}}}\exp\left(-\frac{1}{2}x^{T}\Sigma^{-1}x\right)
+\]
+
+\end_inset
+
+ where 
+\begin_inset Formula 
+\[
+\Sigma=C_{UU}-C_{UV}C_{VV}^{-1}C_{VU}
+\]
+
+\end_inset
+
+ which does not depend on 
+\begin_inset Formula $a$
+\end_inset
+
+.
+ So again, the data at the rest of the nodes is irrelevant for determining
+ relationship between nodes 
+\begin_inset Formula $\{X_{1},X_{2}\}$
+\end_inset
+
+, for this special case, even in the case where we know the joint distribution
+ of the data.
+ Interestingly, conditional mean is a function of 
+\begin_inset Formula $a$
+\end_inset
+
+, but we are not interested in it for the purpose of connectivity.
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+
+\begin_inset Float figure
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename figs/brains1.pdf
+	lyxscale 30
+	width 100col%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+The ROIs considered in this study: precuneus (PC), middle temporal gyrus
+ (MTG) and middle frontal gyrus (MFG), with their subdivisions 
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:The-ROIs-considered"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Now lets look at the numerical method to gain further insight, for simplicity
+ without the Fischer-z and exponential transformation.
+ Let 
+\begin_inset Formula $N_{v}$
+\end_inset
+
+ denote the number of vertices on the cortical surface mesh.
+ Let 
+\begin_inset Formula $B$
+\end_inset
+
+ denote the data matrix for the whole cortex of size 
+\begin_inset Formula $N_{v}\times T$
+\end_inset
+
+ .
+ Then 
+\begin_inset Formula $BB^{T}$
+\end_inset
+
+ is the matrix of spatial connectivity maps denoting correlation between
+ every pair of vertices on the cortex.
+ If we use this spatial map of connectivity as a feature, and compute similarity
+ between the spatial maps using correlation, then we get 
+\begin_inset Formula $(BB^{T})(BB^{T})^{T}=(BB^{T})^{2}$
+\end_inset
+
+ which is simply square of the covariance estimates.
+ 
+\end_layout
+
+\begin_layout Standard
+Therefore, it can be seen that the correlations of correlations measure
+ does not contain any additional information than the usual correlation.
+ Moreover, it is worth noting that the dimension of the spatial correlation
+ maps is 
+\begin_inset Formula $N_{v}\times N_{v}$
+\end_inset
+
+ which could be very large for a high resolution representation of the cortex.
+ Therefore, often the cortical surface mesh is subsampled for this computation
+ resulting in a loss of information.
+ Therefore, we note that this popular approach is not only computationally
+ expensive, but also has less information than simpler approaches.
+ Here, we evaluated these approaches on a real data to demonstrate this.
+ 
+\begin_inset Float figure
+wide true
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename figs/nosample_fig.pdf
+	width 80text%
+
+\end_inset
+
+
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Agreement of clustering based on subsampled fMRI signals to the full length
+ of fMRI as measured by adjusted Rand index.
+ The analysis is repeated for the four measures (shown as curves with different
+ colors) and two clustering algorithms, spectral clustering (left) and region
+ growing (right).
+ The 95% confidence intervals are shown as shaded regions.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Agreement-of-clustering"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status collapsed
+
+\begin_layout Subsection
+Comparison of the measures
+\end_layout
+
+\begin_layout Itemize
+Compare theoretical properties Show that correlation of correlation is square
+ of correlation.
+ Homogeneity, triangle inequalities are important in connectivity analysis.
+ Correlation of correlation has memory issues and does not yield extra informati
+on
+\end_layout
+
+\begin_layout Itemize
+Which are distance metric and which are not 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Comparison of connectivity measures 
+\begin_inset CommandInset label
+LatexCommand label
+name "subsec:Clustering-method"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+As an input, we assume preprocessed rsfMRI data from HCP that is also processed
+ using tNLM filtering 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "bhushan2016temporal"
+
+\end_inset
+
+.
+ We separately consider each anatomical region in the cortex and subdivide
+ them based on the resting fMRI time-series.
+ Specifically, (1) Precuneus (PC), (2) Middle Frontal Gyrus (MFG), (3) Middle
+ Temporal Gyrus (MTG) from the BCI_DNI_brain atlas (described at 
+\begin_inset Flex URL
+status open
+
+\begin_layout Plain Layout
+
+http://brainsuite.org/svreg_atlas_description
+\end_layout
+
+\end_inset
+
+) from BrainSuite software were coregistered to the HCP data using freesurfer
+ (Fig.
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:The-ROIs-considered"
+
+\end_inset
+
+).
+ For the selected anatomical region that we want to subparcellate, the similarit
+y matrix is computed using the four measures (Sec.
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "subsec:Distance-measures"
+
+\end_inset
+
+).
+ This similarity matrix is then inputted to the clustering algorithms.
+ In this paper, we used two clustering algorithms (1) region growing 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "blumensath2012resting"
+
+\end_inset
+
+, and (2) spectral clustering 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "bhushan2016temporal,thirion2014fmri"
+
+\end_inset
+
+.
+ The region growing starts with seeds transferred from an atlas which are
+ grown into different clusters.
+ Neighbouring vertices are joined to a seed’s cluster if their similarity
+ measure is within 90% of the maximal similarity found within that iteration
+ 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "blumensath2012resting"
+
+\end_inset
+
+.
+ The spectral clustering algorithm we used is the standard implementation
+ of n-cuts algorithm 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "shi2000normalized"
+
+\end_inset
+
+.
+ The optimal number of clusters for each ROI is selected based on Silhouette
+ score 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "rousseeuw1987silhouettes"
+
+\end_inset
+
+.
+ We analyzed cross subject consistency of parcellation by measuring adjusted
+ Rand index.
+ The adjusted Rand index ranges from 0 to 1 with value of 0 for random label
+ assignment and 1 for complete agreement of labels, upto permutation of
+ label ids.
+ We did Rand index analysis for cross subject comparison as well as cross
+ session comparison.
+ For cross subject analysis, for a given clustering algorithm and given
+ similarity measure, we computed pairwise adj.
+ Rand indices for each pair of subjects.
+ These Rand indices were averaged over all the sessions.
+ Conversely, for cross session comparison, for a given clustering algorithm
+ and given similarity measure, we computed pairwise Rand indices for all
+ pairs of sessions for each subject.
+ These Rand indices were again averaged over all the subjects.
+\begin_inset Float table
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename figs/table12.pdf
+	width 78col%
+
+\end_inset
+
+
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Rand Index Analysis for the four measures using two clustering algorithms
+\begin_inset CommandInset label
+LatexCommand label
+name "tab:Rand-Index-Analysis"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Additionally, we also studied the effect of length of time series on the
+ accuracy of clustering.
+ Each of the time series in HCP data has 1200 time points.
+ We performed clusterings using the full sample of 1200 and compared the
+ labeling results to the labeling result from subsampled data.
+ For each of the sample size, we downsampled the time series by sampling
+ randomly, without replacement, from the full length time series.
+ The agreement of labeling was computed for subsampled data to the full
+ length data using adjusted Rand index.
+ This computation was repeated 100 times to obtain a confidence interval.
+ 
+\begin_inset Note Note
+status collapsed
+
+\begin_layout Itemize
+We compare using two clustering algorithms 1) spectral clustering, 2) region
+ growing 
+\end_layout
+
+\begin_layout Itemize
+Cross subject and cross session consistency analysis
+\end_layout
+
+\begin_layout Itemize
+Consistency with subsampled data
+\end_layout
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Section
+Results
+\end_layout
+
+\begin_layout Subsection
+Data
+\end_layout
+
+\begin_layout Standard
+All of the in vivo results below used the minimally preprocessed (ICA-FIX
+ denoised) resting fMRI data from 100 unrelated subjects, with 4 scan sessions
+ each, which are publicly available from the Human Connectome Project (HCP)
+ 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "glasser2013minimal"
+
+\end_inset
+
+.
+ In addition to this processing, we also applied temporal non-local means
+ (tNLM) filter 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "bhushan2016temporal"
+
+\end_inset
+
+.
+ The tNLM filtering is shown to improve the performance of parcellation
+ algorithms by enhancing local correlations between the datasets.
+ Additionally, we normalized the resting fMRI time series at each vertex
+ to zero mean and unit variance.
+ 
+\end_layout
+
+\begin_layout Subsection
+Comparison of connectivity measures
+\end_layout
+
+\begin_layout Standard
+The Silhouette analysis described in Sec.
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "subsec:Clustering-method"
+
+\end_inset
+
+ resulted in optimal number of clusters to be 2,3,4 for PC, MFG and MTG
+ respectively.
+ A table of Rand indices for is shown in Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:Rand-Index-Analysis"
+
+\end_inset
+
+.
+ It can be seen that in both the cross subject and cross session comparisons,
+ geodesic distance based measure resulted in the most consistent labeling.
+ Among the clustering algorithms, region growing performed better than the
+ spectral clustering.
+ 
+\end_layout
+
+\begin_layout Standard
+Next, we compared the performance of the connectivity measures for effect
+ of length of time series on the accuracy of clustering as explained in
+ Sec.
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "subsec:Clustering-method"
+
+\end_inset
+
+.
+ Here again, the geodesic distance based connectivity measure showed best
+ performance, followed by Euclidean 
+\begin_inset Formula $L^{2}$
+\end_inset
+
+distance based measure, exponential kernel based and spatial connectivity
+ based measures in that order (Fig.
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Agreement-of-clustering"
+
+\end_inset
+
+).
+ This order of performance was consistently observed for both region growing
+ and spectral clustering methods respectively, except Euclidean distance
+ performed better in spectral clustering than exponential kernel, while
+ their performance was comparable in region growing.
+ Again among the two clustering algorithms the region growing method showed
+ better performance.
+ For the purpose of statistical analysis, we compared Rand indices for the
+ geodesic measure to the functional connectivity measure using nonparametric
+ ranksum test.
+ In all cases, the geodesic measure showed statistically significant better
+ performance than functional connectivity with 
+\begin_inset Formula $p<0.01$
+\end_inset
+
+ showing its superiority.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status collapsed
+
+\begin_layout Itemize
+We compare using two clustering algorithms 1) spectral clustering, 2) region
+ growing.
+ Figures and results here.
+\end_layout
+
+\begin_layout Itemize
+Cross subject and cross session consistency analysis
+\end_layout
+
+\begin_layout Itemize
+Consistency with subsampled data
+\end_layout
+
+\begin_layout Itemize
+Show brain figure showing modulated plot of labels for across session.
+ TODO make a figure with all ROIs
+\end_layout
+
+\end_inset
+
+
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+\begin_inset Float table
+wide true
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Comparison of Rand Score
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Wrap figure
+lines 0
+placement L
+overhang 0in
+width "50col%"
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename figs/perf_samples.pdf
+	lyxscale 30
+	width 100col%
+
+\end_inset
+
+
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+a
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Figure showing subdivisions
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Conclusion
+\end_layout
+
+\begin_layout Standard
+This paper presents a comparison of correlation based connectivity measures
+ and addresses the question what connectivity measure should be used for
+ fMRI based connectivity analysis.
+ It is pointed out in this paper that the popularly used functional connectivity
+ measure does not show a good performance and is also computationally expensive.
+ The spatial connectivity map used in that method in fact does not contain
+ any additional information than the original time series, despite being
+ a very high dimensional feature compared to the original time series.
+ A new measure of connectivity is suggested and evaluated in this paper
+ based on geodesic distance.
+ A quantitative performance provides evidence that the proposed geodesic
+ distance measure performs best for the connectivity studies.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage clearpage
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset bibtex
+LatexCommand bibtex
+bibfiles "fmri_bib"
+options "IEEEbib"
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document
