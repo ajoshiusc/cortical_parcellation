@@ -1,9 +1,7 @@
 #LyX 2.2 created this file. For more info see http://www.lyx.org/
-\lyxformat 508
+\lyxformat 413
 \begin_document
 \begin_header
-\save_transient_properties true
-\origin unavailable
 \textclass article
 \begin_preamble
 % Template for ISBI-2017 paper; to be used with:
@@ -60,16 +58,15 @@
 \language_package none
 \inputencoding auto
 \fontencoding global
-\font_roman "default" "default"
-\font_sans "default" "default"
-\font_typewriter "default" "default"
-\font_math "auto" "auto"
+\font_roman default
+\font_sans default
+\font_typewriter default
 \font_default_family default
 \use_non_tex_fonts false
 \font_sc false
 \font_osf false
-\font_sf_scale 100 100
-\font_tt_scale 100 100
+\font_sf_scale 100
+\font_tt_scale 100
 \graphics default
 \default_output_format default
 \output_sync 0
@@ -80,24 +77,15 @@
 \use_hyperref false
 \papersize default
 \use_geometry false
-\use_package amsmath 2
-\use_package amssymb 2
-\use_package cancel 1
-\use_package esint 1
-\use_package mathdots 0
-\use_package mathtools 1
-\use_package mhchem 0
-\use_package stackrel 1
-\use_package stmaryrd 1
-\use_package undertilde 1
+\use_amsmath 2
+\use_esint 1
+\use_mhchem 0
+\use_mathdots 0
 \cite_engine basic
-\cite_engine_type default
-\biblio_style plain
 \use_bibtopic false
 \use_indices false
 \paperorientation portrait
 \suppress_date false
-\justification true
 \use_refstyle 0
 \index Index
 \shortcut idx
@@ -279,7 +267,7 @@ In this section, the four connectivity measures are described first.
 Similarity measures 
 \begin_inset CommandInset label
 LatexCommand label
-name "subsec:Distance-measures"
+name "sub:Distance-measures"
 
 \end_inset
 
@@ -407,7 +395,7 @@ status open
 \end_inset
 
 
-\begin_inset Caption Standard
+\begin_inset Caption
 
 \begin_layout Plain Layout
 Geodesic distance on Hypersphere 
@@ -898,7 +886,7 @@ status collapsed
 \end_layout
 
 \begin_layout Plain Layout
-\begin_inset Caption Standard
+\begin_inset Caption
 
 \begin_layout Plain Layout
 The ROIs considered in this study: precuneus (PC), middle temporal gyrus
@@ -983,7 +971,7 @@ status open
 \end_inset
 
 
-\begin_inset Caption Standard
+\begin_inset Caption
 
 \begin_layout Plain Layout
 Agreement of clustering based on subsampled fMRI signals to the full length
@@ -1040,7 +1028,7 @@ Which are distance metric and which are not
 Comparison of connectivity measures 
 \begin_inset CommandInset label
 LatexCommand label
-name "subsec:Clustering-method"
+name "sub:Clustering-method"
 
 \end_inset
 
@@ -1086,7 +1074,7 @@ y matrix is computed using the four measures (Sec.
  
 \begin_inset CommandInset ref
 LatexCommand ref
-reference "subsec:Distance-measures"
+reference "sub:Distance-measures"
 
 \end_inset
 
@@ -1166,7 +1154,7 @@ status open
 \end_inset
 
 
-\begin_inset Caption Standard
+\begin_inset Caption
 
 \begin_layout Plain Layout
 Rand Index Analysis for the four measures using two clustering algorithms
@@ -1267,7 +1255,7 @@ The Silhouette analysis described in Sec.
  
 \begin_inset CommandInset ref
 LatexCommand ref
-reference "subsec:Clustering-method"
+reference "sub:Clustering-method"
 
 \end_inset
 
@@ -1295,7 +1283,7 @@ Next, we compared the performance of the connectivity measures for effect
  
 \begin_inset CommandInset ref
 LatexCommand ref
-reference "subsec:Clustering-method"
+reference "sub:Clustering-method"
 
 \end_inset
 
@@ -1370,7 +1358,7 @@ status collapsed
 
 \begin_layout Plain Layout
 \align center
-\begin_inset Caption Standard
+\begin_inset Caption
 
 \begin_layout Plain Layout
 Comparison of Rand Score
@@ -1403,7 +1391,7 @@ status collapsed
 \end_inset
 
 
-\begin_inset Caption Standard
+\begin_inset Caption
 
 \begin_layout Plain Layout
 a
