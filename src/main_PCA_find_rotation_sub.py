@@ -32,7 +32,7 @@ msk = scipy.io.loadmat(fname1)  # h5py.File(fname1);
 dfs_left = readdfs(os.path.join(p_dir_ref, 'reference', ref + '.aparc.a2009s.32k_fs.reduce3.left.dfs'))
 dfs_left_sm = readdfs(os.path.join(p_dir_ref, 'reference', ref + '.aparc.a2009s.32k_fs.reduce3.very_smooth.left.dfs'))
 count1 = 0
-roilist= [30,6] # [30, 72, 9, 47,6,7,8,9,10] #pc
+roilist= [30,6,9,47] # [30, 72, 9, 47,6,7,8,9,10] #pc
 #roilist=[6,7,8,9,10] #cing
 
 #ref=lst[11]
@@ -58,7 +58,7 @@ sub2 = sub2/(s[:, None]*sp.sqrt(1200))
 sub = sp.concatenate((sub1, sub2), axis=0)
 pca = PCA(n_components=3)
 pca.fit(sub)
-msk_small_region = np.in1d(dfs_left. labels, roilist)
+msk_small_region = np.in1d(dfs_left.labels, roilist)
 
 
 sub1_3d = pca.transform(sub1)
@@ -78,8 +78,8 @@ m = np.mean(sub2, 1)
 #sub2 = sub2 - m[:, None]
 #s = np.std(sub2, 1)+1e-16
 sub2 = sub2/sp.sqrt(sp.sum(sub2**2,1))[:,None] #(s[:, None]*sp.sqrt(3))
-sub1 = sub1[msk_small_region, :]
-sub2 = sub2[msk_small_region, :]
+#sub1 = sub1[msk_small_region, :]
+#sub2 = sub2[msk_small_region, :]
 
 # Create a sphere
 r = 1
@@ -93,17 +93,24 @@ y = r * sin(phi) * sin(theta)
 z = r * cos(phi)
 
 mlab.figure(1, bgcolor=(1, 1, 1), fgcolor=(0, 0, 0), size=(400, 300))
-mlab.clf()
+#mlab.clf()
+clr=[[1,0,0],[0,1,0],[0,0,1],[1,1,0],[0,1,1],[1,0,1]]
 # Represent spherical harmonics on the surface of the sphere
-mlab.mesh(x, y, z, color=(0.5, 0.5, 0.5), opacity=1)
-mlab.points3d(sub1[:,0], sub1[:,1], sub1[:,2], scale_factor=0.05, color=(1, 0, 0))
+mlab.mesh(x, y, z, color=(0.5, 0.5, 0.5), opacity=.5)
+for ind in range(len(roilist)):    
+    msk_roi=np.in1d(dfs_left.labels, roilist[ind])    
+    mlab.points3d(sub1[msk_roi,0], sub1[msk_roi,1], sub1[msk_roi,2], scale_factor=0.05, color=tuple(clr[ind]))
 
 mlab.figure(2, bgcolor=(1, 1, 1), fgcolor=(0, 0, 0), size=(400, 300))
-# Represent spherical harmonics on the surface of the sphere
-mlab.mesh(x, y, z, color=(0.5, 0.5, 0.5), opacity=1)
+## Represent spherical harmonics on the surface of the sphere
+mlab.mesh(x, y, z, color=(0.5, 0.5, 0.5), opacity=.5)
+for ind in range(len(roilist)):    
+    msk_roi=np.in1d(dfs_left.labels, roilist[ind])    
+    mlab.points3d(sub2[msk_roi,0], sub2[msk_roi,1], sub2[msk_roi,2], scale_factor=0.05, color=tuple(clr[ind]))
 
-mlab.points3d(sub2[:,0], sub2[:,1], sub2[:,2], scale_factor=0.05, color=(0, 1, 0))
-
+#
+# mlab.points3d(sub2[:,0], sub2[:,1], sub2[:,2], scale_factor=0.05, color=(0, 1, 0))
+mlab.show()
 #
 #
 ##    msk_small_region = (dfs_left.labels == 30) | (dfs_left.labels == 72) | (dfs_left.labels == 9) |  (dfs_left.labels == 47)  # % motor

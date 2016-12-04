@@ -1,4 +1,4 @@
-#LyX 2.2 created this file. For more info see http://www.lyx.org/
+#LyX 2.0 created this file. For more info see http://www.lyx.org/
 \lyxformat 413
 \begin_document
 \begin_header
@@ -18,6 +18,7 @@
 \font_osf false
 \font_sf_scale 100
 \font_tt_scale 100
+
 \graphics default
 \default_output_format default
 \output_sync 0
@@ -65,7 +66,7 @@ BrainSync: A Method for synchronization of fMRI Data Across Scans using
 \end_layout
 
 \begin_layout Author
-*****
+*****S
 \end_layout
 
 \begin_layout Institute
@@ -102,6 +103,32 @@ Materials and Methods
 
 \begin_layout Subsection
 Correlation Structure in the fMRI signal
+\end_layout
+
+\begin_layout Standard
+In order to check our hypothesis that the distribution of points on sphere
+ for two fmri data is similar, I tried the following as we discussed: 1.
+ Consider 2 sessions of one subject.
+ Normalize their data.
+ This data is now on high dimensional sphere.
+ 2.
+ Reduce the dimensionality to 3 using PCA.
+ Since PCA tries to preserve the correlation structure, their structure
+ should be similar if the original data looked similar on sphere.
+ PCA does not map data on high dimensional sphere on low dimensional sphere
+ though.
+ 3.
+ For visualization map this data to usual sphere by normalizing each point
+ to unit length.
+\end_layout
+
+\begin_layout Standard
+Since the all the pairwise correlations in high dimensional data cannot
+ be preserved when we reduce the dimensionality, we do expect some distortions,
+ but their spacial adjacency should be similar.
+ For visualization, I am showing data points from 2 (out of 3) subdivisions
+ of Cingulate and 2 subdivisions of precuneus using different colors.
+ This is done for 2 scans resulting in 2 spheres as shown below:
 \end_layout
 
 \begin_layout Subsection
