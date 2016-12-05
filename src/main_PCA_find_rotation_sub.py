@@ -65,13 +65,17 @@ sub = sp.concatenate((sub1[msk_small_region,:], sub2[msk_small_region,:]), axis=
 pca = PCA(n_components=3)
 pca.fit(sub)
 
+sub2_rot = rot_sub_data(sub1, sub2)
 
 
 sub1_3d = pca.transform(sub1)
 sub2_3d = pca.transform(sub2)
+sub2_rot_3d = pca.transform(sub2_rot)
+
 print sub1.shape
 sub1 = sub1_3d
 sub2 = sub2_3d
+sub2_rot = sub2_rot_3d
 #sub1=sp.random.rand(sub1.shape[0],sub1.shape[1])-.5
 #sub2=sp.random.rand(sub2.shape[0],sub2.shape[1])-.5
 print sub1.shape
@@ -86,6 +90,8 @@ m = np.mean(sub2, 1)
 sub2 = sub2/sp.sqrt(sp.sum(sub2**2,1))[:,None] #(s[:, None]*sp.sqrt(3))
 #sub1 = sub1[msk_small_region, :]
 #sub2 = sub2[msk_small_region, :]
+
+sub2_rot = sub2_rot/sp.sqrt(sp.sum(sub2_rot**2,1))[:,None] #(s[:, None]*sp.sqrt(3))
 
 # Create a sphere
 r = 1
@@ -113,10 +119,22 @@ mlab.mesh(x, y, z, color=(0.5, 0.5, 0.5), opacity=.5)
 for ind in range(len(roilist)):    
     msk_roi=np.in1d(dfs_left.labels, roilist[ind])    
     mlab.points3d(sub2[msk_roi,0], sub2[msk_roi,1], sub2[msk_roi,2], scale_factor=0.05, color=tuple(clr[ind]))
-
 #
 # mlab.points3d(sub2[:,0], sub2[:,1], sub2[:,2], scale_factor=0.05, color=(0, 1, 0))
 mlab.show()
+
+
+mlab.figure(3, bgcolor=(1, 1, 1), fgcolor=(0, 0, 0), size=(400, 300))
+## Represent spherical harmonics on the surface of the sphere
+mlab.mesh(x, y, z, color=(0.5, 0.5, 0.5), opacity=.5)
+for ind in range(len(roilist)):    
+    msk_roi=np.in1d(dfs_left.labels, roilist[ind])    
+    mlab.points3d(sub2_rot[msk_roi,0], sub2_rot[msk_roi,1], sub2_rot[msk_roi,2], scale_factor=0.05, color=tuple(clr[ind]))
+#
+# mlab.points3d(sub2[:,0], sub2[:,1], sub2[:,2], scale_factor=0.05, color=(0, 1, 0))
+mlab.show()
+
+
 #
 #
 ##    msk_small_region = (dfs_left.labels == 30) | (dfs_left.labels == 72) | (dfs_left.labels == 9) |  (dfs_left.labels == 47)  # % motor
