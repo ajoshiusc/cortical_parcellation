@@ -28,8 +28,8 @@ count1 = 0
 rho_rho = []
 rho_all = []
 # lst=lst[:2]
-labs_all = sp.zeros((len(dfs_left.labels), len(lst)))
-
+#labs_all = sp.zeros((len(dfs_left.labels), len(lst)))
+cc_msk = (dfs_left.labels > 0)
 for sub in lst:
     data = scipy.io.loadmat(os.path.join(p_dir, sub, sub + '.rfMRI_REST1_LR.\
 reduce3.ftdata.NLM_11N_hvar_25.mat'))
@@ -41,7 +41,7 @@ reduce3.ftdata.NLM_11N_hvar_25.mat'))
     temp = temp - m[:, None]
     s = np.std(temp, 1)+1e-16
     temp = temp/s[:, None]
-    d = temp
+    d = temp[cc_msk, :]
     if count1 == 0:
         sub_data = sp.zeros((d.shape[0], d.shape[1], len(lst)))
 
@@ -60,7 +60,7 @@ for ind in range(1, nSub):
     sub_conn = sp.corrcoef(sub_data[:, :, ind]+1e-16)
     sub_conn = sub_conn - sp.mean(sub_conn, axis=1)[:, None]
     sub_conn = sub_conn / (np.std(sub_conn, axis=1) + 1e-16)[:, None]
-    corr_all_conn += sp.mean(sub_conn_0*sub_conn, axis=(1))
+    corr_all_conn[cc_msk] += sp.mean(sub_conn_0*sub_conn, axis=(1))
     print ind,
 
 corr_all_conn = corr_all_conn/nSub

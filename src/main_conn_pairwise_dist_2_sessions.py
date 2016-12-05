@@ -27,8 +27,7 @@ a2009s.32k_fs.reduce3.very_smooth.right.dfs'))
 count1 = 0
 rho_rho = []
 rho_all = []
-#lst=lst[:1]
-labs_all = sp.zeros((len(dfs_right.labels), len(lst)))
+cc_msk = (dfs_right.labels > 0)
 
 for sub in lst:
     data = scipy.io.loadmat(os.path.join(p_dir, sub, sub + '.rfMRI_REST1_LR.\
@@ -41,7 +40,7 @@ reduce3.ftdata.NLM_11N_hvar_25.mat'))
     temp = temp - m[:, None]
     s = np.std(temp, 1)+1e-16
     temp = temp/s[:, None]
-    d1 = temp
+    d1 = temp[cc_msk, :]
     data = scipy.io.loadmat(os.path.join(p_dir, sub, sub + '.rfMRI_REST2_LR.\
 reduce3.ftdata.NLM_11N_hvar_25.mat'))
     LR_flag = msk['LR_flag']
@@ -52,7 +51,7 @@ reduce3.ftdata.NLM_11N_hvar_25.mat'))
     temp = temp - m[:, None]
     s = np.std(temp, 1)+1e-16
     temp = temp/s[:, None]
-    d2 = temp
+    d2 = temp[cc_msk, :]
 
     if count1 == 0:
         sub_data1 = sp.zeros((d1.shape[0], d1.shape[1], len(lst)))
@@ -69,13 +68,13 @@ corr_all_conn = sp.zeros(len(dfs_right_sm.vertices))
 
 for ind in range(nSub):
     sub_conn1 = sp.corrcoef(sub_data1[:, :, ind]+1e-16)
-    sub_conn1 = sub_conn1 - sp.mean(sub_conn1, axis=1)[:,None]
+    sub_conn1 = sub_conn1 - sp.mean(sub_conn1, axis=1)[:, None]
     sub_conn1 = sub_conn1 / (np.std(sub_conn1, axis=1) + 1e-16)[:, None]
     sub_conn2 = sp.corrcoef(sub_data2[:, :, ind]+1e-16)
-    sub_conn2 = sub_conn2 - sp.mean(sub_conn2, axis=1)[:,None]
+    sub_conn2 = sub_conn2 - sp.mean(sub_conn2, axis=1)[:, None]
     sub_conn2 = sub_conn2 / (np.std(sub_conn2, axis=1) + 1e-16)[:, None]
 
-    corr_all_conn += sp.mean(sub_conn1*sub_conn2, axis=(1))
+    corr_all_conn[cc_msk] += sp.mean(sub_conn1*sub_conn2, axis=(1))
     print ind,
 
 corr_all_conn = corr_all_conn/(nSub)
