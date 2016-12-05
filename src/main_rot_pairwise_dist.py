@@ -7,8 +7,8 @@ from surfproc import view_patch_vtk, patch_color_attrib
 from dfsio import readdfs
 import os
 
-p_dir = '/home/ajoshi/data/HCP_data/data'
-p_dir_ref = '/home/ajoshi/data/HCP_data'
+p_dir = '/big_disk/ajoshi/HCP_data/data'
+p_dir_ref = '/big_disk/ajoshi/HCP_data'
 lst = os.listdir(p_dir)
 
 r_factor = 3
