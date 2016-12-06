@@ -341,53 +341,15 @@ Brain Synch
 \end_layout
 
 \begin_layout Subsection
+Comparison to Connectivity based feature
+\end_layout
+
+\begin_layout Subsection
 Quantifying Variability of rfMRI
 \end_layout
 
 \begin_layout Standard
 Across subjects as well as across scans.
-\end_layout
-
-\begin_layout Standard
-\begin_inset Float figure
-wide false
-sideways false
-status open
-
-\begin_layout Plain Layout
-\align center
-\begin_inset Graphics
-	filename figs/hists_sync.pdf
-	width 100text%
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-\begin_inset Caption
-
-\begin_layout Plain Layout
-Histograms of 
-\begin_inset Formula $L^{2}$
-\end_inset
-
- distances for 
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-
-
 \end_layout
 
 \begin_layout Subsection
@@ -419,8 +381,14 @@ Data
 \begin_layout Standard
 We used the minimally preprocessed (ICA-FIX denoised) resting fMRI data
  from 40 unrelated subjects, which are publicly available from the Human
- Connectome Project (HCP) (Van Essen et al., 2013; Glasser et al., 2013; Smith
- et al., 2013; Barch et al., 2013; Woolrich et al., 2013).
+ Connectome Project (HCP) 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "smith2013functional,glasser2013minimal"
+
+\end_inset
+
+.
  The resting fMRI data were resampled onto the individuals’ cortical surfaces,
  which were coregistered using FreeSurfer.
  The functional MRI data sets were acquired for four independent resting
@@ -429,13 +397,35 @@ We used the minimally preprocessed (ICA-FIX denoised) resting fMRI data
  bright cross-hair on a dark background.
  HCP's minimal preprocessing primarily corrects the fMRI data for acquisition
  artifacts, resamples the data on the cortical surface and performs a non-aggres
-sive spatio-temporal cleanup (Glasser et al., 2013; Smith et al., 2013).
+sive spatio-temporal cleanup 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "glasser2013minimal,smith2013functional"
+
+\end_inset
+
+.
  The data are then resampled for each subject onto a common standard cortical
  surface mesh representation (32K Conte-69) in the native subject space
- (Smith et al., 2013; Van Essen et al., 2012).
+ 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "smith2013functional"
+
+\end_inset
+
+.
  Additional spatial-temporal processing is then used to remove scanner,
- motion and other artifacts (Smith et al., 2013).In addition to this processing,
- we also applied temporal non-local means (tNLM) filter 
+ motion and other artifacts 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "smith2013functional"
+
+\end_inset
+
+.
+ In addition to this processing, we also applied temporal non-local means
+ (tNLM) filter 
 \begin_inset CommandInset citation
 LatexCommand cite
 key "bhushan2016temporal"
@@ -448,6 +438,86 @@ key "bhushan2016temporal"
  Additionally, we normalized the resting fMRI time series at each vertex
  to zero mean and unit variance.
  
+\end_layout
+
+\begin_layout Subsection
+Comparison to Connectivity based feature
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename figs/hists_sync.pdf
+	width 100text%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Histograms of 
+\begin_inset Formula $L^{2}$
+\end_inset
+
+ distances for 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename figs/fig_conn_sync.pdf
+	width 100text%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Histograms of 
+\begin_inset Formula $L^{2}$
+\end_inset
+
+ distances for 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Subsection
@@ -465,7 +535,7 @@ Since BrainSync allows us to compare fMRI data across scans, we use it for
 \begin_inset Float figure
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \align center
@@ -496,11 +566,117 @@ Variability of Resting State fMRI
 \end_layout
 
 \begin_layout Subsection
-Cortical Parcellation
+Application to Joint Cortical Parcellation
 \end_layout
 
 \begin_layout Standard
 For the purpose of cortical parcellation, we used HCP data
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename figs/indep_parcellation_100.pdf
+	width 100text%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Individual Parcellations
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename figs/joint_both_sessions_parcellation_100.pdf
+	width 100text%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Joiny Parcellation of both sessions
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename figs/common_sub_jointly.pdf
+	width 100text%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Joiny Parcellation of both sessions
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Section
