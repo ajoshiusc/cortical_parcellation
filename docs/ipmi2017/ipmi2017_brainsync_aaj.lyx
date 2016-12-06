@@ -74,8 +74,8 @@ BrainSync: An Orthogonal Transformation for Synchronization of fMRI Data
 \end_layout
 
 \begin_layout Abstract
-The fMRI signals from one scan cannot be directly compared to the other
- scan.
+The fMRI time series from one scan cannot be directly compared to the other
+ scan without feature extraction.
  We exploit the geometry of the fMRI signal space to conjecture an existence
  of orthogonal transformation that synchronizes fMRI scans allowing direct
  comparison of signal from one brain to the other.
@@ -141,6 +141,12 @@ key "raichle2001default,sporns2005human,rousseeuw1987silhouettes,smith2013functi
  Most of the existing methods on fMRI based brain connectivity use correlation
  in fMRI signals as a measures of connectivity.
  
+\end_layout
+
+\begin_layout Itemize
+Group ICA is a lossy method, does not preserve correlation structure and
+ needs non-gaussianity.
+ We don't need non-gaussianity
 \end_layout
 
 \begin_layout Section
@@ -242,12 +248,12 @@ In order to check our hypothesis that the distribution of points on sphere
  Reduce the dimensionality to 3 using PCA.
  Since PCA tries to preserve the correlation structure, their structure
  should be similar if the original data looked similar on sphere.
- PCA does not map data on high dimensional sphere on low dimensional sphere
- though.
  3.
  For visualization map this data to usual sphere by normalizing each point
  to unit length.
- 
+ Since for visualization, we reduce the dimensionality to 3, and therefore
+ it may not look identical to the unrotated scans, but in the original high
+ dimension, it is.
 \end_layout
 
 \begin_layout Standard
@@ -303,6 +309,14 @@ For visualization, I am showing data points from 2 (out of 3) subdivisions
 
 \begin_layout Subsection
 A Method for Temporal Alignment
+\end_layout
+
+\begin_layout Itemize
+Mathematical Forumulation
+\end_layout
+
+\begin_layout Itemize
+Verification on permuted vertices and gaussian random data.
 \end_layout
 
 \begin_layout Standard
@@ -407,6 +421,14 @@ key "fan2015functional,craddock2012whole"
  
 \end_layout
 
+\begin_layout Itemize
+across subject comparison
+\end_layout
+
+\begin_layout Itemize
+across sessions comparison
+\end_layout
+
 \begin_layout Subsection
 Quantifying Variability of rfMRI
 \end_layout
@@ -425,8 +447,8 @@ Since fMRI data are not directly comparable, it is non-trivial to quantify
 Quantifying variability of fMRI signal aceoss sessions and across subjects
  can help in identifying areas in the brain that are functionally similar
  across population and areas that are individualizaed.
- This analysis can also help us in understanding the reliability of fMRI
- signal in the resting state for each point in the brain.
+ Across session analysis can also help us in understanding the reliability
+ of fMRI signal in the resting state for each point in the brain.
 \end_layout
 
 \begin_layout Itemize
@@ -560,7 +582,7 @@ Comparison to Connectivity based feature
 \begin_inset Float figure
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \align center
@@ -598,7 +620,7 @@ Histograms of
 \begin_inset Float figure
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \align center
@@ -647,7 +669,7 @@ Since BrainSync allows us to compare fMRI data across scans, we use it for
 \begin_inset Float figure
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \align center
@@ -682,7 +704,21 @@ Application to Joint Cortical Parcellation
 \end_layout
 
 \begin_layout Standard
-For the purpose of cortical parcellation, we used HCP data
+For the purpose of cortical parcellation, we used HCP data.
+ 
+\end_layout
+
+\begin_layout Itemize
+Show how to comcatenate data of 40 subjects.
+\end_layout
+
+\begin_layout Itemize
+Just because we have pooled a lot of data, we get good results.
+\end_layout
+
+\begin_layout Itemize
+In the first way, we are performing k-means clustering 40 times, while after
+ brainsync we do k means only once on all the data at once.
 \end_layout
 
 \begin_layout Standard
@@ -757,6 +793,10 @@ Joiny Parcellation of both sessions
 
 \end_layout
 
+\begin_layout Itemize
+Table of ROI 40 subjects
+\end_layout
+
 \begin_layout Standard
 \begin_inset Float figure
 wide false
@@ -805,8 +845,16 @@ One of the assumptions is that the correlation structure of the brain images
  
 \end_layout
 
-\begin_layout Standard
+\begin_layout Itemize
+For individual analysis, synchronization will not change the result since
+ it retains the correlation structure.
+ But synchronization allows us to do cross scan comparisons.
+ 
+\end_layout
 
+\begin_layout Itemize
+This allows for concatenation of data across subjects and allows for group
+ dynamics studies.
 \end_layout
 
 \begin_layout Standard
