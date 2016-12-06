@@ -62,7 +62,7 @@
 
 \begin_layout Title
 BrainSync: An Orthogonal Transformation for Synchronization of fMRI Data
- Across Scans using a Patterns in the Correlation Structure
+ Across Scans
 \end_layout
 
 \begin_layout Author
@@ -74,11 +74,24 @@ BrainSync: An Orthogonal Transformation for Synchronization of fMRI Data
 \end_layout
 
 \begin_layout Abstract
-We present a method for comparing fMRI signal across scans allowing for
- direct comparisons of functional activations in fMRI study.
+The fMRI signals from one scan cannot be directly compared to the other
+ scan.
+ We exploit the geometry of the fMRI signal space to conjecture an existence
+ of orthogonal transformation that synchronizes fMRI scans allowing direct
+ comparison of signal from one brain to the other.
+ This is based on an observation that pairwise distances in the signal space
+ follow the similar patterns.
  The method allows for temporal alignment of the signal so that they can
  be directly compared from one brain to the other.
- 
+ Sinilar to image registration where we spatially align the anatomical brain
+ images, this temporal alignment (synchronization) of brains across a population
+ or within subject across sessions can facilitate longitudinal and cross
+ sectional studies of fMRI data with improved sensitivity and specificity.
+ The presented orthogonal transformation is unique, invertible, effecient
+ to compute and preserves the connectivity structure of the original data.
+ The utility of this transformation is demonstrated by application to quantifica
+tion of fMRI variability across subjects and sessions as well as joint cortical
+ clustering of a population.
 \end_layout
 
 \begin_layout Section
@@ -95,6 +108,39 @@ Currently it is not possible to directly compare the signals across sessions
 
 \begin_layout Standard
 Connectivity matrices are comparable
+\end_layout
+
+\begin_layout Standard
+Studies of cortical connectivity derived from in-vivo imaging based on correlati
+on in the functional magnetic resonance imaging (fMRI) signal is becoming
+ increasingly popular for human connectome analysis.
+ The correlation between fMRI BOLD signal between different regions in the
+ brain is often used as a measure of connectivity between those regions.
+ This large scale connectivity information derived from fMRI can be used
+ to identify cyto-architectonic boundaries between functionally-connected
+ regions 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "biswal1995functional"
+
+\end_inset
+
+.
+ Identification of contiguous areas of cortex that exhibit similar connectivity
+ to the rest of the brain can be used to perform a functional parcellation
+ of the cortex 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "raichle2001default,sporns2005human,rousseeuw1987silhouettes,smith2013functional,eickhoff2005new"
+
+\end_inset
+
+.
+ These applications require pairwise connectivity measures between every
+ pair of points on the cortical surface.
+ Most of the existing methods on fMRI based brain connectivity use correlation
+ in fMRI signals as a measures of connectivity.
+ 
 \end_layout
 
 \begin_layout Section
@@ -344,6 +390,23 @@ Brain Synch
 Comparison to Connectivity based feature
 \end_layout
 
+\begin_layout Standard
+One of the most popular approach for connectivity, referred to as 
+\emph on
+spatial connectivity-based measure
+\emph default
+ is to first compute correlation of time series at the given points on the
+ cortex to the time series for all the points in the brain 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "fan2015functional,craddock2012whole"
+
+\end_inset
+
+.
+ 
+\end_layout
+
 \begin_layout Subsection
 Quantifying Variability of rfMRI
 \end_layout
@@ -352,8 +415,57 @@ Quantifying Variability of rfMRI
 Across subjects as well as across scans.
 \end_layout
 
+\begin_layout Itemize
+Since fMRI data are not directly comparable, it is non-trivial to quantify
+ the across session and across scan variability of fMRI.
+ 
+\end_layout
+
+\begin_layout Itemize
+Quantifying variability of fMRI signal aceoss sessions and across subjects
+ can help in identifying areas in the brain that are functionally similar
+ across population and areas that are individualizaed.
+ This analysis can also help us in understanding the reliability of fMRI
+ signal in the resting state for each point in the brain.
+\end_layout
+
+\begin_layout Itemize
+First, to compute across subjects variability of the fMRI signal, we chose
+ one reference brain and synchronized the scans of all other brains to the
+ reference brain.
+ This resulted in a synchronized data of size 
+\end_layout
+
 \begin_layout Subsection
 Cortical Parcellation
+\end_layout
+
+\begin_layout Standard
+Limited data available for a single individual scan can result in instability
+ of the estimated cyto-architectonic boundaries and parcellations (
+\begin_inset CommandInset citation
+LatexCommand cite
+key "rubinov2010complex,smith2011network"
+
+\end_inset
+
+.
+ A large number of network estimation methods have been used in the neuroimaging
+ literature ranging from simple measures that consider correlation between
+ two nodes' timeseries, information theoretic measures, time-lag correlations,
+ ICA based methods to more sophisticated approaches that consider the whole
+ cortex simultaneously and estimate a global Bayes net models 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "smith2011network"
+
+\end_inset
+
+.
+ However, most neuroimaging studies use correlation and derived measures
+ as a measure of connectivity and therefore, it is important to perform
+ comparison of the correlation based connectivity measures and assess their
+ performance.
 \end_layout
 
 \begin_layout Itemize
