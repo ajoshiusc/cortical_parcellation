@@ -51,7 +51,7 @@ reduce3.ftdata.NLM_11N_hvar_25.mat'))
 
 nSub = sub_data.shape[2]
 rperm = sp.random.permutation(dfs_left_sm.vertices.shape[0])
-corr_all_conn = sp.zeros(len(dfs_left_sm.vertices))
+dist_all_conn = sp.zeros(len(dfs_left_sm.vertices))
 
 sub_conn_0 = sp.corrcoef(sub_data[:, :, 0]+1e-16)
 sub_conn_0 = sub_conn_0 - sp.mean(sub_conn_0, axis=1)[:, None]
@@ -60,18 +60,20 @@ for ind in range(1, nSub):
     sub_conn = sp.corrcoef(sub_data[:, :, ind]+1e-16)
     sub_conn = sub_conn - sp.mean(sub_conn, axis=1)[:, None]
     sub_conn = sub_conn / (np.std(sub_conn, axis=1) + 1e-16)[:, None]
-    corr_all_conn[cc_msk] += sp.mean(sub_conn_0*sub_conn, axis=(1))
+    dist_all_conn[cc_msk] += sp.mean((sub_conn_0-sub_conn)**2.0, axis=(1))
     print ind,
 
-corr_all_conn = corr_all_conn/nSub
+dist_all_conn = dist_all_conn/nSub
 
 var_all = sp.zeros((sub_data.shape[0], sub_data.shape[1]))
 
 avg_sub_data = sp.mean(sub_data, axis=2)
 
 # azimuth=-90,elevation=-180, roll=-90,
-dfs_left_sm = patch_color_attrib(dfs_left_sm, corr_all_conn, clim=[0, 1])
+dfs_left_sm = patch_color_attrib(dfs_left_sm, dist_all_conn, clim=[0, 1])
 view_patch_vtk(dfs_left_sm, azimuth=-90, elevation=-180,
-               roll=-90, outfile='corr_conn_view1_1sub_left.png', show=0)
+               roll=-90, outfile='dist_conn_view1_1sub_left.png', show=0)
 view_patch_vtk(dfs_left_sm, azimuth=90, elevation=180, roll=90,
-               outfile='corr_conn_view2_1sub_left.png', show=0)
+               outfile='dist_conn_view2_1sub_left.png', show=0)
+
+sp.savez('conn_pairwise_dist.npz', dist_all_conn)

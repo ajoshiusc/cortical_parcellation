@@ -52,36 +52,37 @@ reduce3.ftdata.NLM_11N_hvar_25.mat'))
 nSub = sub_data.shape[2]
 rperm = sp.random.permutation(dfs_left_sm.vertices.shape[0])
 #rperm=range(dfs_left_sm.vertices.shape[0])
-corr_all_orig = sp.zeros(len(dfs_left_sm.vertices))
-corr_all_rot = corr_all_orig.copy()
+dist_all_orig = sp.zeros(len(dfs_left_sm.vertices))
+dist_all_rot = dist_all_orig.copy()
 #sub_data[:,:,1]=sub_data[rperm,:,1]
 sub_data_orig = sub_data.copy()
 
 for ind in range(1, nSub):
-    corr_all_orig += sp.mean(sub_data_orig[:, :, 0]*sub_data_orig[:, :, ind],
+    dist_all_orig += sp.mean((sub_data_orig[:, :, 0] - sub_data_orig[:, :, ind])**2.0,
                              axis=(1))
     sub_data[:, :, ind] = rot_sub_data(ref=sub_data[:, :, 0],
                                        sub=sub_data[:, :, ind])
-    corr_all_rot += sp.mean(sub_data[:, :, 0]*sub_data[:, :, ind], axis=(1))
+    dist_all_rot += sp.mean((sub_data[:, :, 0] - sub_data[:, :, ind])**2.0, axis=(1))
     print ind,
 
-corr_all_rot = corr_all_rot/nSub
-corr_all_orig = corr_all_orig/nSub
+dist_all_rot = dist_all_rot/nSub
+dist_all_orig = dist_all_orig/nSub
 
 var_all = sp.zeros((sub_data.shape[0], sub_data.shape[1]))
 
 avg_sub_data = sp.mean(sub_data, axis=2)
 
-#azimuth=-90,elevation=-180, roll=-90,
-dfs_left_sm = patch_color_attrib(dfs_left_sm, corr_all_orig, clim=[0, 1])
+# azimuth=-90,elevation=-180, roll=-90,
+dfs_left_sm = patch_color_attrib(dfs_left_sm, dist_all_orig, clim=[0, 1])
 view_patch_vtk(dfs_left_sm, azimuth=-90, elevation=-180,
-               roll=-90, outfile='corr_orig_view1_1sub_left.png', show=0)
+               roll=-90, outfile='dist_orig_view1_1sub_left.png', show=0)
 view_patch_vtk(dfs_left_sm, azimuth=90, elevation=180, roll=90,
-               outfile='corr_orig_view2_1sub_left.png', show=0)
+               outfile='dist_orig_view2_1sub_left.png', show=0)
 
-dfs_left_sm = patch_color_attrib(dfs_left_sm, corr_all_rot, clim=[.5, 1])
+dfs_left_sm = patch_color_attrib(dfs_left_sm, dist_all_rot, clim=[0, 1])
 view_patch_vtk(dfs_left_sm, azimuth=-90, elevation=-180, roll=-90,
-               outfile='corr_rot_view1_1sub_left.png', show=0)
+               outfile='dist_rot_view1_1sub_left.png', show=0)
 view_patch_vtk(dfs_left_sm, azimuth=90, elevation=180, roll=90,
-               outfile='corr_rot_view2_1sub_left.png', show=0)
+               outfile='dist_rot_view2_1sub_left.png', show=0)
 
+sp.savez('rot_pairwise_dist.npz', dist_all_rot)

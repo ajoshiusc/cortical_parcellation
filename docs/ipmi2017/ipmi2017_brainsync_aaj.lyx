@@ -61,8 +61,8 @@
 \begin_body
 
 \begin_layout Title
-BrainSync: A Method for synchronization of fMRI Data Across Scans using
- a Patterns in its Correlation Structure
+BrainSync: An Orthogonal Transformation for Synchronization of fMRI Data
+ Across Scans using a Patterns in the Correlation Structure
 \end_layout
 
 \begin_layout Author
@@ -106,31 +106,8 @@ Correlation Structure in the fMRI signal
 \end_layout
 
 \begin_layout Standard
-In order to check our hypothesis that the distribution of points on sphere
- for two fmri data is similar, I tried the following as we discussed: 1.
- Consider 2 sessions of one subject.
- Normalize their data.
- This data is now on high dimensional sphere.
- 2.
- Reduce the dimensionality to 3 using PCA.
- Since PCA tries to preserve the correlation structure, their structure
- should be similar if the original data looked similar on sphere.
- PCA does not map data on high dimensional sphere on low dimensional sphere
- though.
- 3.
- For visualization map this data to usual sphere by normalizing each point
- to unit length.
- 
-\end_layout
-
-\begin_layout Standard
-In this paper, we propose a 
-\emph on
-geodesic distance measure
-\emph default
-.
- Since we assume that the input time series are variance normalized, we
- can represent each of the time series as points on a hypersphere 
+Since we assume that the input time series are variance normalized, we can
+ represent each of the time series as points on a hypersphere 
 \begin_inset Formula $\mathbb{S}^{T-1}$
 \end_inset
 
@@ -142,11 +119,11 @@ geodesic distance measure
  
 \begin_inset CommandInset ref
 LatexCommand ref
-reference "fig:(a)-Geodesic-distance"
+reference "fig:Correlation-Structure-of"
 
 \end_inset
 
-), where 
+ (a)), where 
 \begin_inset Formula $T$
 \end_inset
 
@@ -177,23 +154,54 @@ If
 \end_inset
 
  between them.
- If we consider X and Y as points on hypersphere due to unit variance, then
- the geodesic distance between them is a metric given by 
+ If we consider 
+\begin_inset Formula $X$
+\end_inset
+
+ and 
+\begin_inset Formula $Y$
+\end_inset
+
+ as points on hypersphere due to unit variance, then the geodesic distance
+ between them is a metric given by 
 \begin_inset Formula $\cos^{-1}(X\cdot Y)$
 \end_inset
 
- and therefore a similarity measure for connectivity can be defined as:
+.
 \end_layout
 
 \begin_layout Standard
-\begin_inset Formula 
-\begin{align*}
-S_{G}(X,Y)= & \frac{\pi}{2}+\sin^{-1}(X\cdot Y)=\frac{\pi}{2}+\sin^{-1}(\rho_{XY}).
-\end{align*}
+We know that the connectivity in the fMRI data of two different sessions
+ is comparable, but the time series is not directly comparable from session
+ to session.
+ Since we say that the connectivities of brains are similar, we can say
+ that the correlation patterns are similar to each other and can be compared.
+ The pearson correlation of each point to every other point in the brain
+ as been used as a feature that is then used for cross subject comparisons
+ in fMRI literature.
+ In this paper we go further.
+ Since the correlation patterns are similar, the pairwise distances of points
+ on the hypersphere are similar indicating that the distributions of the
+ points on the hypersphere are similar to each other.
+ 
+\end_layout
 
-\end_inset
-
-
+\begin_layout Standard
+In order to check our hypothesis that the distribution of points on sphere
+ for two fmri data is similar, I tried the following as we discussed: 1.
+ Consider 2 sessions of one subject.
+ Normalize their data.
+ This data is now on high dimensional sphere.
+ 2.
+ Reduce the dimensionality to 3 using PCA.
+ Since PCA tries to preserve the correlation structure, their structure
+ should be similar if the original data looked similar on sphere.
+ PCA does not map data on high dimensional sphere on low dimensional sphere
+ though.
+ 3.
+ For visualization map this data to usual sphere by normalizing each point
+ to unit length.
+ 
 \end_layout
 
 \begin_layout Standard
@@ -201,10 +209,6 @@ S_{G}(X,Y)= & \frac{\pi}{2}+\sin^{-1}(X\cdot Y)=\frac{\pi}{2}+\sin^{-1}(\rho_{XY
 wide false
 sideways false
 status open
-
-\begin_layout Plain Layout
-
-\end_layout
 
 \begin_layout Plain Layout
 \align center
@@ -219,14 +223,17 @@ status open
 
 \begin_layout Plain Layout
 Correlation Structure of fMRI data
-\end_layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Correlation-Structure-of"
 
 \end_inset
 
 
 \end_layout
 
-\begin_layout Plain Layout
+\end_inset
+
 
 \end_layout
 
@@ -239,7 +246,11 @@ Correlation Structure of fMRI data
 Since the all the pairwise correlations in high dimensional data cannot
  be preserved when we reduce the dimensionality, we do expect some distortions,
  but their spacial adjacency should be similar.
- For visualization, I am showing data points from 2 (out of 3) subdivisions
+ 
+\end_layout
+
+\begin_layout Standard
+For visualization, I am showing data points from 2 (out of 3) subdivisions
  of Cingulate and 2 subdivisions of precuneus using different colors.
  This is done for 2 scans resulting in 2 spheres as shown below:
 \end_layout
@@ -261,7 +272,7 @@ Correlation was computed between time series data of Brain 1 B1 and Brain
 \begin_inset Float figure
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \align center
@@ -341,6 +352,20 @@ Across subjects as well as across scans.
 Cortical Parcellation
 \end_layout
 
+\begin_layout Itemize
+Since the data are comparable to each other after BrainSync, we can pool
+ it and do joint parcellation
+\end_layout
+
+\begin_layout Itemize
+Clustering will work better when data is pooled, rather than doing clustering
+ of one brain at a time
+\end_layout
+
+\begin_layout Itemize
+We can now directly pool the data together after synchronization
+\end_layout
+
 \begin_layout Section
 Results
 \end_layout
@@ -388,10 +413,17 @@ Quantifying Variability of rfMRI
 \end_layout
 
 \begin_layout Standard
+Since BrainSync allows us to compare fMRI data across scans, we use it for
+ quantifying variability in the fMRI resting state data across session as
+ well as across subjects.
+ 
+\end_layout
+
+\begin_layout Standard
 \begin_inset Float figure
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \align center
@@ -425,6 +457,10 @@ Variability of Resting State fMRI
 Cortical Parcellation
 \end_layout
 
+\begin_layout Standard
+For the purpose of cortical parcellation, we used HCP data
+\end_layout
+
 \begin_layout Section
 Discussion and Conclusion
 \end_layout
@@ -432,9 +468,11 @@ Discussion and Conclusion
 \begin_layout Standard
 One of the assumptions is that the correlation structure of the brain images
  is constant over time.
- However we know that there are subtle yet consistent changes in connectivity
- over time.
- changes It is possible to develop a windowed version of BrainSync.
+ However we know that there are subtle changes in connectivity over time.
+ It is possible to develop a windowed version of BrainSync.
+ We will also explore the extension of BrainSync in case of task data by
+ using the timing information.
+ 
 \end_layout
 
 \begin_layout Standard
