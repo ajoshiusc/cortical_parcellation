@@ -74,11 +74,12 @@ BrainSync: An Orthogonal Transformation for Synchronization of fMRI Data
 \end_layout
 
 \begin_layout Abstract
-The fMRI time series from one scan cannot be directly compared to the other
- scan without feature extraction.
- In this work, we exploit the geometry of the fMRI signal space to conjecture
- an existence of orthogonal transformation that synchronizes fMRI scans
- allowing direct comparison of signal from one brain to the other.
+The resting state fMRI time series from one scan cannot be directly compared
+ to the other scan without feature extraction.
+ To address this issue and facilitate cross subject studies, in this work,
+ we exploit the geometry of the fMRI signal space to conjecture an existence
+ of orthogonal transformation that synchronizes fMRI scans allowing direct
+ comparison of signal from one brain to the other.
  This is based on an observation that pairwise distances in the signal space
  follow the similar patterns.
  The method allows for temporal alignment of the signal so that they can
@@ -99,7 +100,31 @@ Introduction
 \end_layout
 
 \begin_layout Standard
-Resting State fMRI signal is interesting
+Resting State fMRI (rsfMRI) is being increasingly used for understanding
+ brain connectivity and functional organization 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "biswal1995functional,blumensath2012resting,smith2013functional"
+
+\end_inset
+
+.
+ It has also being using as a diagnostic biomarker for studying brain developmen
+t 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "smyser2015use"
+
+\end_inset
+
+ and various neurological and psychological diseases and conditions 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "wang2006changes"
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Standard
@@ -141,6 +166,12 @@ key "raichle2001default,sporns2005human,rousseeuw1987silhouettes,smith2013functi
  Most of the existing methods on fMRI based brain connectivity use correlation
  in fMRI signals as a measures of connectivity.
  
+\end_layout
+
+\begin_layout Standard
+In order to perform across subject comparisons of rsfMRI signal, typically,
+ a connectivity feature of the fMRI signal is derived first and this feature
+ is then compared across scans.
 \end_layout
 
 \begin_layout Itemize
