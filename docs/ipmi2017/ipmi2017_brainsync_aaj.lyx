@@ -181,8 +181,11 @@ key "calhoun2009review"
 In this paper, we present a novel method for cross subject comparison of
  fMRI signals.
  We utilize the signal geometry and propose an existence of an orthogonal
- transformation referred now onwards as BrainSync that makes signals from
- two scans directly comparable.
+ transformation referred now onwards as 
+\emph on
+BrainSync
+\emph default
+ that makes signals from two scans directly comparable.
  Due to orthogonality, this transformation preserves the correlation structure
  in the original signal, yet makes signals from one scan to the other directly
  comparable.
@@ -669,7 +672,7 @@ Comparison to Connectivity based feature
 \begin_layout Standard
 One of the most popular approach for connectivity, referred to as 
 \emph on
-spatial connectivity-based measure
+spatial connectivity-based feature
 \emph default
  is to first compute correlation of time series at the given points on the
  cortex to the time series for all the points in the brain 
@@ -685,14 +688,42 @@ key "fan2015functional,craddock2012whole"
 \end_inset
 
  at each point on the cortex.
+ This feature can then be compared across subjects.
+ Since the input time series are zero mean and variance normalized, the
+ connectivity based feature is computed 
+\begin_inset Formula $X^{c}=XX^{t}$
+\end_inset
+
+ and 
+\begin_inset Formula $Y^{c}=YY^{t}$
+\end_inset
+
+.
+ The pointwise 
+\begin_inset Formula $L^{2}$
+\end_inset
+
+distance between two brain data is can be computed to check how coherent
+ this feature is across the pair of brains.
+ In order to compare this approach with BrainSync, we computed pairwise
+ distance between a reference brain and a population of 40 brains, 2 repeat
+ sessions each, using both connectivity based as well as BrainSync approach
+ and averaged the resulting 
+\begin_inset Formula $L^{2}$
+\end_inset
+
+ distances over the subjects.
+ Additionally, we also performed similar 
+\begin_inset Formula $L^{2}$
+\end_inset
+
+ distance computation for two sessions of each subject and then averaged
+ the distance maps over the 40 subjects, resulting in across subject and
+ across scan differences.
 \end_layout
 
-\begin_layout Itemize
-across subject comparison
-\end_layout
-
-\begin_layout Itemize
-across sessions comparison
+\begin_layout Standard
+Next, we present applications of BrainSync.
 \end_layout
 
 \begin_layout Subsection
@@ -702,19 +733,14 @@ Quantifying Variability of rfMRI
 \begin_layout Standard
 Quantifying variability of fMRI signal across sessions and across subjects
  can help in identifying areas in the brain that are functionally similar
- across population and areas that are individualizaed.
+ in a population and areas that are individualized.
  Across session analysis can also help us in understanding the reliability
  of fMRI signal in the resting state for each point in the brain.
-\end_layout
-
-\begin_layout Itemize
-Since fMRI data are not directly comparable, it is non-trivial to quantify
+ Since fMRI data are not directly comparable, it is non-trivial to quantify
  the across session and across scan variability of fMRI.
- 
-\end_layout
-
-\begin_layout Itemize
-First, to compute across subjects variability of the fMRI signal, we chose
+ In this section, we demonstrate the utility of BrainSync for quantification
+ of variability in the resting state within as well as across subjects.
+ First, to compute across subjects variability of the fMRI signal, we chose
  one reference brain and synchronized the scans of all other brains to the
  reference brain.
  This resulted in a synchronized data of size 
