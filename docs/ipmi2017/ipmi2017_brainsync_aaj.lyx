@@ -62,7 +62,7 @@
 
 \begin_layout Title
 BrainSync: An Orthogonal Transformation for Synchronization of fMRI Data
- Across Scans
+ Across Subjects and Scans 
 \end_layout
 
 \begin_layout Author
@@ -76,18 +76,18 @@ BrainSync: An Orthogonal Transformation for Synchronization of fMRI Data
 \begin_layout Abstract
 The fMRI time series from one scan cannot be directly compared to the other
  scan without feature extraction.
- We exploit the geometry of the fMRI signal space to conjecture an existence
- of orthogonal transformation that synchronizes fMRI scans allowing direct
- comparison of signal from one brain to the other.
+ In this work, we exploit the geometry of the fMRI signal space to conjecture
+ an existence of orthogonal transformation that synchronizes fMRI scans
+ allowing direct comparison of signal from one brain to the other.
  This is based on an observation that pairwise distances in the signal space
  follow the similar patterns.
  The method allows for temporal alignment of the signal so that they can
  be directly compared from one brain to the other.
- Sinilar to image registration where we spatially align the anatomical brain
+ Similar to image registration where we spatially align the anatomical brain
  images, this temporal alignment (synchronization) of brains across a population
  or within subject across sessions can facilitate longitudinal and cross
  sectional studies of fMRI data with improved sensitivity and specificity.
- The presented orthogonal transformation is unique, invertible, effecient
+ The presented orthogonal transformation is unique, invertible, efficient
  to compute and preserves the connectivity structure of the original data.
  The utility of this transformation is demonstrated by application to quantifica
 tion of fMRI variability across subjects and sessions as well as joint cortical
@@ -220,6 +220,8 @@ If
 \end_inset
 
 .
+ Condisions for existence of rotation.
+ This is 
 \end_layout
 
 \begin_layout Standard
@@ -325,7 +327,7 @@ Correlation was computed between time series data of Brain 1 B1 and Brain
  It seems that the correlation only increases to average about .3.
  Note that after tNLM average correlation within subject is about that.
  So it seems to align the baseline signal only.
- 
+ We use spatial correspondence alignment
 \end_layout
 
 \begin_layout Standard
@@ -349,7 +351,8 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-Brain Synch
+(a) Correlation for two subjects between the fMRI sigbals at corresponding
+ points on their cortices: (a) original, (b) after synchronization
 \end_layout
 
 \end_inset
@@ -387,7 +390,7 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-Brain Synch
+Brain Synch: add lateral surfaces
 \end_layout
 
 \end_inset
@@ -603,12 +606,12 @@ Histograms of
 \begin_inset Formula $L^{2}$
 \end_inset
 
- distances for 
+ distances for (a) random iid data, (b) across subjects and (c) across scans
 \end_layout
 
 \end_inset
 
-
+ write equations 
 \end_layout
 
 \end_inset
@@ -709,11 +712,12 @@ For the purpose of cortical parcellation, we used HCP data.
 \end_layout
 
 \begin_layout Itemize
-Show how to comcatenate data of 40 subjects.
+Show how to concatenate data of 40 subjects.
 \end_layout
 
 \begin_layout Itemize
-Just because we have pooled a lot of data, we get good results.
+Because we have pooled a lot of data, we get good results.
+ Purely data driven algorithm
 \end_layout
 
 \begin_layout Itemize
@@ -742,7 +746,7 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-Individual Parcellations
+Individual Parcellation of subjects done independently of each other
 \end_layout
 
 \end_inset
@@ -780,7 +784,7 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-Joiny Parcellation of both sessions
+Joint Parcellation of subjects with two sessions per subject
 \end_layout
 
 \end_inset
@@ -818,7 +822,8 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-Joiny Parcellation of both sessions
+Joint parcellation of one subject when placed in two different groups yields
+ consistent parcellation.
 \end_layout
 
 \end_inset
