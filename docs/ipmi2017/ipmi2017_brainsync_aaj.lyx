@@ -180,8 +180,9 @@ key "calhoun2009review"
 \begin_layout Standard
 In this paper, we present a novel method for cross subject comparison of
  fMRI signals.
- We utilize the signal geometry and propose an existence of orthogonal transform
-ation that makes signals from two scans directly comparable.
+ We utilize the signal geometry and propose an existence of an orthogonal
+ transformation referred now onwards as BrainSync that makes signals from
+ two scans directly comparable.
  Due to orthogonality, this transformation preserves the correlation structure
  in the original signal, yet makes signals from one scan to the other directly
  comparable.
@@ -380,28 +381,155 @@ name "fig:Correlation-Structure-of"
 
 \end_inset
 
- This alignment 
+ 
 \end_layout
 
 \begin_layout Subsection
 A Method for Temporal Alignment
 \end_layout
 
-\begin_layout Itemize
-Mathematical Formulation
-\end_layout
+\begin_layout Standard
+We assume that the fMRI subject data is given on cortical surface meshes.
+ Let 
+\begin_inset Formula $X=\left(\begin{array}{ccc}
+x_{11} & \cdots & x_{1T}\\
+\vdots & \ddots & \vdots\\
+x_{V1} & \cdots & x_{VT}
+\end{array}\right)$
+\end_inset
 
-\begin_layout Itemize
-Verification on permuted vertices and gaussian random data.
+ and 
+\begin_inset Formula $Y=\left(\begin{array}{ccc}
+y_{11} & \cdots & y_{1T}\\
+\vdots & \ddots & \vdots\\
+y_{V1} & \cdots & y_{VT}
+\end{array}\right)$
+\end_inset
+
+ represent data matrices of size 
+\begin_inset Formula $N\times T$
+\end_inset
+
+ for two subjects, where 
+\begin_inset Formula $N$
+\end_inset
+
+ represents the number of vertices in a cortical mesh and 
+\begin_inset Formula $T$
+\end_inset
+
+ represents the number of time samples.
+ We want to find the orthogonal transformation 
+\begin_inset Formula $O$
+\end_inset
+
+ that synchronizes the two data:
 \end_layout
 
 \begin_layout Standard
-Correlation was computed between time series data of Brain 1 B1 and Brain
- 2 with permuted vertices.
- It seems that the correlation only increases to average about .3.
- Note that after tNLM average correlation within subject is about that.
- So it seems to align the baseline signal only.
- We use spatial correspondence alignment
+\begin_inset Formula 
+\[
+\hat{O}=\arg\min_{O\in O(T)}\left||X-OT\right||^{2}
+\]
+
+\end_inset
+
+ where 
+\begin_inset Formula $O(T)$
+\end_inset
+
+ represents the group of 
+\begin_inset Formula $T\times T$
+\end_inset
+
+ orthogonal matrices.
+ It can be noted that our formulation tries to synchronize corresponding
+ points in the brains.
+ The problem of finding optimal rotation, referred to as Kabsch algorithm,
+ has a known solution.
+ Following derivation in 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "sorkine2009least"
+
+\end_inset
+
+, we first form a covariance matrix 
+\begin_inset Formula $XY^{t}$
+\end_inset
+
+ and then perform its SVD: 
+\begin_inset Formula $XY^{t}=U\Sigma V^{t}$
+\end_inset
+
+.
+ The optimal orthogonal matrix is given by 
+\begin_inset Formula $O^{s}=VU^{t}$
+\end_inset
+
+.
+ Now we can use this optimal transform and generate synchronized brain data
+ for the two subjects: 
+\begin_inset Formula $X^{s}=X$
+\end_inset
+
+ and 
+\begin_inset Formula $Y^{s}=O^{s}Y$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+We applied this synchronization technique on a pair of brain data (see Sec.
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:Data"
+
+\end_inset
+
+).
+ Before any synchronization, if we compute correlation of fMRI signal at
+ each point of first brain to the corresponding point of the second brain,
+ we get almost zero correlation everywhere e.g.
+ Fig.
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:(a)-Correlation-for"
+
+\end_inset
+
+(a).
+ The correlation values after BrainSync are shown in Fig.
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:(a)-Correlation-for"
+
+\end_inset
+
+(b).
+ In order to further verify that we are not simply exploiting the lower
+ rank of the signal, correlation was computed between time series data of
+ first subject and data of subject 2, after random permutation of its vertex
+ indices (permutation of rows of 
+\begin_inset Formula $Y$
+\end_inset
+
+), before and after synchronization (Fig.
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:(a)-Correlation-for"
+
+\end_inset
+
+(c)-(d)).
+ As opposed to the case of unpermuted vertices where we got almost perfect
+ correlation, in this case the correlation only increases slightly.
+ 
 \end_layout
 
 \begin_layout Standard
@@ -426,7 +554,14 @@ status open
 
 \begin_layout Plain Layout
 (a) Correlation for two subjects between the fMRI sigbals at corresponding
- points on their cortices: (a) original, (b) after synchronization
+ points on their cortices: (a) original, (b) after synchronization 
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:(a)-Correlation-for"
+
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -440,7 +575,44 @@ status open
 \end_layout
 
 \begin_layout Standard
-Correlation of average signal in precuneus to the signals in brain 
+To illustrate the synchronization of fMRI achieved, we consider a pair of
+ subjects and compute average fMRI signal in their precuneus (PC) region.
+ The correlation of these signals to the data of the same brains is shown
+ in Fig.
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:precuneus_corr_map"
+
+\end_inset
+
+(a,b).
+ These maps clearly show the resting state networks.
+ However, when we compute correlation between avg.
+ PC signal of the first brain and all the data for the second brain, unsurprisin
+gly, we get almost zero correlation.
+ After application of BrainSync to synchronize the two brain datasets, we
+ recompute the correlation of avg.
+ PC signal of first subject to the data at all the vertices of the second
+ subject (Fig.
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:precuneus_corr_map"
+
+\end_inset
+
+(d)).
+ It can be noted that we get a very similar correlation map as in Fig.
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:precuneus_corr_map"
+
+\end_inset
+
+(c), even if the data is from two different brains.
+ 
 \end_layout
 
 \begin_layout Standard
@@ -464,7 +636,20 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-Brain Synch: add lateral surfaces
+(a), (b) correlation of avg.
+ precuneus (PC) signal of two brains to the same brains; (c) correlation
+ of avg.
+ PC signal from the first brain to the data at all the vertices of the second
+ brain; (d) the same correlation map after synchronization of the two brain
+ datas.
+ 
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:precuneus_corr_map"
+
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -495,7 +680,11 @@ key "fan2015functional,craddock2012whole"
 \end_inset
 
 .
- 
+ This results in a very high dimensional feature vector of the size 
+\begin_inset Formula $N$
+\end_inset
+
+ at each point on the cortex.
 \end_layout
 
 \begin_layout Itemize
@@ -511,21 +700,17 @@ Quantifying Variability of rfMRI
 \end_layout
 
 \begin_layout Standard
-Across subjects as well as across scans.
+Quantifying variability of fMRI signal across sessions and across subjects
+ can help in identifying areas in the brain that are functionally similar
+ across population and areas that are individualizaed.
+ Across session analysis can also help us in understanding the reliability
+ of fMRI signal in the resting state for each point in the brain.
 \end_layout
 
 \begin_layout Itemize
 Since fMRI data are not directly comparable, it is non-trivial to quantify
  the across session and across scan variability of fMRI.
  
-\end_layout
-
-\begin_layout Itemize
-Quantifying variability of fMRI signal aceoss sessions and across subjects
- can help in identifying areas in the brain that are functionally similar
- across population and areas that are individualizaed.
- Across session analysis can also help us in understanding the reliability
- of fMRI signal in the resting state for each point in the brain.
 \end_layout
 
 \begin_layout Itemize
@@ -586,7 +771,14 @@ Results
 \end_layout
 
 \begin_layout Subsection
-Data
+Data 
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:Data"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
