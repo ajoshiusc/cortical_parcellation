@@ -189,6 +189,12 @@ BrainSync
  Due to orthogonality, this transformation preserves the correlation structure
  in the original signal, yet makes signals from one scan to the other directly
  comparable.
+ This synchronized data can be easily pooled facilitating large scale studies
+ involving a large number of subjects from cross-sectional as well as longitudin
+al studies.
+ We demonstrate the utility of the proposed synchronization method by applying
+ it for quantifying variability in rsfMRI data across subjects and sessions;
+ and for joint cortical parcellation for a group of subjects.
 \end_layout
 
 \begin_layout Section
@@ -388,7 +394,7 @@ name "fig:Correlation-Structure-of"
 \end_layout
 
 \begin_layout Subsection
-A Method for Temporal Alignment
+A method for temporal synchronization 
 \end_layout
 
 \begin_layout Standard
@@ -666,7 +672,14 @@ name "fig:precuneus_corr_map"
 \end_layout
 
 \begin_layout Subsection
-Comparison to Connectivity based feature
+Comparison to connectivity based feature 
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:Comparison-to-connectivity"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -720,6 +733,14 @@ distance between two brain data is can be computed to check how coherent
  distance computation for two sessions of each subject and then averaged
  the distance maps over the 40 subjects, resulting in across subject and
  across scan differences.
+ As a baseline for comparison, we generated a random iid gaussian noise
+ at every point on the cortex for 40 subjects and computed cross subject
+ similarity using the connectivity based measure and after BrainSync, using
+ 
+\begin_inset Formula $L^{2}$
+\end_inset
+
+ distance.
 \end_layout
 
 \begin_layout Standard
@@ -727,7 +748,7 @@ Next, we present applications of BrainSync.
 \end_layout
 
 \begin_layout Subsection
-Quantifying Variability of rfMRI
+Quantifying variability of rfMRI
 \end_layout
 
 \begin_layout Standard
@@ -741,21 +762,54 @@ Quantifying variability of fMRI signal across sessions and across subjects
  In this section, we demonstrate the utility of BrainSync for quantification
  of variability in the resting state within as well as across subjects.
  First, to compute across subjects variability of the fMRI signal, we chose
- one reference brain and synchronized the scans of all other brains to the
- reference brain.
- This resulted in a synchronized data of size 
+ one reference brain and synchronized the scans of all other 40 brains to
+ the reference brain.
+ These synchronized brains are then directly compared to each other by computing
+ correlations of time series for corresponding points on the cortex to generate
+ a point-wise cross-subject correlation map.
+ Similarly, for quantifying cross session variability, we considered data
+ from 2 scanning sessions of each subject, for 40 subjects and synchronized
+ the two scans to each other for every subject, using BrainSync.
+ Their point-wise correlation is computed and averaged over all the subjects
+ to generate a point-wise cross session correlation map.
+ 
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Finally, a ratio of cross session to cross subject variance maps is generated
+ to show intraclass correlations.
+ The areas with high intraclass correlations are individualized whereas
+ the areas with low intraclass correlations are generate similar rsfMRI
+ signal in all subjects.
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Subsection
-Cortical Parcellation
+Cortical parcellation 
 \end_layout
 
 \begin_layout Standard
-Limited data available for a single individual scan can result in instability
- of the estimated cyto-architectonic boundaries and parcellations (
+Parcellations of the human cerebral cortex representing cyto-, myelo- or
+ chemo- architecture are helpful in understanding the structural and function
+ organization of the brain 
 \begin_inset CommandInset citation
 LatexCommand cite
-key "rubinov2010complex,smith2011network"
+key "von1925cytoarchitectonics,amunts2007cytoarchitecture"
+
+\end_inset
+
+.
+ In vivo imaging, specifically, rsfMRI has been used for identification
+ of contiguous areas of cortex that exhibit similar functional connectivity
+ to define a functional parcellation 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "sporns2005human,smith2013functional,eickhoff2005new"
 
 \end_inset
 
@@ -772,24 +826,105 @@ key "smith2011network"
 \end_inset
 
 .
- However, most neuroimaging studies use correlation and derived measures
- as a measure of connectivity and therefore, it is important to perform
- comparison of the correlation based connectivity measures and assess their
- performance.
+ One major problem in using rsfMRI for single subject parcellation is that
+ the amount of data for single subject is not enough, especially if we are
+ trying to parcellate brain into a large number of regions.
+ Limited data available for a single individual scan can result in instability
+ of the estimated cyto-architectonic boundaries and parcellations 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "rubinov2010complex,smith2011network"
+
+\end_inset
+
+.
+ 
 \end_layout
 
-\begin_layout Itemize
-Since the data are comparable to each other after BrainSync, we can pool
- it and do joint parcellation
+\begin_layout Standard
+Since BrainSync makes data across subjects directly comparable, this synchronize
+d data can be easily pooled and a joint parcellation of a large number of
+ subjects is possible.
+ We show that this joint clustering of a large number of subjects works
+ better than individual clustering.
+ For this purpose, first, we applied clustering on the original brain data
+ for 40 subjects and 2 sessions each.
+ We used k-means algorithm, with k=100 since we are interested in using
+ it on a large amount of data with a large number of voxels.
+ Next, we synchronized all the data to a single reference brain and pooled
+ the for all points in all the brains.
+ Let 
+\begin_inset Formula $B_{i,j}$
+\end_inset
+
+ represent 
+\begin_inset Formula $N\times T$
+\end_inset
+
+ data matrix for 
+\begin_inset Formula $i^{th}$
+\end_inset
+
+ subject and 
+\begin_inset Formula $j^{th}$
+\end_inset
+
+scan.
+ The concatenated data matrix 
+\begin_inset Formula $B=[B_{1,1}^{t},B_{2,1}^{t},\cdots,B_{40,1}^{t},B_{1,2}^{t},\cdots,B_{40,2}^{t}]^{t}$
+\end_inset
+
+.
+ Note that we are not concatenating the data temporally, but are simply
+ pooling the time series data from all the points for all the subjects.
+ This results in a large data matrix 
+\begin_inset Formula $B$
+\end_inset
+
+ of the size 
+\begin_inset Formula $80N\times T$
+\end_inset
+
+ of synchronized brain data.
+ The k-means algorithm is then applied to this data to generate simultaneous
+ parcellation of all the 
+\begin_inset Formula $40x2$
+\end_inset
+
+ brain scans.
+ Note that we have not enforced any initialization, spatial prior, topological
+ constraint on the data, but are simply exploiting the ability to pool a
+ large amount of data after BrainSync.
 \end_layout
 
-\begin_layout Itemize
-Clustering will work better when data is pooled, rather than doing clustering
- of one brain at a time
+\begin_layout Standard
+We have also tried using region growing and spectral clustering algorithms.
+ While these algorithms work on individual brains yielding similar or slightly
+ better results to k-means, they do not scale well to a large amount of
+ data as we are trying here.
+ Additionally, region-growing requires a spatial prior, while our method
+ is prior free and purely data driven.
 \end_layout
 
-\begin_layout Itemize
-We can now directly pool the data together after synchronization
+\begin_layout Standard
+For quantitation of the results, we computed adjusted Rand index between
+ all pairs of subjects and scans and reported across scan similarity and
+ across subject similarity by averaging them across subjects and sessions
+ respectively.
+ This was applied to both individual parcellation as well as joint parcellation.
+\end_layout
+
+\begin_layout Standard
+For additional validation, we divided the group of 40 subjects into 2 groups
+ of 20 subject each, with only 1 subject common in both of these groups.
+ The k-means clustering algorithm was applied to the two sets of subjects
+ separately.
+ For this comparison, since we have smaller groups of 20 subjects, we used
+ k=30 number of clusters.
+ We measured similarity of the two parcellations for the common subject
+ when it is done jointly with two disjoint groups of subjects, using adjusted
+ Rand index.
+ 
 \end_layout
 
 \begin_layout Section
@@ -870,14 +1005,58 @@ key "bhushan2016temporal"
 \end_layout
 
 \begin_layout Subsection
-Comparison to Connectivity based feature
+Comparison to connectivity-based feature
 \end_layout
 
 \begin_layout Standard
+We compared the performance of BrainSync to the popularly used connectivity-base
+d measure as explained in Sec.
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:Comparison-to-connectivity"
+
+\end_inset
+
+.
+ For the random iid gaussian case, both the measured produced a large 
+
+\begin_inset Formula $L^{2}$
+\end_inset
+
+ distance as expected as seen in Fig.
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Histograms-of-L2"
+
+\end_inset
+
+(a).
+ The histograms of correlations across subjects as well as for across sessions
+ is low shown in Fig.
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Histograms-of-L2"
+
+\end_inset
+
+(b and c).
+ Random simulated data produces largest 
+\begin_inset Formula $L^{2}$
+\end_inset
+
+ distances followed by across subject followed by across session distances.
+ It can be seen that in both cases, BrainSync is able to synchronize the
+ data better yielding lower distances.
+ 
+\lang english
+
 \begin_inset Float figure
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \align center
@@ -899,6 +1078,14 @@ Histograms of
 \end_inset
 
  distances for (a) random iid data, (b) across subjects and (c) across scans
+ 
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Histograms-of-L2"
+
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -908,14 +1095,33 @@ Histograms of
 
 \end_inset
 
+ This is further evident in the spatial maps of 
+\begin_inset Formula $L^{2}$
+\end_inset
 
-\end_layout
+ distances (Fig.
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Spatial maps of L2"
 
-\begin_layout Standard
+\end_inset
+
+) where it can be seen that BrainSync is able to synchronize different sessions
+ of the same subject (Fig.
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Spatial maps of L2"
+
+\end_inset
+
+(d)), a desirable property for rsfMRI analysis.
+ 
 \begin_inset Float figure
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \align center
@@ -936,7 +1142,16 @@ Histograms of
 \begin_inset Formula $L^{2}$
 \end_inset
 
- distances for 
+ distances for connectivity based measure as well as BrainSync for across
+ subjects comparison (a,b); and for across sessions comparison (c,d).
+ 
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Spatial maps of L2"
+
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -981,7 +1196,8 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-Variability of Resting State fMRI
+Correlation of Resting State fMRI (a) across two sessions of subjects, averaged
+ over subjects; (b) across subjects averaged over the two sessions.
 \end_layout
 
 \end_inset
@@ -1043,10 +1259,6 @@ Individual Parcellation of subjects done independently of each other
 
 \end_inset
 
-
-\end_layout
-
-\begin_layout Plain Layout
 
 \end_layout
 
@@ -1130,6 +1342,12 @@ Joint parcellation of one subject when placed in two different groups yields
 
 \begin_layout Section
 Discussion and Conclusion
+\end_layout
+
+\begin_layout Standard
+It is not feasible to directly pool the connectivity based measures without
+ dimensionality reduction which will result in a loss of information.
+ The connectivity based me
 \end_layout
 
 \begin_layout Standard
