@@ -109,38 +109,22 @@ key "biswal1995functional,blumensath2012resting,smith2013functional"
 \end_inset
 
 .
- It has also being using as a diagnostic biomarker for studying brain developmen
-t 
+ It is also being used for longitudinal studies of brain development 
 \begin_inset CommandInset citation
 LatexCommand cite
 key "smyser2015use"
 
 \end_inset
 
- and various neurological and psychological diseases and conditions 
+ and as a diagnostic biomarker in cross-sectional studies for various neurologic
+al and psychological diseases and conditions 
 \begin_inset CommandInset citation
 LatexCommand cite
-key "wang2006changes"
+key "wang2006changes,redcay2013intrinsic,posner2014connecting"
 
 \end_inset
 
 .
-\end_layout
-
-\begin_layout Standard
-Currently it is not possible to directly compare the signals across sessions
-\end_layout
-
-\begin_layout Standard
-Connectivity matrices are comparable
-\end_layout
-
-\begin_layout Standard
-Studies of cortical connectivity derived from in-vivo imaging based on correlati
-on in the functional magnetic resonance imaging (fMRI) signal is becoming
- increasingly popular for human connectome analysis.
- The correlation between fMRI BOLD signal between different regions in the
- brain is often used as a measure of connectivity between those regions.
  This large scale connectivity information derived from fMRI can be used
  to identify cyto-architectonic boundaries between functionally-connected
  regions 
@@ -161,23 +145,46 @@ key "raichle2001default,sporns2005human,rousseeuw1987silhouettes,smith2013functi
 \end_inset
 
 .
- These applications require pairwise connectivity measures between every
- pair of points on the cortical surface.
- Most of the existing methods on fMRI based brain connectivity use correlation
- in fMRI signals as a measures of connectivity.
  
 \end_layout
 
 \begin_layout Standard
-In order to perform across subject comparisons of rsfMRI signal, typically,
+Currently it is not possible to directly compare the resulting fMRI signals
+ across sessions.
+ In order to perform cross subject comparisons of rsfMRI signal, typically,
  a connectivity feature of the fMRI signal is derived first and this feature
  is then compared across scans.
+ The correlation between fMRI BOLD signal at each point and rest of the
+ brain is often used as a feature defined at each point on the brain 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "fan2015functional,craddock2012whole"
+
+\end_inset
+
+.
+ This is a very high dimensional feature and often requires dimensionality
+ reduction or down-sampling.
+ Another alternative for cross subject comparison is group independent component
+ analysis (group ICA) techniques 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "calhoun2009review"
+
+\end_inset
+
+ that are based on non-gaussianity of the data.
+ 
 \end_layout
 
-\begin_layout Itemize
-Group ICA is a lossy method, does not preserve correlation structure and
- needs non-gaussianity.
- We don't need non-gaussianity
+\begin_layout Standard
+In this paper, we present a novel method for cross subject comparison of
+ fMRI signals.
+ We utilize the signal geometry and propose an existence of orthogonal transform
+ation that makes signals from two scans directly comparable.
+ Due to orthogonality, this transformation preserves the correlation structure
+ in the original signal, yet makes signals from one scan to the other directly
+ comparable.
 \end_layout
 
 \begin_layout Section
@@ -185,12 +192,13 @@ Materials and Methods
 \end_layout
 
 \begin_layout Subsection
-Correlation Structure in the fMRI signal
+Geometry of the rsfMRI signal space
 \end_layout
 
 \begin_layout Standard
-Since we assume that the input time series are variance normalized, we can
- represent each of the time series as points on a hypersphere 
+Since we assume that the input time series are variance normalized, after
+ appropriate scaling, we can represent each of the time series as points
+ on a hypersphere 
 \begin_inset Formula $\mathbb{S}^{T-1}$
 \end_inset
 
@@ -245,55 +253,96 @@ If
 \begin_inset Formula $Y$
 \end_inset
 
- as points on hypersphere due to unit variance, then the geodesic distance
- between them is a metric given by 
+ as points on hypersphere, then the geodesic distance between them on the
+ sphere is given by 
 \begin_inset Formula $\cos^{-1}(X\cdot Y)$
 \end_inset
 
 .
- Condisions for existence of rotation.
- This is 
-\end_layout
+ Since this is a geodesic distance, it defined a metric.
+ 
+\begin_inset Note Note
+status collapsed
 
-\begin_layout Standard
-We know that the connectivity in the fMRI data of two different sessions
- is comparable, but the time series is not directly comparable from session
- to session.
- Since we say that the connectivities of brains are similar, we can say
- that the correlation patterns are similar to each other and can be compared.
- The pearson correlation of each point to every other point in the brain
- as been used as a feature that is then used for cross subject comparisons
- in fMRI literature.
- In this paper we go further.
- Since the correlation patterns are similar, the pairwise distances of points
- on the hypersphere are similar indicating that the distributions of the
- points on the hypersphere are similar to each other.
+\begin_layout Plain Layout
+ Condisions for existence of rotation.
  
 \end_layout
 
-\begin_layout Standard
-In order to check our hypothesis that the distribution of points on sphere
- for two fmri data is similar, I tried the following as we discussed: 1.
- Consider 2 sessions of one subject.
- Normalize their data.
- This data is now on high dimensional sphere.
- 2.
- Reduce the dimensionality to 3 using PCA.
- Since PCA tries to preserve the correlation structure, their structure
- should be similar if the original data looked similar on sphere.
- 3.
- For visualization map this data to usual sphere by normalizing each point
- to unit length.
- Since for visualization, we reduce the dimensionality to 3, and therefore
- it may not look identical to the unrotated scans, but in the original high
- dimension, it is.
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
+We know that the connectivity defined by correlation between every pair
+ of vertices in the fMRI data of two different sessions is comparable, but
+ the time series is not directly comparable.
+ The Pearson correlation of each point to every other point in the brain
+ has been used as a feature that is then used for cross subject comparisons
+ in rsfMRI literature.
+ In this paper we go further.
+ Since the correlation patterns are similar, the pairwise geodesic distances
+ of points on the hypersphere are similar and therefore we note that the
+ relative locations of the points on the hypersphere are similar to each
+ other.
+ Therefore, we propose to use an orthogonal transformation for temporal
+ alignment of two rsfMRI data sets making them directly comparable across
+ subjects and sessions.
+\end_layout
+
+\begin_layout Standard
+In order to check our hypothesis that the relative locations of points on
+ sphere for two fMRI data are similar, we performed the following illustrative
+ experiment.
+ We considered data from a pair of subjects of 1200 time samples which is
+ in 
+\begin_inset Formula $T=1200$
+\end_inset
+
+ dimensional space with certain correlation structure.
+ Now we want to reduce the dimensionality to 3 for visualization of the
+ signal geometry, while preserving correlation structure.
+ Since the full brain data has much higher rank than 3, reducing dimensionality
+ by this much, will not preserve the correlation structure perfectly.
+ Therefore, for this illustrative example, we consider data from only some
+ parts of the brain, namely, cingulate, motor and visual cortex.
+ This data has rank low enough so that 3D representation has similar correlation
+ structure to the full data.
+ Then we reduce the dimensionality to 3 using PCA, that has a very similar
+ correlation structure.
+ After normalization, this data is plotted on the sphere, with the colors
+ indicating where the data came from (red: cingulate, green: motor, blue:
+ visual area).
+ Each time series, after dimensionality reduction to 3D, is represented
+ as a point on the sphere in this visualization.
+ Fig.
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Correlation-Structure-of"
+
+\end_inset
+
+(b) and (c) show data from two different subjects.
+ As can be seen in the figure, they are similar in the signal space except
+ for an orthogonal transformation (rotation and flipping).
+ Fig.
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Correlation-Structure-of"
+
+\end_inset
+
+(d) shows result of application of BrainSync (explained later in the paper)
+ on the original data followed by dimensionality reduction to 3D.
+ It can be seen that the proposed method aligns the data in the signal space.
+ 
 \begin_inset Float figure
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \align center
@@ -307,7 +356,14 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-Correlation Structure of fMRI data
+Correlation Structure of fMRI data: (a) geodesic distance between two data
+ points is given by 
+\begin_inset Formula $\cos^{-1}\rho_{XY}$
+\end_inset
+
+; (b),(c): data from two subjects after dimensionality reduction to 3D;
+ (d) data from subject 2 after application of BrainSync followed by dimensionali
+ty reduction to 3D for visualization.
 \begin_inset CommandInset label
 LatexCommand label
 name "fig:Correlation-Structure-of"
@@ -324,20 +380,7 @@ name "fig:Correlation-Structure-of"
 
 \end_inset
 
-
-\end_layout
-
-\begin_layout Standard
-Since the all the pairwise correlations in high dimensional data cannot
- be preserved when we reduce the dimensionality, we do expect some distortions,
- but their spacial adjacency should be similar.
- 
-\end_layout
-
-\begin_layout Standard
-For visualization, I am showing data points from 2 (out of 3) subdivisions
- of Cingulate and 2 subdivisions of precuneus using different colors.
- This is done for 2 scans resulting in 2 spheres as shown below:
+ This alignment 
 \end_layout
 
 \begin_layout Subsection
@@ -345,7 +388,7 @@ A Method for Temporal Alignment
 \end_layout
 
 \begin_layout Itemize
-Mathematical Forumulation
+Mathematical Formulation
 \end_layout
 
 \begin_layout Itemize
