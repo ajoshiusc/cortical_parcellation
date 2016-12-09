@@ -150,7 +150,14 @@ key "raichle2001default,sporns2005human,rousseeuw1987silhouettes,smith2013functi
 
 \begin_layout Standard
 Currently it is not possible to directly compare the resulting fMRI signals
- across sessions.
+ across subjects 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "iraji2016connectivity"
+
+\end_inset
+
+ since the rsfMRI signal is not synchronized.
  In order to perform cross subject comparisons of rsfMRI signal, typically,
  a connectivity feature of the fMRI signal is derived first and this feature
  is then compared across scans.
@@ -296,9 +303,66 @@ We know that the connectivity defined by correlation between every pair
  of points on the hypersphere are similar and therefore we note that the
  relative locations of the points on the hypersphere are similar to each
  other.
- Therefore, we propose to use an orthogonal transformation for temporal
- alignment of two rsfMRI data sets making them directly comparable across
- subjects and sessions.
+ Indeed, the following well known fact holds.
+ See for example Boutin and Kemper 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "boutin2004reconstructing"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Proposition
+Let 
+\begin_inset Formula $x_{1},\cdots,x_{T}$
+\end_inset
+
+ and 
+\begin_inset Formula $y_{1},\cdots,y_{T}$
+\end_inset
+
+ be points in 
+\begin_inset Formula $\mathbb{R}^{T}$
+\end_inset
+
+.
+ If 
+\begin_inset Formula $\|x_{i}-x_{j}\|=\|y_{i}-y_{j}\|,\forall i,j\in\{1,...,T\}$
+\end_inset
+
+, then there exists a rigid motion 
+\begin_inset Formula $(O,t)$
+\end_inset
+
+ such that 
+\begin_inset Formula $x_{i}=Oy_{i}+t,\forall i\in\{1,\cdots,n\}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Since in our case the points are on a sphere 
+\begin_inset Formula $S^{T-1}$
+\end_inset
+
+, we can exclude the translation and therefore, we propose to use an orthogonal
+ transformation 
+\begin_inset Formula $O$
+\end_inset
+
+ for temporal alignment of two rsfMRI data sets making them directly comparable
+ across subjects and sessions.
+ Since orthogonal transformation also preserves pairwise distances and hence
+ preseves the correlation structure and hence connectivity, a necessary
+ and sufficient condition for existence of the orthogonal transformation
+ is that the two brains have same connectivity.
+ Note that if the brains don't have exactly equal connectivity, but similar
+ connectivity, in that case the orthogonal transformation still aligns their
+ data, albeit imperfectly.
+ 
 \end_layout
 
 \begin_layout Standard
@@ -416,11 +480,11 @@ y_{V1} & \cdots & y_{VT}
 \end_inset
 
  represent data matrices of size 
-\begin_inset Formula $N\times T$
+\begin_inset Formula $V\times T$
 \end_inset
 
  for two subjects, where 
-\begin_inset Formula $N$
+\begin_inset Formula $V$
 \end_inset
 
  represents the number of vertices in a cortical mesh and 
@@ -438,7 +502,7 @@ y_{V1} & \cdots & y_{VT}
 \begin_layout Standard
 \begin_inset Formula 
 \[
-\hat{O}=\arg\min_{O\in O(T)}\left||X-OT\right||^{2}
+\hat{O}=\arg\min_{O\in O(T)}\|X-OY\|^{2}
 \]
 
 \end_inset
@@ -468,16 +532,22 @@ key "sorkine2009least"
 \end_inset
 
  and then perform its SVD: 
-\begin_inset Formula $XY^{t}=U\Sigma V^{t}$
+\begin_inset Formula 
+\[
+XY^{t}=U\Sigma V^{t}.
+\]
+
 \end_inset
 
-.
- The optimal orthogonal matrix is given by 
-\begin_inset Formula $O^{s}=VU^{t}$
+The optimal orthogonal matrix is given by 
+\begin_inset Formula 
+\[
+O^{s}=VU^{t}.
+\]
+
 \end_inset
 
-.
- Now we can use this optimal transform and generate synchronized brain data
+Now we can use this optimal transform and generate synchronized brain data
  for the two subjects: 
 \begin_inset Formula $X^{s}=X$
 \end_inset
@@ -498,54 +568,28 @@ reference "sub:Data"
 
 \end_inset
 
-).
- Before any synchronization, if we compute correlation of fMRI signal at
- each point of first brain to the corresponding point of the second brain,
- we get almost zero correlation everywhere e.g.
- Fig.
- 
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "fig:(a)-Correlation-for"
-
+) denoted as 
+\begin_inset Formula $X$
 \end_inset
 
-(a).
- The correlation values after BrainSync are shown in Fig.
- 
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "fig:(a)-Correlation-for"
-
-\end_inset
-
-(b).
- In order to further verify that we are not simply exploiting the lower
- rank of the signal, correlation was computed between time series data of
- first subject and data of subject 2, after random permutation of its vertex
- indices (permutation of rows of 
+ and 
 \begin_inset Formula $Y$
 \end_inset
 
-), before and after synchronization (Fig.
- 
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "fig:(a)-Correlation-for"
-
+ to get synchronized data 
+\begin_inset Formula $X^{s}$
 \end_inset
 
-(c)-(d)).
- As opposed to the case of unpermuted vertices where we got almost perfect
- correlation, in this case the correlation only increases slightly.
- 
-\end_layout
+ and 
+\begin_inset Formula $Y^{s}$
+\end_inset
 
-\begin_layout Standard
+.
+ 
 \begin_inset Float figure
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \align center
@@ -580,7 +624,61 @@ name "fig:(a)-Correlation-for"
 
 \end_inset
 
+ Before any synchronization, if we compute correlation of fMRI signal, given
+ by 
+\begin_inset Formula $XY^{t}$
+\end_inset
 
+, at each point of first brain to the corresponding point of the second
+ brain, we get almost zero correlation everywhere as shown in Fig.
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:(a)-Correlation-for"
+
+\end_inset
+
+(a).
+ The correlation values after BrainSync, given by 
+\begin_inset Formula $X^{s}Y^{st}$
+\end_inset
+
+ are shown in Fig.
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:(a)-Correlation-for"
+
+\end_inset
+
+(b).
+ In order to further verify that we are not simply exploiting the lower
+ rank of the signal, correlation was computed between time series data of
+ first subject and data of subject 2, after random permutation of its vertex
+ indices (permutation of rows of 
+\begin_inset Formula $Y$
+\end_inset
+
+), before and after synchronization (Fig.
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:(a)-Correlation-for"
+
+\end_inset
+
+(c)-(d)).
+ As opposed to the case of unpermuted vertices where we got almost perfect
+ correlation, in this case the correlation only increases slightly (Fig.
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:(a)-Correlation-for"
+
+\end_inset
+
+(d)).
+ 
 \end_layout
 
 \begin_layout Standard
@@ -622,13 +720,10 @@ reference "fig:precuneus_corr_map"
 
 (c), even if the data is from two different brains.
  
-\end_layout
-
-\begin_layout Standard
 \begin_inset Float figure
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \align center
@@ -743,10 +838,6 @@ distance between two brain data is can be computed to check how coherent
  distance.
 \end_layout
 
-\begin_layout Standard
-Next, we present applications of BrainSync.
-\end_layout
-
 \begin_layout Subsection
 Quantifying variability of rfMRI
 \end_layout
@@ -799,7 +890,7 @@ Parcellations of the human cerebral cortex representing cyto-, myelo- or
  organization of the brain 
 \begin_inset CommandInset citation
 LatexCommand cite
-key "von1925cytoarchitectonics,amunts2007cytoarchitecture"
+key "von1925cytoarchitectonics,amunts2007cytoarchitecture,iraji2016connectivity"
 
 \end_inset
 
@@ -869,7 +960,7 @@ d data can be easily pooled and a joint parcellation of a large number of
 \begin_inset Formula $j^{th}$
 \end_inset
 
-scan.
+ synchronized scan.
  The concatenated data matrix 
 \begin_inset Formula $B=[B_{1,1}^{t},B_{2,1}^{t},\cdots,B_{40,1}^{t},B_{1,2}^{t},\cdots,B_{40,2}^{t}]^{t}$
 \end_inset
@@ -898,16 +989,27 @@ scan.
 \end_layout
 
 \begin_layout Standard
-We have also tried using region growing and spectral clustering algorithms.
- While these algorithms work on individual brains yielding similar or slightly
- better results to k-means, they do not scale well to a large amount of
- data as we are trying here.
+The alternative clustering algorithms such as region-growing 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "blumensath2012resting"
+
+\end_inset
+
+ and spectral clustering 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "craddock2012whole"
+
+\end_inset
+
+ do not scale well to a large amount of data as we are trying here.
  Additionally, region-growing requires a spatial prior, while our method
  is prior free and purely data driven.
 \end_layout
 
 \begin_layout Standard
-For quantitation of the results, we computed adjusted Rand index between
+For obtaining quantitative results, we computed adjusted Rand index between
  all pairs of subjects and scans and reported across scan similarity and
  across subject similarity by averaging them across subjects and sessions
  respectively.
@@ -925,8 +1027,9 @@ key "kuhn1955hungarian"
 \end_layout
 
 \begin_layout Standard
-For additional validation, we divided the group of 40 subjects into 2 groups
- of 20 subject each, with only 1 subject common in both of these groups.
+In order to analyze stability and consistency of clustering, we divided
+ the group of 40 subjects into 2 groups of 20 subject each, with only 1
+ subject common in both of these groups.
  The k-means clustering algorithm was applied to the two sets of subjects
  separately.
  For this comparison, since we have smaller groups of 20 subjects, we used
@@ -1064,7 +1167,7 @@ reference "fig:Histograms-of-L2"
 \begin_inset Float figure
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \align center
@@ -1129,7 +1232,7 @@ reference "fig:Spatial maps of L2"
 \begin_inset Float figure
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \align center
@@ -1185,7 +1288,7 @@ reference "fig:Correlation-of-Resting"
 
 \end_inset
 
-) show the spatial map of regions where fmri signal is similar across subjects
+) show the spatial map of regions where fMRI signal is similar across subjects
  and where it is dissimilar.
  Across sessions, it can be seen that regions associated with the resting
  state (precuneus, association cortex and middle frontal cortex) show high
@@ -1194,17 +1297,14 @@ reference "fig:Correlation-of-Resting"
  lower correlations.
  Across subject correlations are significantly lower than within subject
  correlation as expected.
- In across subject rsfMRI comparison, again resting state network and sensori-mo
+ In across subject rsfMRI comparison, again resting state network and sensory-mo
 tor cortex show high correlation, whereas higher cognitive areas show lower
  correlation.
  
-\end_layout
-
-\begin_layout Standard
 \begin_inset Float figure
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \align center
@@ -1270,60 +1370,11 @@ reference "fig:Joint-Parcellation-of"
 \end_inset
 
  for joint clustering.
- It can be seen in that the individual clustering are not similar (Fig.
  
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "fig:Individual-Parcellation-of"
-
-\end_inset
-
-), even across sessions of the same subject.
- This is because for a high number of clusters (
-\begin_inset Formula $k=100$
-\end_inset
-
-), the limited fMRI data for individual brains produces high variability
- in the clustering.
- It is noted that individual clustering method performs better for a low
- number of clusters (
-\begin_inset Formula $k\approx30$
-\end_inset
-
-) The clustering results produced after synchronization of the pooled data
- are much more coherent across sessions (Fig.
- 
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "fig:Joint-Parcellation-of"
-
-\end_inset
-
-).
- They are also coherent across subjects, even though, we simply pooled their
- data and did not enforce any prior.
- This shows that the resting state signal in each of these brain region
- is similar across subjects, and each region or network produces unique
- signal.
- A higher similarity across sessions was observed than across subjects as
- measured by rand score (Table ) 
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-add table here
-\end_layout
-
-\end_inset
-
-.
-\end_layout
-
-\begin_layout Standard
 \begin_inset Float figure
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \align center
@@ -1357,14 +1408,196 @@ name "fig:Individual-Parcellation-of"
 
 \end_inset
 
+ It can be seen in that the individual clustering are not similar (Fig.
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Individual-Parcellation-of"
+
+\end_inset
+
+), even across sessions of the same subject.
+ This is because for a high number of clusters (
+\begin_inset Formula $k=100$
+\end_inset
+
+), the limited fMRI data for individual brains produces high variability
+ in the clustering.
+ It is noted that individual clustering method performs better for a low
+ number of clusters (
+\begin_inset Formula $k\approx30$
+\end_inset
+
+) The clustering results produced after synchronization of the pooled data
+ are much more coherent across sessions (Fig.
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Joint-Parcellation-of"
+
+\end_inset
+
+).
+ 
+\begin_inset Wrap table
+lines 8
+placement o
+overhang 0in
+width "50col%"
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Tabular
+<lyxtabular version="3" rows="3" columns="3">
+<features tabularvalignment="middle">
+<column alignment="center" valignment="top" width="0">
+<column alignment="center" valignment="top" width="0">
+<column alignment="center" valignment="top" width="0">
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
 
 \end_layout
 
-\begin_layout Standard
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Original 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+BrainSync
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Across Subject
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Across Sessions
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Adjusted Rand Indices
+\begin_inset CommandInset label
+LatexCommand label
+name "tab:Adjusted-Rand-Indices"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+ They are also coherent across subjects, even though, we simply pooled their
+ data and did not enforce any prior.
+ This shows that the resting state signal in each of these brain region
+ is similar across subjects, and each region or network produces unique
+ signal.
+ A higher similarity across sessions was observed than across subjects as
+ measured by adjusted Rand index (Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:Adjusted-Rand-Indices"
+
+\end_inset
+
+) 
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+add table here
+\end_layout
+
+\end_inset
+
+.
+ 
 \begin_inset Float figure
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \align center
@@ -1407,24 +1640,25 @@ The result of two separate joint parcellations of a single subject, when
  
 \begin_inset CommandInset ref
 LatexCommand ref
-reference "fig:Joint-parcellation single subject in two groups"
+reference "fig:Joint-parcellation single subject in two groups-1"
 
 \end_inset
 
 .
  The adjusted Rand index of ## was observed between the two parcellations.
- It can be noted that there is a very close similarity in the clustering
- result observed in several of the parcellations, even if the two parcellations
- were obtained independently by placing the given subject with completely
- disjoint groups of 19 subjects each.
+ While at a couple of places the two clustering makes a slightly different
+ choices (e.g.
+ at the parietal region at near precuneus, it can be noted that there is
+ a very close similarity in the clustering at most of the boundaries in
+ the parcellations, even if the two parcellations were obtained independently
+ by placing the given subject with completely disjoint groups of 19 subjects
+ each.
  This result shows the reproducibility of the parcellation.
-\end_layout
-
-\begin_layout Standard
+ 
 \begin_inset Float figure
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \align center
@@ -1446,7 +1680,204 @@ Joint parcellation of one subject when placed in two different groups yields
  
 \begin_inset CommandInset label
 LatexCommand label
-name "fig:Joint-parcellation single subject in two groups"
+name "fig:Joint-parcellation single subject in two groups2"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+\begin_inset Wrap figure
+lines 0
+placement o
+overhang 0col%
+width "50col%"
+status collapsed
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename figs/common_sub_jointly.pdf
+	width 50text%
+
+\end_inset
+
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Joint parcellation of one subject when placed in two different groups yields
+ consistent parcellation.
+ 
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Joint-parcellation single subject in two groups-1"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+\begin_inset Float table
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Tabular
+<lyxtabular version="3" rows="5" columns="2">
+<features tabularvalignment="middle">
+<column alignment="center" valignment="top" width="0">
+<column alignment="center" valignment="top" width="0">
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Adjusted Rand Indices
+\end_layout
 
 \end_inset
 
