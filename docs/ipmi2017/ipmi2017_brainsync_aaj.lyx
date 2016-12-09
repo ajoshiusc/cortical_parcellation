@@ -80,8 +80,9 @@ The resting state fMRI time series from one scan cannot be directly compared
  we exploit the geometry of the fMRI signal space to conjecture an existence
  of orthogonal transformation that synchronizes fMRI scans allowing direct
  comparison of signal from one brain to the other.
- This is based on an observation that pairwise distances in the signal space
- follow the similar patterns.
+ This is based on an observation that similar connectivity patterns in brains
+ means the pairwise geodesic distances between points on the brain in the
+ fMRI signal space are also similar.
  The method allows for temporal alignment of the signal so that they can
  be directly compared from one brain to the other.
  Similar to image registration where we spatially align the anatomical brain
@@ -149,7 +150,7 @@ key "raichle2001default,sporns2005human,rousseeuw1987silhouettes,smith2013functi
 \end_layout
 
 \begin_layout Standard
-Currently it is not possible to directly compare the resulting fMRI signals
+Currently it is not possible to directly compare the resting fMRI signals
  across subjects 
 \begin_inset CommandInset citation
 LatexCommand cite
@@ -171,7 +172,8 @@ key "fan2015functional,craddock2012whole"
 
 .
  This is a very high dimensional feature and often requires dimensionality
- reduction or down-sampling.
+ reduction or down-sampling before it can be feasibly used in a multisubject
+ comparison.
  Another alternative for cross subject comparison is group independent component
  analysis (group ICA) techniques 
 \begin_inset CommandInset citation
@@ -241,38 +243,38 @@ reference "fig:Correlation-Structure-of"
 
 \begin_layout Standard
 If 
-\begin_inset Formula $X$
+\begin_inset Formula $\vec{x}$
 \end_inset
 
  and 
-\begin_inset Formula $Y$
+\begin_inset Formula $\vec{y}$
 \end_inset
 
  represent time series from two points in the brain, then dot product of
  
-\begin_inset Formula $X$
+\begin_inset Formula $\vec{x}$
 \end_inset
 
  and 
-\begin_inset Formula $Y$
+\begin_inset Formula $\vec{y}$
 \end_inset
 
  yields Pearson correlation 
-\begin_inset Formula $\rho_{XY}$
+\begin_inset Formula $\rho_{\vec{x}\vec{y}}$
 \end_inset
 
  between them.
  If we consider 
-\begin_inset Formula $X$
+\begin_inset Formula $\vec{x}$
 \end_inset
 
  and 
-\begin_inset Formula $Y$
+\begin_inset Formula $\vec{y}$
 \end_inset
 
  as points on hypersphere, then the geodesic distance between them on the
  sphere is given by 
-\begin_inset Formula $\cos^{-1}(X\cdot Y)$
+\begin_inset Formula $\cos^{-1}(\vec{x}\cdot\vec{y})$
 \end_inset
 
 .
@@ -288,21 +290,16 @@ status collapsed
 
 \end_inset
 
+ We know that the connectivity defined by correlation between every pair
+ of points on the cortices of two different scans is comparable, but the
+ time series is not directly comparable.
+ However, since the correlation patterns are similar, the pairwise geodesic
+ distances in the points on cortex represented on the hypersphere 
+\begin_inset Formula $S^{T-1}$
+\end_inset
 
-\end_layout
-
-\begin_layout Standard
-We know that the connectivity defined by correlation between every pair
- of vertices in the fMRI data of two different sessions is comparable, but
- the time series is not directly comparable.
- The Pearson correlation of each point to every other point in the brain
- has been used as a feature that is then used for cross subject comparisons
- in rsfMRI literature.
- In this paper we go further.
- Since the correlation patterns are similar, the pairwise geodesic distances
- of points on the hypersphere are similar and therefore we note that the
- relative locations of the points on the hypersphere are similar to each
- other.
+ are similar and therefore the relative locations of the points on the hypersphe
+re are similar to each other.
  Indeed, the following well known fact holds.
  See for example Boutin and Kemper 
 \begin_inset CommandInset citation
@@ -311,16 +308,16 @@ key "boutin2004reconstructing"
 
 \end_inset
 
-.
+ for a simple derivation.
 \end_layout
 
 \begin_layout Proposition
 Let 
-\begin_inset Formula $x_{1},\cdots,x_{T}$
+\begin_inset Formula $\vec{x}_{1},\cdots,\vec{x}_{T}$
 \end_inset
 
  and 
-\begin_inset Formula $y_{1},\cdots,y_{T}$
+\begin_inset Formula $\vec{y}_{1},\cdots,\vec{y}_{T}$
 \end_inset
 
  be points in 
@@ -329,7 +326,7 @@ Let
 
 .
  If 
-\begin_inset Formula $\|x_{i}-x_{j}\|=\|y_{i}-y_{j}\|,\forall i,j\in\{1,...,T\}$
+\begin_inset Formula $\|\vec{x}_{i}-\vec{x}_{j}\|=\|\vec{y}_{i}-\vec{y}_{j}\|,\forall i,j\in\{1,...,T\}$
 \end_inset
 
 , then there exists a rigid motion 
@@ -337,7 +334,7 @@ Let
 \end_inset
 
  such that 
-\begin_inset Formula $x_{i}=Oy_{i}+t,\forall i\in\{1,\cdots,n\}$
+\begin_inset Formula $\vec{x}_{i}=O\vec{y}_{i}+t,\forall i\in\{1,\cdots,n\}$
 \end_inset
 
 .
@@ -355,10 +352,11 @@ Since in our case the points are on a sphere
 
  for temporal alignment of two rsfMRI data sets making them directly comparable
  across subjects and sessions.
- Since orthogonal transformation also preserves pairwise distances and hence
- preseves the correlation structure and hence connectivity, a necessary
- and sufficient condition for existence of the orthogonal transformation
- is that the two brains have same connectivity.
+ Since orthogonal transformation preserves pairwise distances, it also preserves
+ the correlation structure and hence connectivity.
+ Therefore a necessary and sufficient condition for existence of the orthogonal
+ transformation that does a temporal alignment of two brain signals is that
+ the two brains have same connectivity.
  Note that if the brains don't have exactly equal connectivity, but similar
  connectivity, in that case the orthogonal transformation still aligns their
  data, albeit imperfectly.
@@ -369,8 +367,11 @@ Since in our case the points are on a sphere
 In order to check our hypothesis that the relative locations of points on
  sphere for two fMRI data are similar, we performed the following illustrative
  experiment.
- We considered data from a pair of subjects of 1200 time samples which is
- in 
+ We considered data from a pair of subjects of 
+\begin_inset Formula $1200$
+\end_inset
+
+ time samples which is in 
 \begin_inset Formula $T=1200$
 \end_inset
 
@@ -378,13 +379,13 @@ In order to check our hypothesis that the relative locations of points on
  Now we want to reduce the dimensionality to 3 for visualization of the
  signal geometry, while preserving correlation structure.
  Since the full brain data has much higher rank than 3, reducing dimensionality
- by this much, will not preserve the correlation structure perfectly.
+ by this much would not preserve the correlation structure perfectly.
  Therefore, for this illustrative example, we consider data from only some
- parts of the brain, namely, cingulate, motor and visual cortex.
+ parts of the brain, namely, cingulate, motor cortex and visual cortex.
  This data has rank low enough so that 3D representation has similar correlation
  structure to the full data.
- Then we reduce the dimensionality to 3 using PCA, that has a very similar
- correlation structure.
+ Then we reduce the dimensionality to 3 using PCA since we also want to
+ preserve the correlation structure.
  After normalization, this data is plotted on the sphere, with the colors
  indicating where the data came from (red: cingulate, green: motor, blue:
  visual area).
@@ -411,7 +412,8 @@ reference "fig:Correlation-Structure-of"
 
 (d) shows result of application of BrainSync (explained later in the paper)
  on the original data followed by dimensionality reduction to 3D.
- It can be seen that the proposed method aligns the data in the signal space.
+ It can be seen that the proposed method aligns the data in the signal space
+ as expected.
  
 \begin_inset Float figure
 wide false
@@ -518,8 +520,15 @@ y_{V1} & \cdots & y_{VT}
  orthogonal matrices.
  It can be noted that our formulation tries to synchronize corresponding
  points in the brains.
- The problem of finding optimal rotation, referred to as Kabsch algorithm,
- has a known solution.
+ The problem of finding optimal rotation, referred to as Kabsch algorithm
+ 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "kabsch1976solution"
+
+\end_inset
+
+, has a known unique solution.
  Following derivation in 
 \begin_inset CommandInset citation
 LatexCommand cite
@@ -589,7 +598,7 @@ reference "sub:Data"
 \begin_inset Float figure
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \align center
@@ -606,8 +615,10 @@ status collapsed
 \begin_inset Caption
 
 \begin_layout Plain Layout
-(a) Correlation for two subjects between the fMRI sigbals at corresponding
- points on their cortices: (a) original, (b) after synchronization 
+Correlation for two subjects between the fMRI signals at corresponding points
+ on their cortices: (a) before synchronization, (b) after synchronization.
+ The vertices of one brain were permuted and correlations recomputed: (c)
+ correlation before synchronization, (d) after synchronization 
 \begin_inset CommandInset label
 LatexCommand label
 name "fig:(a)-Correlation-for"
@@ -640,7 +651,7 @@ reference "fig:(a)-Correlation-for"
 
 (a).
  The correlation values after BrainSync, given by 
-\begin_inset Formula $X^{s}Y^{st}$
+\begin_inset Formula $X^{s}(Y^{s})^{t}$
 \end_inset
 
  are shown in Fig.
@@ -700,8 +711,8 @@ reference "fig:precuneus_corr_map"
 gly, we get almost zero correlation.
  After application of BrainSync to synchronize the two brain datasets, we
  recompute the correlation of avg.
- PC signal of first subject to the data at all the vertices of the second
- subject (Fig.
+ PC signal of first subject to the data at all the vertices of the synchronized
+ second subject (Fig.
  
 \begin_inset CommandInset ref
 LatexCommand ref
@@ -718,12 +729,13 @@ reference "fig:precuneus_corr_map"
 
 \end_inset
 
-(c), even if the data is from two different brains.
+(c), with a well delineated default mode network, even if the data is from
+ two different brains.
  
 \begin_inset Float figure
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \align center
@@ -744,8 +756,9 @@ status collapsed
  precuneus (PC) signal of two brains to the same brains; (c) correlation
  of avg.
  PC signal from the first brain to the data at all the vertices of the second
- brain; (d) the same correlation map after synchronization of the two brain
- datas.
+ brain; (d) correlation of avg.
+ PC signal from the first brain to the data at all the vertices of the second
+ brain after synchronization of the two brain datas.
  
 \begin_inset CommandInset label
 LatexCommand label
@@ -778,9 +791,9 @@ name "sub:Comparison-to-connectivity"
 \end_layout
 
 \begin_layout Standard
-One of the most popular approach for connectivity, referred to as 
+One of the most popular approach for connectivity, referred to as
 \emph on
-spatial connectivity-based feature
+ connectivity-based feature
 \emph default
  is to first compute correlation of time series at the given points on the
  cortex to the time series for all the points in the brain 
@@ -798,7 +811,7 @@ key "fan2015functional,craddock2012whole"
  at each point on the cortex.
  This feature can then be compared across subjects.
  Since the input time series are zero mean and variance normalized, the
- connectivity based feature is computed 
+ connectivity based features are computed as 
 \begin_inset Formula $X^{c}=XX^{t}$
 \end_inset
 
@@ -807,6 +820,7 @@ key "fan2015functional,craddock2012whole"
 \end_inset
 
 .
+ These features were normalized to zero-mean and unit-variance.
  The pointwise 
 \begin_inset Formula $L^{2}$
 \end_inset
@@ -836,6 +850,13 @@ distance between two brain data is can be computed to check how coherent
 \end_inset
 
  distance.
+ This is done to compare the performance of BrainSync to the connectivity-based
+ feature.
+ A lower value of 
+\begin_inset Formula $L^{2}$
+\end_inset
+
+ distance across scans indicates more consistency and better performance.
 \end_layout
 
 \begin_layout Subsection
@@ -861,8 +882,9 @@ Quantifying variability of fMRI signal across sessions and across subjects
  Similarly, for quantifying cross session variability, we considered data
  from 2 scanning sessions of each subject, for 40 subjects and synchronized
  the two scans to each other for every subject, using BrainSync.
- Their point-wise correlation is computed and averaged over all the subjects
- to generate a point-wise cross session correlation map.
+ The point-wise correlation between the two synchronized sessions is computed
+ and averaged over all the subjects to generate a point-wise cross session
+ correlation map.
  
 \begin_inset Note Note
 status open
@@ -1006,6 +1028,7 @@ key "craddock2012whole"
  do not scale well to a large amount of data as we are trying here.
  Additionally, region-growing requires a spatial prior, while our method
  is prior free and purely data driven.
+ 
 \end_layout
 
 \begin_layout Standard
@@ -1032,7 +1055,7 @@ In order to analyze stability and consistency of clustering, we divided
  subject common in both of these groups.
  The k-means clustering algorithm was applied to the two sets of subjects
  separately.
- For this comparison, since we have smaller groups of 20 subjects, we used
+ For this comparison, since we have smaller groups of 19 subjects, we used
  k=30 number of clusters.
  We measured similarity of the two parcellations for the common subject
  when it is done jointly with two disjoint groups of subjects, using adjusted
@@ -1167,7 +1190,7 @@ reference "fig:Histograms-of-L2"
 \begin_inset Float figure
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \align center
@@ -1228,7 +1251,9 @@ reference "fig:Spatial maps of L2"
 \end_inset
 
 (d)), a desirable property for rsfMRI analysis.
- 
+ In both these analyses, cross-session distances are lower than cross subject
+ distances, which is expected because we expect more consistency within
+ a subject than across subjects.
 \begin_inset Float figure
 wide false
 sideways false
@@ -1280,7 +1305,7 @@ Quantifying variability of rfMRI
 \end_layout
 
 \begin_layout Standard
-The correlation maps produced after BrainSync (Fig.
+The correlations computed produced after BrainSync (Fig.
  
 \begin_inset CommandInset ref
 LatexCommand ref
@@ -1288,17 +1313,17 @@ reference "fig:Correlation-of-Resting"
 
 \end_inset
 
-) show the spatial map of regions where fMRI signal is similar across subjects
- and where it is dissimilar.
- Across sessions, it can be seen that regions associated with the resting
- state (precuneus, association cortex and middle frontal cortex) show high
- correlation whereas areas associates with higher cognitive functions (medial
- frontal cortex, insula and parts of the temporal lobe) show relatively
- lower correlations.
+) show the spatial map of regions where fMRI signal is similar across sessions/s
+ubjects and where it is dissimilar.
+ Across sessions, it can be seen that most of the brain show high correlation
+ except areas associates with higher cognitive functions (medial frontal
+ cortex, insula and parts of the temporal lobe) which show relatively lower
+ correlations.
  Across subject correlations are significantly lower than within subject
  correlation as expected.
- In across subject rsfMRI comparison, again resting state network and sensory-mo
-tor cortex show high correlation, whereas higher cognitive areas show lower
+ In across subject rsfMRI comparison, the regions associated with the default
+ mode network (precuneus, association cotex, medial frontal cotex) and sensory-m
+otor cortex show high correlation, whereas higher cognitive areas show lower
  correlation.
  
 \begin_inset Float figure
@@ -1348,7 +1373,7 @@ Application to joint cortical parcellation
 \end_layout
 
 \begin_layout Standard
-We performed clustering of 40 subjects x 2 sessions each, bot individually
+We performed clustering of 40 subjects x 2 sessions each, both individually
  as well as jointly after synchronization using BrainSync.
  It is noted that for individual clustering, we performed clustering separately
  for 80 scans one at a time, whereas in joint clustering, we performed only
@@ -1425,7 +1450,7 @@ reference "fig:Individual-Parcellation-of"
  in the clustering.
  It is noted that individual clustering method performs better for a low
  number of clusters (
-\begin_inset Formula $k\approx30$
+\begin_inset Formula $k<40$
 \end_inset
 
 ) The clustering results produced after synchronization of the pooled data
@@ -1597,7 +1622,7 @@ add table here
 \begin_inset Float figure
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \align center
@@ -1636,11 +1661,11 @@ name "fig:Joint-Parcellation-of"
 
 \begin_layout Standard
 The result of two separate joint parcellations of a single subject, when
- it is placed in two disjoint group of 19 subjects is shown in Fig.
+ it is placed in two disjoint group of other 19 subjects is shown in Fig.
  
 \begin_inset CommandInset ref
 LatexCommand ref
-reference "fig:Joint-parcellation single subject in two groups-1"
+reference "fig:Joint-parcellation single subject in two groups2"
 
 \end_inset
 
@@ -1648,7 +1673,7 @@ reference "fig:Joint-parcellation single subject in two groups-1"
  The adjusted Rand index of ## was observed between the two parcellations.
  While at a couple of places the two clustering makes a slightly different
  choices (e.g.
- at the parietal region at near precuneus, it can be noted that there is
+ at the parietal region at near precuneus), it can be noted that there is
  a very close similarity in the clustering at most of the boundaries in
  the parcellations, even if the two parcellations were obtained independently
  by placing the given subject with completely disjoint groups of 19 subjects
@@ -1918,17 +1943,19 @@ We presented a method for synchronization of rsfMRI data across subjects
 \end_layout
 
 \begin_layout Standard
-One of the assumptions is that the correlation structure of the brain images
- is constant over time.
- However we know that there are subtle changes in connectivity over time.
- It is possible to develop a windowed version of BrainSync.
+One of the implicit assumption in the proposed analysis is that the rsfMRI
+ signal is stationary atleast in the wide sense.
+ However we know that there are subtle changes in brain connectivity over
+ time.
+ It is possible to adopt a quasi-stationary model and develop a windowed
+ version of BrainSync.
  We will also explore the extension of BrainSync in case of task data by
  using the timing information.
  It is also possible to add weighting on synchronization if we are interesting
  in only a subset of brain for a particular study, or sparcity prior if
  we expect the brain networks to be sparse.
- While it is possible to have additional assumptions and prior on the synchroniz
-ation method, in this work we have tried to keep the assumptions and prior
+ While it is possible to have additional assumptions and priors on the synchroni
+zation method, in this work we have tried to keep the assumptions and prior
  to the minimum and only exploit signal space geometry to get a powerful
  new method that facilitates cross scan comparison of rsfMRI.
 \end_layout
