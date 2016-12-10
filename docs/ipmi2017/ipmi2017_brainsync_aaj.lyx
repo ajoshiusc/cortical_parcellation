@@ -62,7 +62,7 @@
 
 \begin_layout Title
 BrainSync: An Orthogonal Transformation for Synchronization of fMRI Data
- Across Subjects and Scans 
+ Across Subjects
 \end_layout
 
 \begin_layout Author
@@ -290,11 +290,11 @@ status collapsed
 
 \end_inset
 
- We know that the connectivity defined by correlation between every pair
- of points on the cortices of two different scans is comparable, but the
- time series is not directly comparable.
- However, since the correlation patterns are similar, the pairwise geodesic
- distances in the points on cortex represented on the hypersphere 
+ We know that the connectivity defined by distance in the signal space between
+ every pair of points on the cortices of two different scans is comparable,
+ but the time series is not directly comparable.
+ However, the pairwise geodesic distances in the points on cortex represented
+ on the hypersphere 
 \begin_inset Formula $S^{T-1}$
 \end_inset
 
@@ -308,16 +308,16 @@ key "boutin2004reconstructing"
 
 \end_inset
 
- for a simple derivation.
+ for a derivation.
 \end_layout
 
 \begin_layout Proposition
 Let 
-\begin_inset Formula $\vec{x}_{1},\cdots,\vec{x}_{T}$
+\begin_inset Formula $\vec{x}_{1},\cdots,\vec{x}_{V}$
 \end_inset
 
  and 
-\begin_inset Formula $\vec{y}_{1},\cdots,\vec{y}_{T}$
+\begin_inset Formula $\vec{y}_{1},\cdots,\vec{y}_{V}$
 \end_inset
 
  be points in 
@@ -326,7 +326,7 @@ Let
 
 .
  If 
-\begin_inset Formula $\|\vec{x}_{i}-\vec{x}_{j}\|=\|\vec{y}_{i}-\vec{y}_{j}\|,\forall i,j\in\{1,...,T\}$
+\begin_inset Formula $\|\vec{x}_{i}-\vec{x}_{j}\|=\|\vec{y}_{i}-\vec{y}_{j}\|,\forall i,j\in\{1,...,V\}$
 \end_inset
 
 , then there exists a rigid motion 
@@ -334,7 +334,7 @@ Let
 \end_inset
 
  such that 
-\begin_inset Formula $\vec{x}_{i}=O\vec{y}_{i}+t,\forall i\in\{1,\cdots,n\}$
+\begin_inset Formula $\vec{x}_{i}=O\vec{y}_{i}+t,\forall i\in\{1,\cdots,V\}$
 \end_inset
 
 .
@@ -376,7 +376,7 @@ In order to check our hypothesis that the relative locations of points on
 \end_inset
 
  dimensional space with certain correlation structure.
- Now we want to reduce the dimensionality to 3 for visualization of the
+ Now we want to reduce the dimensionality to 3D for visualization of the
  signal geometry, while preserving correlation structure.
  Since the full brain data has much higher rank than 3, reducing dimensionality
  by this much would not preserve the correlation structure perfectly.
@@ -384,7 +384,7 @@ In order to check our hypothesis that the relative locations of points on
  parts of the brain, namely, cingulate, motor cortex and visual cortex.
  This data has rank low enough so that 3D representation has similar correlation
  structure to the full data.
- Then we reduce the dimensionality to 3 using PCA since we also want to
+ Then we reduce the dimensionality to 3D using PCA since we also want to
  preserve the correlation structure.
  After normalization, this data is plotted on the sphere, with the colors
  indicating where the data came from (red: cingulate, green: motor, blue:
@@ -418,7 +418,7 @@ reference "fig:Correlation-Structure-of"
 \begin_inset Float figure
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \align center
@@ -434,7 +434,7 @@ status collapsed
 \begin_layout Plain Layout
 Correlation Structure of fMRI data: (a) geodesic distance between two data
  points is given by 
-\begin_inset Formula $\cos^{-1}\rho_{XY}$
+\begin_inset Formula $\cos^{-1}\rho_{\vec{x}\vec{y}}$
 \end_inset
 
 ; (b),(c): data from two subjects after dimensionality reduction to 3D;
@@ -566,6 +566,13 @@ Now we can use this optimal transform and generate synchronized brain data
 \end_inset
 
 .
+ This is unique and invertible transformation since SVD decomposition is
+ unique (
+\begin_inset Formula $\text{rank}(XY^{t})=T$
+\end_inset
+
+).
+ 
 \end_layout
 
 \begin_layout Standard
@@ -842,10 +849,10 @@ distance between two brain data is can be computed to check how coherent
  distance computation for two sessions of each subject and then averaged
  the distance maps over the 40 subjects, resulting in across subject and
  across scan differences.
- As a baseline for comparison, we generated a random iid gaussian noise
- at every point on the cortex for 40 subjects and computed cross subject
- similarity using the connectivity based measure and after BrainSync, using
- 
+ As a baseline for comparison, we generated a random i.i.d.
+ gaussian noise at every point on the cortex for 40 subjects and computed
+ cross subject similarity using the connectivity based measure and after
+ BrainSync, using 
 \begin_inset Formula $L^{2}$
 \end_inset
 
@@ -856,7 +863,8 @@ distance between two brain data is can be computed to check how coherent
 \begin_inset Formula $L^{2}$
 \end_inset
 
- distance across scans indicates more consistency and better performance.
+ distance across scans indicates more consistency and better performance,
+ given the assumption that signal should be consistent across group.
 \end_layout
 
 \begin_layout Subsection
@@ -1001,7 +1009,7 @@ d data can be easily pooled and a joint parcellation of a large number of
  of synchronized brain data.
  The k-means algorithm is then applied to this data to generate simultaneous
  parcellation of all the 
-\begin_inset Formula $40x2$
+\begin_inset Formula $40\times2$
 \end_inset
 
  brain scans.
@@ -1025,7 +1033,10 @@ key "craddock2012whole"
 
 \end_inset
 
- do not scale well to a large amount of data as we are trying here.
+ were considered, but spectral clustering does not scale well to a large
+ amount of data.
+ Region-growing scales well but does not work well in a joint parcellation
+ scenario as we are trying here.
  Additionally, region-growing requires a spatial prior, while our method
  is prior free and purely data driven.
  
@@ -1156,7 +1167,8 @@ reference "sub:Comparison-to-connectivity"
 \end_inset
 
 .
- For the random iid gaussian case, both the measured produced a large 
+ For the random i.i.d.
+ gaussian case, both the measured produced a large 
 \begin_inset Formula $L^{2}$
 \end_inset
 
@@ -1211,8 +1223,8 @@ Histograms of
 \begin_inset Formula $L^{2}$
 \end_inset
 
- distances for (a) random iid data, (b) across subjects and (c) across scans
- 
+ distances for (a) random i.i.d.
+ data, (b) across subjects and (c) across scans 
 \begin_inset CommandInset label
 LatexCommand label
 name "fig:Histograms-of-L2"
@@ -1224,7 +1236,7 @@ name "fig:Histograms-of-L2"
 
 \end_inset
 
- write equations 
+
 \end_layout
 
 \end_inset
@@ -1257,7 +1269,7 @@ reference "fig:Spatial maps of L2"
 \begin_inset Float figure
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \align center
@@ -1378,6 +1390,137 @@ We performed clustering of 40 subjects x 2 sessions each, both individually
  It is noted that for individual clustering, we performed clustering separately
  for 80 scans one at a time, whereas in joint clustering, we performed only
  one clustering on all the pooled data of 80 scans.
+ 
+\begin_inset Wrap table
+lines 8
+placement o
+overhang 0in
+width "50col%"
+status collapsed
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Tabular
+<lyxtabular version="3" rows="3" columns="3">
+<features tabularvalignment="middle">
+<column alignment="center" valignment="top" width="0">
+<column alignment="center" valignment="top" width="0">
+<column alignment="center" valignment="top" width="0">
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Original 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+BrainSync
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Across Subject
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0.3221
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0.8912
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Across Sessions
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0.4234
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0.9416
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Adjusted Rand Indices
+\begin_inset CommandInset label
+LatexCommand label
+name "tab:Adjusted-Rand-Indices"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
  A sample result for 2 of the brains is shown in Fig.
  
 \begin_inset CommandInset ref
@@ -1463,137 +1606,6 @@ reference "fig:Joint-Parcellation-of"
 \end_inset
 
 ).
- 
-\begin_inset Wrap table
-lines 8
-placement o
-overhang 0in
-width "50col%"
-status open
-
-\begin_layout Plain Layout
-\align center
-\begin_inset Tabular
-<lyxtabular version="3" rows="3" columns="3">
-<features tabularvalignment="middle">
-<column alignment="center" valignment="top" width="0">
-<column alignment="center" valignment="top" width="0">
-<column alignment="center" valignment="top" width="0">
-<row>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-Original 
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-BrainSync
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell alignment="center" valignment="top" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-Across Subject
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-Across Sessions
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-</row>
-</lyxtabular>
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-\begin_inset Caption
-
-\begin_layout Plain Layout
-Adjusted Rand Indices
-\begin_inset CommandInset label
-LatexCommand label
-name "tab:Adjusted-Rand-Indices"
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
  They are also coherent across subjects, even though, we simply pooled their
  data and did not enforce any prior.
  This shows that the resting state signal in each of these brain region
@@ -1670,14 +1682,14 @@ reference "fig:Joint-parcellation single subject in two groups2"
 \end_inset
 
 .
- The adjusted Rand index of ## was observed between the two parcellations.
+ The adjusted Rand index of 0.9202 was observed between the two parcellations.
  While at a couple of places the two clustering makes a slightly different
  choices (e.g.
- at the parietal region at near precuneus), it can be noted that there is
- a very close similarity in the clustering at most of the boundaries in
- the parcellations, even if the two parcellations were obtained independently
- by placing the given subject with completely disjoint groups of 19 subjects
- each.
+ at the parietal region at near precuneus) because the groups of subjects
+ are different, It can be noted that there is a very close similarity in
+ the clustering at most of the boundaries in the parcellations, even if
+ the two parcellations were obtained independently by placing the given
+ subject with completely disjoint groups of 19 subjects each.
  This result shows the reproducibility of the parcellation.
  
 \begin_inset Float figure
@@ -1932,6 +1944,28 @@ We presented a method for synchronization of rsfMRI data across subjects
  The orthogonal transformation produced by BrainSync is invertible, perfectly
  preserves the correlation structure of the original data and is therefore
  lossless.
+ Note that the individual pairwise correlation estimates between pairs of
+ points in the brain could be noisy since 
+\begin_inset Formula $V\gg T$
+\end_inset
+
+, since we are using the whole brain timeseries data for estimation the
+ orthogonal transformation, we get an accurate result as evident in Figs.
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Histograms-of-L2"
+
+\end_inset
+
+ and 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Spatial maps of L2"
+
+\end_inset
+
+.
  In addition to showing superior performance to the feature based techniques
  such as functional connectivity, BrainSync also produces a low dimensional
  feature and therefore allows pooling of the data across scans.
