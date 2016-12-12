@@ -753,7 +753,55 @@ reference "fig:(a)-Correlation-for"
 \end_inset
 
 (d)).
+ An example synchronized time series is shown in Fig.
  
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Time-series-for"
+
+\end_inset
+
+.
+ 
+\begin_inset Float figure
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename figs/Sync_time_series.pdf
+	width 100text%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Time series for two subjects at a point in the brain before and after synchroniz
+ation
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Time-series-for"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
