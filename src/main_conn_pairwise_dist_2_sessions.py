@@ -24,6 +24,9 @@ dfs_left = readdfs(os.path.join(p_dir_ref, 'reference', ref + '.aparc.\
 a2009s.32k_fs.reduce3.left.dfs'))
 dfs_left_sm = readdfs(os.path.join(p_dir_ref, 'reference', ref + '.aparc.\
 a2009s.32k_fs.reduce3.very_smooth.left.dfs'))
+view_patch_vtk(dfs_left_sm, azimuth=-90, elevation=-180, roll=-90,
+               outfile='dist_sess_conn_view1_1sub_left2222.png', show=0)
+
 count1 = 0
 rho_rho = []
 rho_all = []

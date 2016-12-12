@@ -58,35 +58,35 @@ def readdfs(fname):
     fid.seek(hdr.hdrsize)
 
     if hdr.nTriangles > 0 :
-        NFV.faces = np.array(struct.unpack(('i' * 3 * hdr.nTriangles), fid.read(3 * hdr.nTriangles * 4)), dtype='int32').reshape(hdr.nTriangles, 3)
-    NFV.vertices = np.array(struct.unpack('f' * 3 * hdr.nVertices, fid.read(3 * hdr.nVertices * 4)),
-                            dtype='float32').reshape(hdr.nVertices, 3)
+        NFV.faces = np.array(struct.unpack(('i' * 3 * hdr.nTriangles[0]), fid.read(3 * hdr.nTriangles[0] * 4)), dtype='int32').reshape(hdr.nTriangles[0], 3)
+    NFV.vertices = np.array(struct.unpack('f' * 3 * hdr.nVertices[0], fid.read(3 * hdr.nVertices[0] * 4)),
+                            dtype='float32').reshape(hdr.nVertices[0], 3)
     if (hdr.normals > 0):
         #print 'reading vertex normals.'
         fid.seek(hdr.normals)
-        NFV.normals = np.array(struct.unpack('f' * 3 * hdr.nVertices, fid.read(3 * hdr.nVertices * 4)),
-                               dtype='float32').reshape(hdr.nVertices, 3)
+        NFV.normals = np.array(struct.unpack('f' * 3 * hdr.nVertices[0], fid.read(3 * hdr.nVertices[0] * 4)),
+                               dtype='float32').reshape(hdr.nVertices[0], 3)
     if (hdr.vcoffset > 0):
         #print 'reading vertex colors.'
         fid.seek(hdr.vcoffset)
-        NFV.vColor = np.array(struct.unpack('f' * 3 * hdr.nVertices, fid.read(3 * hdr.nVertices * 4)),
-                              dtype='float32').reshape(hdr.nVertices, 3)
+        NFV.vColor = np.array(struct.unpack('f' * 3 * hdr.nVertices[0], fid.read(3 * hdr.nVertices[0] * 4)),
+                              dtype='float32').reshape(hdr.nVertices[0], 3)
     if (hdr.uvStart > 0):
         #print 'reading uv coordinates.'
         fid.seek(hdr.uvStart)
-        uv = np.array(struct.unpack('f' * 2 * hdr.nVertices, fid.read(2 * hdr.nVertices * 4)), dtype='float32').reshape(
-            hdr.nVertices, 2)
+        uv = np.array(struct.unpack('f' * 2 * hdr.nVertices[0], fid.read(2 * hdr.nVertices[0] * 4)), dtype='float32').reshape(
+            hdr.nVertices[0], 2)
         NFV.u = uv[:, 0]
         NFV.v = uv[:, 1]
     if (hdr.labelOffset > 0):
         #print 'reading vertex labels.'
         fid.seek(hdr.labelOffset)
         #labels are 2 byte unsigned integers, so use unsigned short in python
-        NFV.labels = np.array(struct.unpack('H' * hdr.nVertices,fid.read(hdr.nVertices * 2)), dtype='uint16')
+        NFV.labels = np.array(struct.unpack('H' * hdr.nVertices[0],fid.read(hdr.nVertices[0] * 2)), dtype='uint16')
     if (hdr.vertexAttributes > 0):
         #print 'reading vertex attributes.'
         fid.seek(hdr.vertexAttributes)
-        NFV.attributes = np.array(struct.unpack('f' * hdr.nVertices,fid.read(hdr.nVertices * 4)), dtype='float32')
+        NFV.attributes = np.array(struct.unpack('f' * hdr.nVertices[0],fid.read(hdr.nVertices[0] * 4)), dtype='float32')
     NFV.name = fname
     fid.close()
     return (NFV)

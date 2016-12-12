@@ -14,6 +14,9 @@ from scipy.stats import trim_mean
 from sklearn.metrics.pairwise import pairwise_distances
 from sklearn.utils.linear_assignment_ import linear_assignment
 from sklearn.metrics import silhouette_score
+import matplotlib.pyplot as plt
+
+
 p_dir = '/big_disk/ajoshi/HCP_data/data'
 p_dir_ref='/big_disk/ajoshi/HCP_data'
 lst = os.listdir(p_dir)
@@ -115,3 +118,14 @@ dfs_left_sm=patch_color_attrib(dfs_left_sm, rho, clim=[-1,1])
 view_patch_vtk(dfs_left_sm, azimuth=90,elevation=180, roll=90, outfile='sub1to2_view1_pc_rot.png', show=1)
 view_patch_vtk(dfs_left_sm, azimuth=-90,elevation=-180, roll=-90, outfile='sub1to2_view2_pc_rot.png', show=1)
 
+
+plt.figure(num=None, figsize=(10, 1), dpi=300, facecolor='w', edgecolor='k')
+plt.plot(sub1[8991,100:200])
+plt.plot(sub2[8991,100:200])
+plt.plot(sub_rot[8991,100:200])
+plt.savefig('Sync_time_series.pdf')
+#plt.ylabel('time')
+#plt.plot(sub1[8991,100:200], sub2[8991,100:200])
+#plt.plot()
+#plt.plot(sub1[8991,100:200],sub_rot[8991,100:200])
+#plt.ylabel('time')
