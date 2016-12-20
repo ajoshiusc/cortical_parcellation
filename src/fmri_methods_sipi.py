@@ -168,6 +168,7 @@ def rot_sub_data(ref,sub):
     xcorr=sp.dot((sub.T),ref)
     u,s,v=sp.linalg.svd(xcorr)
     R=sp.dot(v.T,u.T)
+#    print sp.linalg.det(R)
     return sp.dot(sub,R.T)
 
 

@@ -64,8 +64,8 @@
      id="namedview4"
      showgrid="false"
      inkscape:zoom="1.1250855"
-     inkscape:cx="304.27363"
-     inkscape:cy="85.659597"
+     inkscape:cx="152.72959"
+     inkscape:cy="83.881954"
      inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:window-maximized="1"
@@ -375,15 +375,15 @@
 <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14px;line-height:125%;font-family:'Latin Modern Roman';-inkscape-font-specification:'Latin Modern Roman, Normal';text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="357.66174"
-       y="5.6879711"
+       x="324.06161"
+       y="4.0879707"
        id="text4328"
        sodipodi:linespacing="125%"
        transform="scale(1,-1)"><tspan
          sodipodi:role="line"
          id="tspan4330"
-         x="357.66174"
-         y="5.6879711">Time</tspan></text>
+         x="324.06161"
+         y="4.0879707">Time Samples</tspan></text>
 <path
        style="fill:none;fill-rule:evenodd;stroke:#ff0000;stroke-width:1.20000005;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        d="m 95.09647,74.48311 c 41.94103,0 42.2225,0 42.2225,0"
