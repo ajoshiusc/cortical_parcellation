@@ -1,4 +1,4 @@
-#LyX 2.2 created this file. For more info see http://www.lyx.org/
+#LyX 2.1 created this file. For more info see http://www.lyx.org/
 \lyxformat 474
 \begin_document
 \begin_header
@@ -15,9 +15,9 @@ theorems-std
 \language_package default
 \inputencoding auto
 \fontencoding global
-\font_roman default
-\font_sans default
-\font_typewriter default
+\font_roman lmodern
+\font_sans lmss
+\font_typewriter lmtt
 \font_math auto
 \font_default_family default
 \use_non_tex_fonts false
@@ -27,7 +27,7 @@ theorems-std
 \font_tt_scale 100
 \graphics default
 \default_output_format default
-\output_sync 0
+\output_sync 1
 \bibtex_command bibtex
 \index_command default
 \paperfontsize default
@@ -167,7 +167,7 @@ Magnetic Resonance Imaging (MRI) is an in-vivo imaging technique whic h
  transferred to label ind ividual subjects registered to the atlas .
  The reference image can be created using a single subject or an average
  of multip le subjects registered to a common coordinate system.(Roland &
- Zilles, 1994) The m ost widely used single-subject atlas is the Colin atlas
+ Zilles, 1994) The most widely used single-subject atlas is the Colin atlas
  which has high SNR.(Holmes et al., 1998) Ho wever, this human subject has
  an infrequent anomaly present in the left precentral gyrus which causes
  misidentificat ion of the lower bound of the precentral gyrus and neighboring
@@ -185,7 +185,7 @@ Magnetic Resonance Imaging (MRI) is an in-vivo imaging technique whic h
  resolution , SNR and signal .
  Alternatively, most studies acquire T1-weighted images which may be reliably
  registered onto an atlas using anatomical information.
- Lesion analysis have allowed researchers to identify t hat there exists
+ Lesion analysis have allowed researchers to identify that there exists
  a relationship between the structure and function of the human brain.(Damasio
  & Damasio, 1989) Anatomical delineation for morphological characteristics
  may serve as a surrogat e for functional localization and therefore allow
