@@ -15,7 +15,7 @@
    viewBox="0 0 1005.5762 200.22388"
    id="svg2"
    version="1.1"
-   inkscape:version="0.91 r"
+   inkscape:version="0.91 r13725"
    sodipodi:docname="indep_parcellation_100.svg">
   <defs
      id="defs4" />
@@ -26,16 +26,16 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.7"
-     inkscape:cx="408.92953"
-     inkscape:cy="-37.416737"
+     inkscape:zoom="1.4"
+     inkscape:cx="351.64782"
+     inkscape:cy="-49.608724"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
      inkscape:window-width="1920"
-     inkscape:window-height="1030"
-     inkscape:window-x="0"
-     inkscape:window-y="0"
+     inkscape:window-height="1018"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
      inkscape:window-maximized="1"
      fit-margin-left="1"
      fit-margin-top="1"
@@ -49,7 +49,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -92,47 +92,47 @@
        width="239.77881" />
     <text
        xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:17.5px;line-height:125%;font-family:'Latin Modern Roman';-inkscape-font-specification:'Latin Modern Roman, Normal';text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="48.431946"
-       y="505.50159"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:18.62759018px;line-height:125%;font-family:'Latin Modern Roman';-inkscape-font-specification:'Latin Modern Roman, Normal';text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="48.371384"
+       y="505.26868"
        id="text4191"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan4193"
-         x="48.431946"
-         y="505.50159">subject 1, session 1</tspan></text>
+         x="48.371384"
+         y="505.26868">subject 1, session 1</tspan></text>
     <text
        xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:17.5px;line-height:125%;font-family:'Latin Modern Roman';-inkscape-font-specification:'Latin Modern Roman, Normal';text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="297.73972"
-       y="505.49469"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:18.62759018px;line-height:125%;font-family:'Latin Modern Roman';-inkscape-font-specification:'Latin Modern Roman, Normal';text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="297.67914"
+       y="505.26178"
        id="text4191-3"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan4193-6"
-         x="297.73972"
-         y="505.49469">subject 1, session 2</tspan></text>
+         x="297.67914"
+         y="505.26178">subject 1, session 2</tspan></text>
     <text
        xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:17.5px;line-height:125%;font-family:'Latin Modern Roman';-inkscape-font-specification:'Latin Modern Roman, Normal';text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="557.57251"
-       y="505.49463"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:18.62759018px;line-height:125%;font-family:'Latin Modern Roman';-inkscape-font-specification:'Latin Modern Roman, Normal';text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="557.51196"
+       y="505.26172"
        id="text4191-3-7"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan4193-6-5"
-         x="557.57251"
-         y="505.49463">subject 2, session 1</tspan></text>
+         x="557.51196"
+         y="505.26172">subject 2, session 1</tspan></text>
     <text
        xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:17.5px;line-height:125%;font-family:'Latin Modern Roman';-inkscape-font-specification:'Latin Modern Roman, Normal';text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="806.88019"
-       y="505.49469"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:18.62759018px;line-height:125%;font-family:'Latin Modern Roman';-inkscape-font-specification:'Latin Modern Roman, Normal';text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="806.81964"
+       y="505.26178"
        id="text4191-3-7-3"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan4193-6-5-5"
-         x="806.88019"
-         y="505.49469">subject 2, session 2</tspan></text>
+         x="806.81964"
+         y="505.26178">subject 2, session 2</tspan></text>
   </g>
 </svg>

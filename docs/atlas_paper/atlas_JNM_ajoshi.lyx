@@ -564,7 +564,14 @@ We used the minimally preprocessed (ICA-FIX denoised) resting fMRI data
  bright cross-hair on a dark background.
  HCP's minimal preprocessing primarily corrects the fMRI data for acquisition
  artifacts, resamples the data on the cortical surface and performs a non-aggres
-sive spatio-temporal cleanup (Glasser et al., 2013; Smith et al., 2013).
+sive spatio-temporal cleanup 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "glasser2013minimal,smith2013functional"
+
+\end_inset
+
+.
  The data are then resampled for each subject onto a common standard cortical
  surface mesh representation (32K Conte-69) in the native subject space
  (Smith et al., 2013; Van Essen et al., 2012).
@@ -828,8 +835,8 @@ Conclusion
 \begin_layout Standard
 \begin_inset CommandInset bibtex
 LatexCommand bibtex
-bibfiles "xampl"
-options "bibtotoc,elsarticle-harv"
+bibfiles "fmri_bib"
+options "bibtotoc,elsarticle-num"
 
 \end_inset
 
