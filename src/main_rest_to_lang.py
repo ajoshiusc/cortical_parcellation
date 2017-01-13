@@ -32,7 +32,7 @@ dfs_left_sm = readdfs(os.path.join(p_dir_ref, 'reference', ref + '.aparc.a2009s.
 # sub = '110411'
 # p_dir = '/home/ajoshi/data/HCP_data'
 lst = os.listdir('/big_disk/ajoshi/HCP5')
-rho1=0; rho1lang=0; rho2=0; rho2lang=0;
+rho1=0; rho1rot=0; rho2=0; rho2rot=0;
 #lst = [lst[0]]
 for sub in lst:
     vrest = nib.load('/big_disk/ajoshi/HCP5/' + sub + '/MNINonLinear/Resu\
@@ -89,28 +89,28 @@ lts/tfMRI_LANGUAGE_RL/tfMRI_LANGUAGE_RL_Atlas.dtseries.nii')
     vrest1 = vrest1[:, :vlang1.shape[1]]
     vrest2 = vrest2[:, :vlang1.shape[1]]
 
-    rho1 += sp.sum(vrest1*vrest2, axis=1)/vrest1.shape[1]
-    rho1lang += sp.sum(vlang1*vlang2, axis=1)/vlang1.shape[1]
+    rho1 += sp.sum(vrest1*vlang1, axis=1)/vrest1.shape[1]
+    rho2 += sp.sum(vrest2*vlang2, axis=1)/vlang1.shape[1]
 
-    vrest2 = rot_sub_data(ref=vrest1, sub=vrest2)
-    vlang2 = rot_sub_data(ref=vlang1, sub=vlang2)
+    vlang1 = rot_sub_data(ref=vrest1, sub=vlang1)
+    vlang2 = rot_sub_data(ref=vrest2, sub=vlang2)
 
-    rho2 += sp.sum(vrest1*vrest2, axis=1)/vrest1.shape[1]
-    rho2lang += sp.sum(vlang1*vlang2, axis=1)/vlang1.shape[1]
+    rho1rot += sp.sum(vrest1*vlang1, axis=1)/vrest1.shape[1]
+    rho2rot += sp.sum(vrest2*vlang2, axis=1)/vlang1.shape[1]
 
 
 rho1 = smooth_surf_function(dfs_left_sm, rho1, a1=0, a2=1)
-rho2 = smooth_surf_function(dfs_left_sm, rho2, a1=0, a2=1)
+rho1rot = smooth_surf_function(dfs_left_sm, rho1rot, a1=0, a2=1)
 
 view_patch(dfs_left_sm, rho1/len(lst), clim=[0, 1],
-           outfile='rest_before_rot.png', show=0)
-view_patch(dfs_left_sm, rho2/len(lst), clim=[0, 1],
-           outfile='rest_after_rot.png', show=0)
+           outfile='rest1lang_before_rot.png', show=0)
+view_patch(dfs_left_sm, rho1rot/len(lst), clim=[0, 1],
+           outfile='rest1lang_after_rot.png', show=0)
 
-rho1lang = smooth_surf_function(dfs_left_sm, rho1lang, a1=0, a2=1)
-rho2lang = smooth_surf_function(dfs_left_sm, rho2lang, a1=0, a2=1)
+rho2 = smooth_surf_function(dfs_left_sm, rho2, a1=0, a2=1)
+rho2rot = smooth_surf_function(dfs_left_sm, rho2rot)
 
-view_patch(dfs_left_sm, rho1lang/len(lst), clim=[0,1],
-           outfile='lang_before_rot.png', show=0)
-view_patch(dfs_left_sm, rho2lang/len(lst),
-           clim=[0,1], outfile='lang_after_rot.png', show=0)
+view_patch(dfs_left_sm, rho2/len(lst), clim=[0,1],
+           outfile='rest2lang_before_rot.png', show=0)
+view_patch(dfs_left_sm, rho2rot/len(lst),
+           clim=[0,1], outfile='rest2lang_after_rot.png', show=0)
