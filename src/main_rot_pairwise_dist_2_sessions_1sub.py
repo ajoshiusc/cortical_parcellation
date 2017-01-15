@@ -27,6 +27,8 @@ dfs_left = readdfs(os.path.join(p_dir_ref, 'reference', ref + '.aparc.\
 a2009s.32k_fs.reduce3.left.dfs'))
 dfs_left_sm = readdfs(os.path.join(p_dir_ref, 'reference', ref + '.aparc.\
 a2009s.32k_fs.reduce3.very_smooth.left.dfs'))
+
+#view_patch_vtk(dfs_left_sm)
 rho_rho = []
 rho_all = []
 #lst=lst[:1]
@@ -38,7 +40,7 @@ LR_flag = msk['LR_flag']
 LR_flag = np.squeeze(LR_flag) != 0
 data = data['ftdata_NLM']
 temp = data[LR_flag, :]
-temp[1:1000, 1000:] = sp.randn(1000-1, -1000+temp.shape[1]) # temp[1000, :]
+temp[5000:6000, 500:700] = sp.randn(1000, 200) # temp[1000, :]
 m = np.mean(temp, 1)
 temp = temp - m[:, None]
 s = np.std(temp, 1)+1e-16
@@ -72,7 +74,10 @@ dist_all_rot = sub_data1-sub_data2
 
 plt.imshow(sp.absolute(dist_all_orig), aspect='auto', clim=(0.0, 5.0))
 plt.colorbar()
+plt.savefig('dist_before.pdf', dpi=300)
 plt.show()
+
 plt.imshow(sp.absolute(dist_all_rot), aspect='auto', clim=(0.0, 5.0))
 plt.colorbar()
+plt.savefig('dist_after.pdf', dpi=300)
 plt.show()
