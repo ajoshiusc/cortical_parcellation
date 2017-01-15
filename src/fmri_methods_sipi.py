@@ -163,13 +163,16 @@ brain.right.inner.cortex.dfs')
     labs=bci_bst.labels
     return labs
 
-def rot_sub_data(ref,sub):
+def rot_sub_data(ref,sub, area_weight=[]):
     """ref and sub matrices are of the form (vertices x time) """
-    xcorr=sp.dot((sub.T),ref)
+    if len(area_weight) == 0:
+        xcorr=sp.dot(sub.T, ref)
+    else:
+        xcorr=sp.dot((area_weight*sub).T, area_weight*ref)
     u,s,v=sp.linalg.svd(xcorr)
     R=sp.dot(v.T,u.T)
 #    print sp.linalg.det(R)
-    return sp.dot(sub,R.T)
+    return sp.dot(sub,R.T), R
 
 
 def show_slices(slices,vmax=None,vmin=None):
