@@ -65,7 +65,7 @@ LR_flag = np.squeeze(LR_flag) != 0
 
 # Length of window
 win_lengths = sp.arange(5, data.shape[1], 20)
-nboot = 20
+nboot = 200
 dist = sp.zeros((len(win_lengths), nboot))
 corr_diff = dist.copy()
 corr_mtx_diff = dist.copy()
@@ -126,5 +126,13 @@ for nb, iWinL in itertools.product(nbootiter, sp.arange(len(win_lengths))):
     print(nb, WinL, dist[iWinL, nb], corr_diff[iWinL, nb],
           corr_mtx_diff[iWinL, nb])
 
-sp.savez_compressed('Corr_dist_nsamples.npz', corr_diff=corr_diff,
+sp.savez_compressed('Corr_dist_nsamples_200.npz', corr_diff=corr_diff,
                     corr_mtx_diff=corr_mtx_diff, dist=dist)
+
+##
+data=sp.load('Corr_dist_nsamples_200.npz')
+
+corr_mtx_diff = data['corr_mtx_diff']
+corr_diff = data['corr_diff']
+dist = data['corr_mtx_diff']
+
