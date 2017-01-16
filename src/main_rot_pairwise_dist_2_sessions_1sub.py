@@ -28,7 +28,7 @@ a2009s.32k_fs.reduce3.left.dfs'))
 dfs_left_sm = readdfs(os.path.join(p_dir_ref, 'reference', ref + '.aparc.\
 a2009s.32k_fs.reduce3.very_smooth.left.dfs'))
 
-#view_patch_vtk(dfs_left_sm)
+# view_patch_vtk(dfs_left_sm)
 rho_rho = []
 rho_all = []
 #lst=lst[:1]
