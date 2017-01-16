@@ -45,7 +45,7 @@ data = data['ftdata_NLM']
 #data = sp.squeeze(vlang.get_data()).T
 
 # Length of window
-WinT = 20
+WinT = 100
 
 dist = sp.zeros(data.shape[1]+1-WinT)
 for t in sp.arange(0, data.shape[1]+1-WinT):
@@ -58,14 +58,14 @@ for t in sp.arange(0, data.shape[1]+1-WinT):
     if t == 0:
         d_ref = d
 
-    drot = rot_sub_data(ref=d_ref, sub=d)
-    dist[t] = sp.linalg.norm(drot-d_ref)
+    drot, _ = rot_sub_data(ref=d_ref, sub=d)
+    dist[t] = sp.linalg.norm(drot - d_ref)
     d_ref = d
     print t, dist[t]
 
 plt.plot(dist)
 plt.ylabel('$L^2$ dist')
 plt.xlabel('time samples')
-plt.savefig('Rest_L1_windowed.png',dpi=200)
+plt.savefig('Rest_L1_windowed.png', dpi=200)
 plt.show()
 plt.draw()

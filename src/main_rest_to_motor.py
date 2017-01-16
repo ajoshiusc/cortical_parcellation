@@ -124,8 +124,8 @@ ults/rfMRI_REST1_LR/rfMRI_REST1_LR_Atlas_hp2000_clean.dtseries.nii')
     rho1 += sp.sum(vrest1*vmotor1, axis=1)/vrest1.shape[1]
     rho2 += sp.sum(vrest2*vmotor2, axis=1)/vmotor1.shape[1]
 
-    vmotor1 = rot_sub_data(ref=vrest1, sub=vmotor1, area_weight=sp.sqrt(surf_weight))
-    vmotor2 = rot_sub_data(ref=vrest2, sub=vmotor2, area_weight=sp.sqrt(surf_weight))
+    vmotor1, _ = rot_sub_data(ref=vrest1, sub=vmotor1, area_weight=sp.sqrt(surf_weight))
+    vmotor2, _ = rot_sub_data(ref=vrest2, sub=vmotor2, area_weight=sp.sqrt(surf_weight))
       
     rho1rot += sp.sum(vrest1*vmotor1, axis=1)/vrest1.shape[1]
     rho2rot += sp.sum(vrest2*vmotor2, axis=1)/vmotor1.shape[1]
