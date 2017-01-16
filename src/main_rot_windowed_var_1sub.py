@@ -116,15 +116,15 @@ for nb, iWinL in itertools.product(nbootiter, sp.arange(len(win_lengths))):
 #
     drot, _ = rot_sub_data(ref=d2, sub=d1)
     dist[iWinL, nb] = sp.linalg.norm((drot - d2)/sp.sqrt(WinL))
-    print nb, WinL, dist[iWinL, nb],
 
     corr_diff[iWinL, nb] = sp.median(sp.sum(drot * d2, axis=1)/d2.shape[1])
-
-    print corr_diff[iWinL, nb]
 
     corr_mtx = sp.sum(d1 * d2, axis=1)/d2.shape[1]
 
     corr_mtx_diff[iWinL, nb] = sp.linalg.norm(corr_mtx - full_corr)
 
-sp.savez_compressed('Corr_dist_nsamples.npz', corr_mtx_diff=corr_mtx_diff,
-                    corr_diff=corr_diff, dist=dist)
+    print(nb, WinL, dist[iWinL, nb], corr_diff[iWinL, nb],
+          corr_mtx_diff[iWinL, nb])
+
+sp.savez_compressed('Corr_dist_nsamples.npz', corr_diff=corr_diff,
+                    corr_mtx_diff=corr_mtx_diff, dist=dist)
