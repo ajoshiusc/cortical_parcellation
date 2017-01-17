@@ -11,6 +11,8 @@ import nibabel as nib
 import itertools
 from random import randint
 
+#%%
+
 p_dir = '/big_disk/ajoshi/HCP5'
 p_dir_ref = '/big_disk/ajoshi/HCP_data'
 lst = os.listdir(p_dir)
@@ -86,8 +88,8 @@ s = sp.std(temp, axis=1)+1e-116
 temp = temp/s[:, None]
 d2 = temp
 
-
-full_corr = sp.sum(d1 * d2, axis=1)/d2.shape[1]
+drot, _ = rot_sub_data(ref=d2, sub=d1)
+full_corr = sp.sum(drot * d2, axis=1)/d2.shape[1]
 
 for nb, iWinL in itertools.product(nbootiter, sp.arange(len(win_lengths))):
 
@@ -119,20 +121,41 @@ for nb, iWinL in itertools.product(nbootiter, sp.arange(len(win_lengths))):
 
     corr_diff[iWinL, nb] = sp.median(sp.sum(drot * d2, axis=1)/d2.shape[1])
 
-    corr_mtx = sp.sum(d1 * d2, axis=1)/d2.shape[1]
+    corr_mtx = sp.sum(drot * d2, axis=1)/d2.shape[1]
 
     corr_mtx_diff[iWinL, nb] = sp.linalg.norm(corr_mtx - full_corr)
 
     print(nb, WinL, dist[iWinL, nb], corr_diff[iWinL, nb],
           corr_mtx_diff[iWinL, nb])
 
-sp.savez_compressed('Corr_dist_nsamples_200.npz', corr_diff=corr_diff,
+sp.savez_compressed('Corr_dist_nsamples_200new.npz', corr_diff=corr_diff,
                     corr_mtx_diff=corr_mtx_diff, dist=dist)
 
-##
+#%%
+import seaborn as sns
+import matplotlib.pyplot as plt
+import pandas as pd
+
+win_lengths = sp.arange(5, 1200, 20)
+
 data=sp.load('Corr_dist_nsamples_200.npz')
 
 corr_mtx_diff = data['corr_mtx_diff']
 corr_diff = data['corr_diff']
-dist = data['corr_mtx_diff']
+dist = data['dist']
+df = []
 
+fig, ax = plt.subplots(1,1)
+plt.plot(win_lengths, sp.mean(corr_mtx_diff,axis=1))
+plt.savefig('corr_mtx_diff.png', dpi=300)
+plt.show()
+
+fig, ax = plt.subplots(1,1)
+plt.plot(win_lengths, sp.mean(corr_diff,axis=1))
+plt.savefig('corr_diff.png', dpi=300)
+plt.show()
+
+fig, ax = plt.subplots(1,1)
+plt.plot(win_lengths, sp.mean(dist,axis=1))
+plt.savefig('dist.png', dpi=300)
+plt.show()

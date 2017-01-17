@@ -6,6 +6,8 @@ from fmri_methods_sipi import rot_sub_data
 from surfproc import view_patch_vtk, view_patch, patch_color_attrib
 from dfsio import readdfs
 import os
+import itertools
+from random import randint
 
 p_dir = '/big_disk/ajoshi/HCP_data/data'
 p_dir_ref = '/big_disk/ajoshi/HCP_data'
@@ -41,16 +43,33 @@ data = data['ftdata_NLM']
 temp = data[LR_flag, :]
 m = np.mean(temp, 1)
 temp = temp - m[:, None]
-s = np.std(temp, 1)+1e-16
+s = np.std(temp, 1)+1e-116
 temp = temp/s[:, None]
-d1 = temp[cc_msk, :]
+d1 = temp  # [cc_msk, :]
+win_lengths = sp.arange(5, d1.shape[1], 20)
+nboot = 200
+nbootiter = sp.arange(nboot)
 
 cfull = sp.dot(d1, d1.T)/d1.shape[1]
 cnt = 0
 sz = sp.arange(2, d1.shape[1], 20)
-err = sp.zeros(sz.shape[0])
-for jj in sz:
-    c = sp.dot(d1[:, :jj], d1[:, :jj].T)/jj
-    err[cnt] = sp.linalg.norm(cfull-c)
-    print jj, err[cnt]
-    cnt += 1
+err = sp.zeros((len(win_lengths), nboot))
+
+for nb, iWinL in itertools.product(nbootiter, sp.arange(len(win_lengths))):
+    WinL = win_lengths[iWinL]
+    startpt = randint(0, data.shape[1])
+    t = sp.arange(startpt, startpt + WinL)
+    t = sp.mod(t, data.shape[1])
+    temp = data[LR_flag, :]
+    temp = temp[:, t]
+    m = np.mean(temp, 1)
+    temp = temp - m[:, None]
+    s = sp.std(temp, axis=1)+1e-116
+    temp = temp/s[:, None]
+    d1 = temp
+
+    c = sp.dot(d1, d1.T)/WinL
+    err[iWinL, nb] = sp.linalg.norm(cfull-c)
+    print WinL, nb, err[iWinL, nb]
+
+sp.savez_compressed('corr_samples.npz', err=err, win_lengths=win_lengths)
