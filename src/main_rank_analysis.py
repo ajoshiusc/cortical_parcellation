@@ -1,3 +1,10 @@
+# -*- coding: utf-8 -*-
+"""
+Spyder Editor
+
+This is a temporary script file.
+"""
+
 # ||AUM||
 import scipy.io
 import scipy as sp
@@ -7,7 +14,6 @@ from surfproc import view_patch_vtk, patch_color_attrib
 from dfsio import readdfs
 import os
 import matplotlib.pyplot as plt
-
 
 
 p_dir = '/big_disk/ajoshi/HCP_data/data'
@@ -27,7 +33,6 @@ dfs_left = readdfs(os.path.join(p_dir_ref, 'reference', ref + '.aparc.\
 a2009s.32k_fs.reduce3.left.dfs'))
 dfs_left_sm = readdfs(os.path.join(p_dir_ref, 'reference', ref + '.aparc.\
 a2009s.32k_fs.reduce3.very_smooth.left.dfs'))
-
 # view_patch_vtk(dfs_left_sm)
 rho_rho = []
 rho_all = []
@@ -40,7 +45,6 @@ LR_flag = msk['LR_flag']
 LR_flag = np.squeeze(LR_flag) != 0
 data = data['ftdata_NLM']
 temp = data[LR_flag, :]
-#temp = temp[:,0:30]
 #temp[5000:6000, 500:700] = sp.randn(1000, 200) # temp[1000, :]
 m = np.mean(temp, 1)
 temp = temp - m[:, None]
@@ -48,44 +52,22 @@ s = np.std(temp, 1)+1e-16
 temp = temp/s[:, None]
 d1 = temp
 
-data = scipy.io.loadmat(os.path.join(p_dir, sub, sub + '.rfMRI_REST2_LR.\
+data = scipy.io.loadmat(os.path.join(p_dir, sub, sub + '.rfMRI_REST1_RL.\
 reduce3.ftdata.NLM_11N_hvar_25.mat'))
 LR_flag = msk['LR_flag']
 LR_flag = np.squeeze(LR_flag) != 0
 data = data['ftdata_NLM']
 temp = data[LR_flag, :]
-#temp = temp[:,0:30]
-
+#temp[5000:6000, 500:700] = sp.randn(1000, 200) # temp[1000, :]
 m = np.mean(temp, 1)
 temp = temp - m[:, None]
 s = np.std(temp, 1)+1e-16
 temp = temp/s[:, None]
 d2 = temp
 
-sub_data1 = d1
-sub_data2 = d2
+## 
 
-
-dist_all_orig = sp.zeros(len(dfs_left_sm.vertices))
-dist_all_rot = dist_all_orig.copy()
-sub_data_orig1 = sub_data1.copy()
-sub_data_orig2 = sub_data2.copy()
-
-dist_all_orig = sub_data_orig1-sub_data_orig2
-sub_data2, Rot = rot_sub_data(ref=sub_data1, sub=sub_data2)
-dist_all_rot = sub_data1-sub_data2
-
-plt.imshow(sp.absolute(dist_all_orig), aspect='auto', clim=(0.0, 5.0))
-plt.colorbar()
-plt.savefig('dist_before.pdf', dpi=300)
-plt.show()
-
-plt.imshow(dist_all_rot, aspect='auto', clim=(0.0, 5.0))
-plt.colorbar()
-plt.savefig('dist_after.pdf', dpi=300)
-plt.show()
-plt.imshow(Rot, aspect='auto')
-plt.colorbar()
-plt.savefig('Rot.pdf', dpi=300)
-plt.show()
-plt.plot(Rot[1000,:])
+ev = np.linalg.eigvals(sp.dot(d1.T,d1))
+ev = -sp.sort(-ev)
+plt.plot(ev[2:100])
+plt.savefig('Eigvalue_spread.pdf')

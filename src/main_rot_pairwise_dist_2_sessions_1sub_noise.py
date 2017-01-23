@@ -40,8 +40,7 @@ LR_flag = msk['LR_flag']
 LR_flag = np.squeeze(LR_flag) != 0
 data = data['ftdata_NLM']
 temp = data[LR_flag, :]
-#temp = temp[:,0:30]
-#temp[5000:6000, 500:700] = sp.randn(1000, 200) # temp[1000, :]
+temp[5000:6000, 500:700] = sp.randn(1000, 200) # temp[1000, :]
 m = np.mean(temp, 1)
 temp = temp - m[:, None]
 s = np.std(temp, 1)+1e-16
@@ -54,8 +53,6 @@ LR_flag = msk['LR_flag']
 LR_flag = np.squeeze(LR_flag) != 0
 data = data['ftdata_NLM']
 temp = data[LR_flag, :]
-#temp = temp[:,0:30]
-
 m = np.mean(temp, 1)
 temp = temp - m[:, None]
 s = np.std(temp, 1)+1e-16
@@ -72,7 +69,7 @@ sub_data_orig1 = sub_data1.copy()
 sub_data_orig2 = sub_data2.copy()
 
 dist_all_orig = sub_data_orig1-sub_data_orig2
-sub_data2, Rot = rot_sub_data(ref=sub_data1, sub=sub_data2)
+sub_data2, _ = rot_sub_data(ref=sub_data1, sub=sub_data2)
 dist_all_rot = sub_data1-sub_data2
 
 plt.imshow(sp.absolute(dist_all_orig), aspect='auto', clim=(0.0, 5.0))
@@ -80,12 +77,7 @@ plt.colorbar()
 plt.savefig('dist_before.pdf', dpi=300)
 plt.show()
 
-plt.imshow(dist_all_rot, aspect='auto', clim=(0.0, 5.0))
+plt.imshow(sp.absolute(dist_all_rot), aspect='auto', clim=(0.0, 5.0))
 plt.colorbar()
 plt.savefig('dist_after.pdf', dpi=300)
 plt.show()
-plt.imshow(Rot, aspect='auto')
-plt.colorbar()
-plt.savefig('Rot.pdf', dpi=300)
-plt.show()
-plt.plot(Rot[1000,:])

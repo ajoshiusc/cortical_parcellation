@@ -74,6 +74,8 @@ rho1 = 0; rho1rot = 0; rho2 = 0; rho2rot = 0;
 # lst = [lst[0]]
 diffbefore = 0
 diffafter = 0
+vrest_all=sp.zeros(0)
+vmotor_all=sp.zeros(0);
 
 for sub in lst:
     vmotor = nib.load('/big_disk/ajoshi/with_andrew/For_Anand/tf\
@@ -85,7 +87,7 @@ MRI_MOTOR_RL/tfMRI_MOTOR_RL_Atlas.dtseries.nii')
     m = np.mean(vrest, 1)
     vrest = vrest - m[:, None]
     s = np.std(vrest, 1)+1e-116
-    vmotor1 = vrest/s[:, None]
+    vmotor1 = sp.array(vrest/s[:, None])
 
     vmotor = nib.load('/big_disk/ajoshi/with_andrew/For_Anand/tf\
 MRI_MOTOR_LR/tfMRI_MOTOR_LR_Atlas.dtseries.nii')
@@ -96,7 +98,7 @@ MRI_MOTOR_LR/tfMRI_MOTOR_LR_Atlas.dtseries.nii')
     m = np.mean(vrest, 1)
     vrest = vrest - m[:, None]
     s = np.std(vrest, 1)+1e-116
-    vmotor2 = vrest/s[:, None]    
+    vmotor2 = sp.array(vrest/s[:, None])    
 
     vrest = nib.load('/big_disk/ajoshi/HCP5/' + sub + '/MNINonLinear/Resu\
 lts/rfMRI_REST2_LR/rfMRI_REST2_LR_Atlas_hp2000_clean.dtseries.nii')    
@@ -108,7 +110,7 @@ lts/rfMRI_REST2_LR/rfMRI_REST2_LR_Atlas_hp2000_clean.dtseries.nii')
     m = np.mean(vrest, 1)
     vrest = vrest - m[:, None]
     s = sp.std(vrest, axis=1) +1e-116
-    vrest1 = vrest/s[:, None]
+    vrest1 = sp.array((vrest/s[:, None]))
 
     vrest = nib.load('/big_disk/ajoshi/HCP5/' + sub + '/MNINonLinear/Res\
 ults/rfMRI_REST1_LR/rfMRI_REST1_LR_Atlas_hp2000_clean.dtseries.nii')
@@ -120,45 +122,47 @@ ults/rfMRI_REST1_LR/rfMRI_REST1_LR_Atlas_hp2000_clean.dtseries.nii')
     m = np.mean(vrest, 1)
     vrest = vrest - m[:, None]
     s = np.std(vrest, 1) + 1e-116
-    vrest2 = vrest/s[:, None]
-
-
-    rho1 += sp.sum(vrest1*vmotor1, axis=1)/vrest1.shape[1]
-    rho2 += sp.sum(vrest2*vmotor2, axis=1)/vmotor1.shape[1]
-
-    diffbefore += vrest1 - vmotor1
-
-    vmotor1, _ = rot_sub_data(ref=vrest1, sub=vmotor1, area_weight=sp.sqrt(surf_weight))
-    vmotor2, _ = rot_sub_data(ref=vrest2, sub=vmotor2, area_weight=sp.sqrt(surf_weight))
-      
-    rho1rot += sp.sum(vrest1*vmotor1, axis=1)/vrest1.shape[1]
-    rho2rot += sp.sum(vrest2*vmotor2, axis=1)/vmotor1.shape[1]
+    vrest2 = sp.array((vrest/s[:, None]))
     
-    diffafter += vrest1 - vmotor1
+    if len(vrest_all) == 0:
+        vrest_all = vrest1
+    else:
+        vrest_all = sp.concatenate((vrest_all,vrest1), axis=1)
+        
+    vrest_all = sp.concatenate((vrest_all,vrest2), axis=1)
 
+    if len(vmotor_all) == 0:
+        vmotor_all = vmotor1
+    else:
+        vmotor_all = sp.concatenate((vmotor_all,vmotor1), axis=1)
+        
+    vmotor_all = sp.concatenate((vmotor_all,vmotor2), axis=1)
+        
 
-    plt.imshow(sp.absolute(diffbefore), aspect='auto', clim=(0.0, 5.0))
-    plt.colorbar()
-    plt.savefig('dist_motor_before.pdf', dpi=300)
-    plt.show()
+rho = sp.sum(vrest_all*vmotor_all, axis=1)/vrest_all.shape[1]
 
-    plt.imshow(sp.absolute(diffafter), aspect='auto', clim=(0.0, 5.0))
-    plt.colorbar()
-    plt.savefig('dist_motor_after.pdf', dpi=300)
-    plt.show()
+diffbefore = vrest_all - vmotor_all
 
-rho1 = smooth_surf_function(dfs_left_sm, rho1, a1=0, a2=1)
-rho1rot = smooth_surf_function(dfs_left_sm, rho1rot, a1=0, a2=1)
+vmotor_all, _ = rot_sub_data(ref=vrest_all, sub=vmotor_all, area_weight=sp.sqrt(surf_weight))
+      
+rho_rot = sp.sum(vrest_all*vmotor_all, axis=1)/vrest_all.shape[1]
+    
+diffafter = vrest_all - vmotor_all
 
-view_patch(dfs_left_sm, rho1/len(lst), clim=[0, 1],
+plt.imshow(sp.absolute(diffbefore), aspect='auto', clim=(0.0, 5.0))
+plt.colorbar()
+plt.savefig('dist_motor_before.pdf', dpi=300)
+plt.show()
+
+plt.imshow(sp.absolute(diffafter), aspect='auto', clim=(0.0, 5.0))
+plt.colorbar()
+plt.savefig('dist_motor_after.pdf', dpi=300)
+plt.show()
+
+#rho = smooth_surf_function(dfs_left_sm, rho, a1=0, a2=1)
+#rho_rot = smooth_surf_function(dfs_left_sm, rho_rot, a1=0, a2=1)
+
+view_patch(dfs_left_sm, rho, clim=[0, 1],
            outfile='rest1motor_before_rot.png', show=0)
-view_patch(dfs_left_sm, rho1rot/len(lst), clim=[0, 1],
+view_patch(dfs_left_sm, rho_rot, clim=[0, 1],
            outfile='rest1motor_after_rot.png', show=0)
-
-rho2 = smooth_surf_function(dfs_left_sm, rho2, a1=0, a2=1)
-rho2rot = smooth_surf_function(dfs_left_sm, rho2rot, a1=0, a2=1)
-
-view_patch(dfs_left_sm, rho2/len(lst), clim=[0,1],
-           outfile='rest2motor_before_rot.png', show=0)
-view_patch(dfs_left_sm, diffafter, rho2rot/len(lst),
-           clim=[0,1], outfile='rest2motor_after_rot.png', show=0)

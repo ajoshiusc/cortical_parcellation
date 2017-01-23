@@ -13,7 +13,7 @@ from random import randint
 
 #%%
 
-p_dir = '/big_disk/ajoshi/HCP5'
+p_dir = '/big_disk/ajoshi/HCP_data/data' #'/big_disk/ajoshi/HCP5'
 p_dir_ref = '/big_disk/ajoshi/HCP_data'
 lst = os.listdir(p_dir)
 
@@ -37,26 +37,26 @@ rho_all = []
 labs_all = sp.zeros((len(dfs_left.labels), len(lst)))
 
 sub = lst[0]
-# data = scipy.io.loadmat(os.path.join(p_dir, sub, sub + '.rfMRI_REST1_LR.\
-# reduce3.ftdata.NLM_11N_hvar_25.mat'))
-vrest = nib.load('/big_disk/ajoshi/HCP5/' + sub + '/MNINonLinear/Resu\
-lts/rfMRI_REST1_LR/rfMRI_REST1_LR_Atlas_hp2000_clean.dtseries.nii')
-data = sp.squeeze(vrest.get_data()).T
+data = scipy.io.loadmat(os.path.join(p_dir, sub, sub + '.rfMRI_REST1_LR.\
+reduce3.ftdata.NLM_11N_hvar_25.mat'))
+#vrest = nib.load('/big_disk/ajoshi/HCP5/' + sub + '/MNINonLinear/Resu\
+#lts/rfMRI_REST1_LR/rfMRI_REST1_LR_Atlas_hp2000_clean.dtseries.nii')
+#data = sp.squeeze(vrest.get_data()).T
 
 LR_flag = msk['LR_flag']
 LR_flag = np.squeeze(LR_flag) != 0
-# data = data['ftdata_NLM']
+data = data['ftdata_NLM']
 
 
-# data2 = scipy.io.loadmat(os.path.join(p_dir, sub, sub + '.rfMRI_REST2_LR.\
-# reduce3.ftdata.NLM_11N_hvar_25.mat'))
-vrest = nib.load('/big_disk/ajoshi/HCP5/' + sub + '/MNINonLinear/Resu\
-lts/rfMRI_REST2_LR/rfMRI_REST2_LR_Atlas_hp2000_clean.dtseries.nii')
-data2 = sp.squeeze(vrest.get_data()).T
+data2 = scipy.io.loadmat(os.path.join(p_dir, sub, sub + '.rfMRI_REST2_LR.\
+reduce3.ftdata.NLM_11N_hvar_25.mat'))
+#vrest = nib.load('/big_disk/ajoshi/HCP5/' + sub + '/MNINonLinear/Resu\
+#lts/rfMRI_REST2_LR/rfMRI_REST2_LR_Atlas_hp2000_clean.dtseries.nii')
+#data2 = sp.squeeze(vrest.get_data()).T
 
 LR_flag = msk['LR_flag']
 LR_flag = np.squeeze(LR_flag) != 0
-# data2 = data2['ftdata_NLM']
+data2 = data2['ftdata_NLM']
 
 # vlang=nib.load('/big_disk/ajoshi/HCP5/' + '100307'
 # + '/MNINonLinear/Results/tfMRI_LANGUAGE_LR/tfMRI_LANGUAGE_LR_Atlas\
@@ -128,7 +128,7 @@ for nb, iWinL in itertools.product(nbootiter, sp.arange(len(win_lengths))):
     print(nb, WinL, dist[iWinL, nb], corr_diff[iWinL, nb],
           corr_mtx_diff[iWinL, nb])
 
-sp.savez_compressed('Corr_dist_nsamples_200new.npz', corr_diff=corr_diff,
+sp.savez_compressed('Corr_dist_nsamples_200tNLM.npz', corr_diff=corr_diff,
                     corr_mtx_diff=corr_mtx_diff, dist=dist)
 
 #%%
@@ -138,7 +138,7 @@ import pandas as pd
 
 win_lengths = sp.arange(5, 1200, 20)
 
-data=sp.load('Corr_dist_nsamples_200.npz')
+data=sp.load('Corr_dist_nsamples_200tNLM.npz')
 
 corr_mtx_diff = data['corr_mtx_diff']
 corr_diff = data['corr_diff']
@@ -147,15 +147,15 @@ df = []
 
 fig, ax = plt.subplots(1,1)
 plt.plot(win_lengths, sp.mean(corr_mtx_diff,axis=1))
-plt.savefig('corr_mtx_diff.png', dpi=300)
+plt.savefig('corr_mtx_difftNLM.png', dpi=300)
 plt.show()
 
 fig, ax = plt.subplots(1,1)
 plt.plot(win_lengths, sp.mean(corr_diff,axis=1))
-plt.savefig('corr_diff.png', dpi=300)
+plt.savefig('corr_difftNLM.png', dpi=300)
 plt.show()
 
 fig, ax = plt.subplots(1,1)
 plt.plot(win_lengths, sp.mean(dist,axis=1))
-plt.savefig('dist.png', dpi=300)
+plt.savefig('disttNLM.png', dpi=300)
 plt.show()
