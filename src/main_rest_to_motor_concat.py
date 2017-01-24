@@ -31,6 +31,18 @@ dfs_left = readdfs(os.path.join(p_dir_ref, 'reference', ref + '.aparc\
 dfs_left_sm = readdfs(os.path.join(p_dir_ref, 'reference', ref + '.aparc\
 .a2009s.32k_fs.reduce3.very_smooth.left.dfs'))
 
+ind_subsample = sp.arange(start=0, stop=dfs_left.labels.shape[0],step=100)
+ind_rois_orig = sp.in1d(dfs_left.labels,[46])
+ind_rois = ind_rois_orig
+ind_rois[ind_subsample] = 1
+#ind_rois = sp.union1d(ind_subsample, ind_rois)
+dfs_left_sm.attributes = ind_rois
+dfs_left_sm = patch_color_attrib(dfs_left_sm)
+view_patch_vtk(dfs_left_sm, show=1)
+
+#view_patch(surf1, show=1)
+
+
 surf1 = dfs_left_sm
 X = surf1.vertices[:, 0]
 Y = surf1.vertices[:, 1]
@@ -65,7 +77,7 @@ surf_weight = surf_weight[:, None]
 # smooth_surf_function(dfs_left_sm, Wt*Ar*0.1, a1=0, a2=1)
 surf1 = patch_color_attrib(surf1)
 
-view_patch(surf1, show=1)
+#view_patch(surf1, show=1)
 
 # sub = '110411'
 # p_dir = '/home/ajoshi/data/HCP_data'
@@ -76,7 +88,7 @@ diffbefore = 0
 diffafter = 0
 vrest_all=sp.zeros(0)
 vmotor_all=sp.zeros(0);
-
+#lst = [lst[0]]
 for sub in lst:
     vmotor = nib.load('/big_disk/ajoshi/with_andrew/For_Anand/tf\
 MRI_MOTOR_RL/tfMRI_MOTOR_RL_Atlas.dtseries.nii')
@@ -84,6 +96,7 @@ MRI_MOTOR_RL/tfMRI_MOTOR_RL_Atlas.dtseries.nii')
     LR_flag = np.squeeze(LR_flag) > 0
     data = sp.squeeze(vmotor.get_data()).T
     vrest = data[LR_flag]
+    vrest = vrest[ind_rois,]
     m = np.mean(vrest, 1)
     vrest = vrest - m[:, None]
     s = np.std(vrest, 1)+1e-116
@@ -95,6 +108,7 @@ MRI_MOTOR_LR/tfMRI_MOTOR_LR_Atlas.dtseries.nii')
     LR_flag = np.squeeze(LR_flag) > 0
     data = sp.squeeze(vmotor.get_data()).T
     vrest = data[LR_flag]
+    vrest = vrest[ind_rois,]
     m = np.mean(vrest, 1)
     vrest = vrest - m[:, None]
     s = np.std(vrest, 1)+1e-116
@@ -107,6 +121,7 @@ lts/rfMRI_REST2_LR/rfMRI_REST2_LR_Atlas_hp2000_clean.dtseries.nii')
     data = sp.squeeze(vrest.get_data()).T
     vrest = data[LR_flag]
     vrest = vrest[:, :vmotor1.shape[1]]    # make their length same
+    vrest = vrest[ind_rois,]
     m = np.mean(vrest, 1)
     vrest = vrest - m[:, None]
     s = sp.std(vrest, axis=1) +1e-116
@@ -119,6 +134,7 @@ ults/rfMRI_REST1_LR/rfMRI_REST1_LR_Atlas_hp2000_clean.dtseries.nii')
     data = sp.squeeze(vrest.get_data()).T
     vrest = data[LR_flag]
     vrest = vrest[:, :vmotor1.shape[1]]    
+    vrest = vrest[ind_rois,]
     m = np.mean(vrest, 1)
     vrest = vrest - m[:, None]
     s = np.std(vrest, 1) + 1e-116
@@ -143,7 +159,7 @@ rho = sp.sum(vrest_all*vmotor_all, axis=1)/vrest_all.shape[1]
 
 diffbefore = vrest_all - vmotor_all
 
-vmotor_all, _ = rot_sub_data(ref=vrest_all, sub=vmotor_all, area_weight=sp.sqrt(surf_weight))
+vmotor_all, _ = rot_sub_data(ref=vrest_all, sub=vmotor_all, area_weight=sp.sqrt(surf_weight[ind_rois]))
       
 rho_rot = sp.sum(vrest_all*vmotor_all, axis=1)/vrest_all.shape[1]
     
@@ -162,7 +178,16 @@ plt.show()
 #rho = smooth_surf_function(dfs_left_sm, rho, a1=0, a2=1)
 #rho_rot = smooth_surf_function(dfs_left_sm, rho_rot, a1=0, a2=1)
 
-view_patch(dfs_left_sm, rho, clim=[0, 1],
-           outfile='rest1motor_before_rot.png', show=0)
-view_patch(dfs_left_sm, rho_rot, clim=[0, 1],
-           outfile='rest1motor_after_rot.png', show=0)
+
+rho_full=sp.zeros((surf1.attributes.shape[0]))
+rho_full[ind_rois] = rho
+dfs_left_sm.attributes = rho_full        
+dfs_left_sm = patch_color_attrib(dfs_left_sm)
+view_patch_vtk(dfs_left_sm, outfile='rest1motor_before_rot.png', show=1)
+rho_full[ind_rois] = rho_rot
+dfs_left_sm.attributes = rho_full
+dfs_left_sm = patch_color_attrib(dfs_left_sm)
+view_patch_vtk(dfs_left_sm, outfile='rest1motor_after_rot.png', show=1)
+
+rho_full[ind_rois_orig]
+ind_rois_orig = 
