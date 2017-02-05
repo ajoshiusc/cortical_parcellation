@@ -19,6 +19,38 @@ import matplotlib.cm as cmx
 import matplotlib.colors as colors
 
 
+def surf_weight(surf1):
+    X = surf1.vertices[:, 0]
+    Y = surf1.vertices[:, 1]
+    Z = surf1.vertices[:, 2]
+    NumTri = surf1.faces.shape[0]
+    #    NumVertx = X.shape[0]
+    vertx_1 = surf1.faces[:, 0]
+    vertx_2 = surf1.faces[:, 1]
+    vertx_3 = surf1.faces[:, 2]
+    V1 = np.column_stack((X[vertx_1], Y[vertx_1], Z[vertx_1]))
+    V2 = np.column_stack((X[vertx_2], Y[vertx_2], Z[vertx_2]))
+    V3 = np.column_stack((X[vertx_3], Y[vertx_3], Z[vertx_3]))
+    x1 = np.zeros((NumTri))
+    y1 = np.zeros((NumTri))
+    v2_v1temp = V2-V1
+    x2 = np.linalg.norm(v2_v1temp, axis=1)
+    y2 = np.zeros((NumTri))
+    x3 = np.einsum('ij,ij->i', (V3-V1),
+                   (v2_v1temp/np.column_stack((x2, x2, x2))))
+    mynorm = np.cross((v2_v1temp), V3-V1, axis=1)
+    yunit = np.cross(mynorm, v2_v1temp, axis=1)
+    y3 = np.einsum('ij,ij->i', yunit, (V3-V1))/np.linalg.norm(yunit, axis=1)
+    sqrt_DT = (np.abs((x1*y2 - y1*x2)+(x2*y3 - y2*x3)+(x3*y1 - y3*x1)))
+    Ar = 0.5*(np.abs((x1*y2 - y1*x2)+(x2*y3 - y2*x3)+(x3*y1 - y3*x1)))
+    
+    TC = face_v_conn(surf1)
+    Wt = (1.0/3.0)*(TC)
+    # Wt = sp.sparse.spdiags(Wt*Ar, (0), NumTri, NumTri)
+    surf_weight = sp.sqrt(Wt*Ar)
+    return surf_weight
+    
+
 def patch_color_labels(s,freq=[1],cmap='Paired', shuffle=True):
     ''' color by freq of labels '''
     s.vColor = sp.zeros(s.vertices.shape)
