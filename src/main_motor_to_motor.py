@@ -44,7 +44,7 @@ surf1 = dfs_left_sm
 surf1.attributes = sp.zeros(surf1.vertices.shape[0])
 surf1.attributes[ind_rois] = 1 
 surf1 = patch_color_attrib(surf1)
-view_patch_vtk(surf1, show=1, azimuth=90, elevation=180, roll=90)
+view_patch_vtk(surf1, show=1, azimuth=90, elevation=180, roll=90, outfile='motor_region.png')
 
 # sub = '110411'
 # p_dir = '/home/ajoshi/data/HCP_data'
@@ -79,7 +79,7 @@ surf1.attributes[ind_rois] = tval[ind_rois]
 ind_max_t = sp.argmax(surf1.attributes[ind_rois])
 #ind_max_t = ind_rois[ind_max_t]
 surf1 = patch_color_attrib(surf1)
-view_patch_vtk(surf1, show=1, azimuth=90, elevation=180, roll=90)
+view_patch_vtk(surf1, show=1, azimuth=90, elevation=180, roll=90, outfile='motor_tscore.png')
 
 #vmotor1 = vmotor1[ind_rois,]
 #vrest = nib.load('/big_disk/ajoshi/HCP5/' + sub + '/MNINonLinear/Resu\
@@ -147,6 +147,7 @@ plt.plot(aaaorig,'g')
 plt.plot(bbb,'b') 
 plt.show()  
 
+# Tongue
 tblock1 = sp.zeros(vmotor1.shape[1])
 tblock2 = sp.zeros(vmotor2.shape[1])
 tblock1[57:74] = 1
@@ -166,11 +167,98 @@ s = sp.std(tblock2) +1e-116
 tblock2 = tblock2/s
 
        
-plt.plot(tblock1/2,'r')
-plt.plot(tblock2/2,'g')
+plt.plot(tblock1,'r')
+plt.plot(tblock2,'g')
 blksynced = gaussian_filter(sp.dot(Rot,tblock1),[2]) 
 
 plt.plot(blksynced,'b')
-plt.savefig('synced_blocks.pdf')
+plt.savefig('synced_blocks_tongue.pdf')
 plt.show()       
+
+# Right foot
+tblock1 = sp.zeros(vmotor1.shape[1])
+tblock2 = sp.zeros(vmotor2.shape[1])
+tblock1[78:95] = 1
+tblock1[246:263] = 1
        
+tblock2[36:53] = 1
+tblock2[204:221] = 1
+
+m = np.mean(tblock1)
+tblock1 = tblock1 - m
+s = sp.std(tblock1) +1e-116
+tblock1 = tblock1/s
+
+m = np.mean(tblock2)
+tblock2 = tblock2 - m
+s = sp.std(tblock2) +1e-116
+tblock2 = tblock2/s
+#tblock1=gaussian_filter(tblock1,10)
+#tblock2=gaussian_filter(tblock2,10)
+       
+plt.plot(tblock1,'r')
+plt.plot(tblock2,'g')
+blksynced = gaussian_filter(sp.dot(Rot,tblock1),[2]) 
+
+plt.plot(blksynced,'b')
+plt.savefig('synced_blocks_right_foot.pdf')
+plt.show()       
+
+#righthand
+tblock1 = sp.zeros(vmotor1.shape[1])
+tblock2 = sp.zeros(vmotor2.shape[1])
+tblock1[15:32] = 1
+tblock1[182:199] = 1
+       
+tblock2[121:138] = 1
+tblock2[225:242] = 1
+
+m = np.mean(tblock1)
+tblock1 = tblock1 - m
+s = sp.std(tblock1) +1e-116
+tblock1 = tblock1/s
+
+m = np.mean(tblock2)
+tblock2 = tblock2 - m
+s = sp.std(tblock2) +1e-116
+tblock2 = tblock2/s
+#tblock1=gaussian_filter(tblock1,10)
+#tblock2=gaussian_filter(tblock2,10)
+       
+plt.plot(tblock1,'r')
+plt.plot(tblock2,'g')
+blksynced = gaussian_filter(sp.dot(Rot,tblock1),[2]) 
+
+plt.plot(blksynced,'b')
+plt.savefig('synced_blocks_right_hand.pdf')
+plt.show()       
+
+
+#lefthand
+tblock1 = sp.zeros(vmotor1.shape[1])
+tblock2 = sp.zeros(vmotor2.shape[1])
+tblock1[99:116] = 1
+tblock1[225:242] = 1
+       
+tblock2[15:32] = 1
+tblock2[162:179] = 1
+
+m = np.mean(tblock1)
+tblock1 = tblock1 - m
+s = sp.std(tblock1) +1e-116
+tblock1 = tblock1/s
+
+m = np.mean(tblock2)
+tblock2 = tblock2 - m
+s = sp.std(tblock2) +1e-116
+tblock2 = tblock2/s
+#tblock1=gaussian_filter(tblock1,10)
+#tblock2=gaussian_filter(tblock2,10)
+       
+plt.plot(tblock1,'r')
+plt.plot(tblock2,'g')
+blksynced = gaussian_filter(sp.dot(Rot,tblock1),[2]) 
+
+plt.plot(blksynced,'b')
+plt.savefig('synced_blocks_left_hand.pdf')
+plt.show()       
