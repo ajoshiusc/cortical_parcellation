@@ -110,14 +110,14 @@ diffafter = vmotor2 - vmotor1
 
 plt.imshow(sp.absolute(diffbefore), aspect='auto', clim=(0, 2.0))
 plt.colorbar()
-plt.savefig('dist_motor_before.pdf', dpi=300)
+plt.savefig('dist_motor_before.png', dpi=300)
 plt.show()
 
 diffafter = gaussian_filter(diffafter,[0,5]) 
 
 plt.imshow(sp.absolute(diffafter), aspect='auto', clim=(0, 2.0))
 plt.colorbar()
-plt.savefig('dist_motor_after.pdf', dpi=300)
+plt.savefig('dist_motor_after.png', dpi=300)
 plt.show()
 
 rho_full=sp.zeros((surf1.attributes.shape[0]))
@@ -143,7 +143,7 @@ bbb = vmotor2[ind_max_t,:]
 import matplotlib.pyplot as plt
 
 plt.plot(aaa,'r') 
-plt.plot(aaaorig,'g')
+plt.plot(aaaorig,'k')
 plt.plot(bbb,'b') 
 plt.show()  
 
@@ -168,11 +168,11 @@ tblock2 = tblock2/s
 
        
 plt.plot(tblock1,'r')
-plt.plot(tblock2,'g')
+plt.plot(tblock2,'k')
 blksynced = gaussian_filter(sp.dot(Rot,tblock1),[2]) 
 
 plt.plot(blksynced,'b')
-plt.savefig('synced_blocks_tongue.pdf')
+plt.savefig('synced_blocks_tongue.png',dpi=300)
 plt.show()       
 
 # Right foot
@@ -197,11 +197,11 @@ tblock2 = tblock2/s
 #tblock2=gaussian_filter(tblock2,10)
        
 plt.plot(tblock1,'r')
-plt.plot(tblock2,'g')
+plt.plot(tblock2,'k')
 blksynced = gaussian_filter(sp.dot(Rot,tblock1),[2]) 
 
 plt.plot(blksynced,'b')
-plt.savefig('synced_blocks_right_foot.pdf')
+plt.savefig('synced_blocks_right_foot.png',dpi=300)
 plt.show()       
 
 #righthand
@@ -226,11 +226,11 @@ tblock2 = tblock2/s
 #tblock2=gaussian_filter(tblock2,10)
        
 plt.plot(tblock1,'r')
-plt.plot(tblock2,'g')
+plt.plot(tblock2,'k')
 blksynced = gaussian_filter(sp.dot(Rot,tblock1),[2]) 
 
 plt.plot(blksynced,'b')
-plt.savefig('synced_blocks_right_hand.pdf')
+plt.savefig('synced_blocks_right_hand.png',dpi=300)
 plt.show()       
 
 
@@ -256,9 +256,9 @@ tblock2 = tblock2/s
 #tblock2=gaussian_filter(tblock2,10)
        
 plt.plot(tblock1,'r')
-plt.plot(tblock2,'g')
+plt.plot(tblock2,'k')
 blksynced = gaussian_filter(sp.dot(Rot,tblock1),[2]) 
 
 plt.plot(blksynced,'b')
-plt.savefig('synced_blocks_left_hand.pdf')
+plt.savefig('synced_blocks_left_hand.png',dpi=300)
 plt.show()       
