@@ -57,7 +57,7 @@ diffafter = 0
 sub = lst[0]
 vtscore = scipy.io.loadmat('/big_disk/ajoshi/with_andrew/100307/100307.reduce3.MOTOR_x100307_tfmri_motor_level2_t_avg_hp200_s4_tskdata.mat')
 
-vrest = scipy.io.loadmat('/big_disk/ajoshi/with_andrew/100307/100307.tfMRI_MOTOR_LR.reduce3.ftdata.NLM_11N_hvar_5.mat')
+vrest = scipy.io.loadmat('/big_disk/ajoshi/with_andrew/100307/100307.tfMRI_MOTOR_RL.reduce3.ftdata.NLM_11N_hvar_5.mat')
 #vrest = scipy.io.loadmat('/big_disk/ajoshi/with_andrew/100307/100307.tfMRI_LANGUAGE_RL.reduce3.ftdata.NLM_11N_hvar_0.45.mat')
 #vrest = scipy.io.loadmat('//big_disk/ajoshi/with_andrew/100307/100307.rfMRI_REST2_LR.reduce3.ftdata.NLM_11N_hvar_5.mat')
 
@@ -84,7 +84,7 @@ view_patch_vtk(surf1, show=1, azimuth=90, elevation=180, roll=90, outfile='motor
 #vmotor1 = vmotor1[ind_rois,]
 #vrest = nib.load('/big_disk/ajoshi/HCP5/' + sub + '/MNINonLinear/Resu\
 #lts/rfMRI_REST2_LR/rfMRI_REST2_LR_Atlas_hp2000_clean.dtseries.nii')    
-vrest = scipy.io.loadmat('/big_disk/ajoshi/with_andrew/100307/100307.tfMRI_MOTOR_RL.reduce3.ftdata.NLM_11N_hvar_5.mat')
+vrest = scipy.io.loadmat('/big_disk/ajoshi/with_andrew/100307/100307.tfMRI_MOTOR_LR.reduce3.ftdata.NLM_11N_hvar_5.mat')
 LR_flag = msk['LR_flag']
 LR_flag = np.squeeze(LR_flag) > 0
 data = vrest['ftdata_NLM']
@@ -167,12 +167,12 @@ s = sp.std(tblock2) +1e-116
 tblock2 = tblock2/s
 
        
-plt.plot(tblock1,'r')
-plt.plot(tblock2,'k')
-blksynced = gaussian_filter(sp.dot(Rot,tblock1),[2]) 
+plt.plot(tblock2,'r')
+plt.plot(tblock1,'k')
+blksynced = gaussian_filter(sp.dot(Rot,tblock2),[2]) 
 
 plt.plot(blksynced,'b')
-plt.savefig('synced_blocks_tongue.png',dpi=300)
+plt.savefig('synced_blocks_tongue2.png',dpi=300)
 plt.show()       
 
 # Right foot
@@ -196,12 +196,12 @@ tblock2 = tblock2/s
 #tblock1=gaussian_filter(tblock1,10)
 #tblock2=gaussian_filter(tblock2,10)
        
-plt.plot(tblock1,'r')
-plt.plot(tblock2,'k')
-blksynced = gaussian_filter(sp.dot(Rot,tblock1),[2]) 
+plt.plot(tblock2,'r')
+plt.plot(tblock1,'k')
+blksynced = gaussian_filter(sp.dot(Rot,tblock2),[2]) 
 
 plt.plot(blksynced,'b')
-plt.savefig('synced_blocks_right_foot.png',dpi=300)
+plt.savefig('synced_blocks_right_foot2.png',dpi=300)
 plt.show()       
 
 #righthand
@@ -225,12 +225,12 @@ tblock2 = tblock2/s
 #tblock1=gaussian_filter(tblock1,10)
 #tblock2=gaussian_filter(tblock2,10)
        
-plt.plot(tblock1,'r')
-plt.plot(tblock2,'k')
-blksynced = gaussian_filter(sp.dot(Rot,tblock1),[2]) 
+plt.plot(tblock2,'r')
+plt.plot(tblock1,'k')
+blksynced = gaussian_filter(sp.dot(Rot,tblock2),[2]) 
 
 plt.plot(blksynced,'b')
-plt.savefig('synced_blocks_right_hand.png',dpi=300)
+plt.savefig('synced_blocks_right_hand2.png',dpi=300)
 plt.show()       
 
 
@@ -255,10 +255,10 @@ tblock2 = tblock2/s
 #tblock1=gaussian_filter(tblock1,10)
 #tblock2=gaussian_filter(tblock2,10)
        
-plt.plot(tblock1,'r')
-plt.plot(tblock2,'k')
-blksynced = gaussian_filter(sp.dot(Rot,tblock1),[2]) 
+plt.plot(tblock2,'r')
+plt.plot(tblock1,'k')
+blksynced = gaussian_filter(sp.dot(Rot,tblock2),[2]) 
 
 plt.plot(blksynced,'b')
-plt.savefig('synced_blocks_left_hand.png',dpi=300)
+plt.savefig('synced_blocks_left_hand2.png',dpi=300)
 plt.show()       

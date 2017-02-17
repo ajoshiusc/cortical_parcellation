@@ -190,4 +190,4 @@ dfs_left_sm = patch_color_attrib(dfs_left_sm)
 view_patch_vtk(dfs_left_sm, outfile='rest1motor_after_rot.png', show=1)
 
 rho_full[ind_rois_orig]
-ind_rois_orig = 
+#ind_rois_orig = 
