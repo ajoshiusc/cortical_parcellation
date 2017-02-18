@@ -33,7 +33,7 @@ dfs_left_sm = readdfs(os.path.join(p_dir_ref, 'reference', ref + '.aparc\
 .a2009s.32k_fs.reduce3.very_smooth.left.dfs'))
 
 ind_subsample = sp.arange(start=0, stop=dfs_left.labels.shape[0],step=1)
-ind_rois_orig = sp.in1d(dfs_left.labels,[46]) #,3,4,28,29,68,69,70])
+ind_rois_orig = sp.in1d(dfs_left.labels,[46,3,4,28,29,68,69,70])
 ind_rois = sp.full(ind_rois_orig.shape[0], False ,dtype=bool)
 ind_rois = ind_rois_orig.copy()
 ind_rois[ind_subsample] = True
@@ -86,33 +86,71 @@ diffafter = 0
 
 sub = lst[0]
 
-vrest = scipy.io.loadmat('/big_disk/ajoshi/with_andrew/100307/100307.tfMRI_MOTOR_LR.reduce3.ftdata.NLM_11N_hvar_5.mat')
-#vrest = scipy.io.loadmat('/big_disk/ajoshi/with_andrew/100307/100307.tfMRI_LANGUAGE_RL.reduce3.ftdata.NLM_11N_hvar_0.45.mat')
-#vrest = scipy.io.loadmat('//big_disk/ajoshi/with_andrew/100307/100307.rfMRI_REST2_LR.reduce3.ftdata.NLM_11N_hvar_5.mat')
-
+vrest = scipy.io.loadmat('/big_disk/ajoshi/with_andrew/100307/100307.\
+tfMRI_MOTOR_LR.reduce3.ftdata.NLM_11N_hvar_5.mat')
 LR_flag = msk['LR_flag']
 LR_flag = np.squeeze(LR_flag) > 0
 data = vrest['ftdata_NLM']
 vrest = data[LR_flag]
-vrest = vrest[ind_rois,]
+vrest = vrest[ind_rois, ]
 m = np.mean(vrest, 1)
 vrest = vrest - m[:, None]
 s = np.std(vrest, 1)+1e-116
-vmotor1 = vrest/s[:, None]
+vmotor1_1 = vrest/s[:, None]
+
+vrest = scipy.io.loadmat('/big_disk/ajoshi/with_andrew/100307/100307.\
+tfMRI_MOTOR_RL.reduce3.ftdata.NLM_11N_hvar_5.mat')
+LR_flag = msk['LR_flag']
+LR_flag = np.squeeze(LR_flag) > 0
+data = vrest['ftdata_NLM']
+vrest = data[LR_flag]
+vrest = vrest[ind_rois, ]
+m = np.mean(vrest, 1)
+vrest = vrest - m[:, None]
+s = np.std(vrest, 1)+1e-116
+vmotor1_2 = vrest/s[:, None]
+
+vrest = scipy.io.loadmat('/big_disk/ajoshi/with_andrew/100307/100307.\
+tfMRI_LANGUAGE_LR.reduce3.ftdata.NLM_11N_hvar_5.mat')
+LR_flag = msk['LR_flag']
+LR_flag = np.squeeze(LR_flag) > 0
+data = vrest['ftdata_NLM']
+vrest = data[LR_flag]
+vrest = vrest[ind_rois, ]
+m = np.mean(vrest, 1)
+vrest = vrest - m[:, None]
+s = np.std(vrest, 1)+1e-116
+vmotor1_3 = vrest/s[:, None]
+
+vrest = scipy.io.loadmat('/big_disk/ajoshi/with_andrew/100307/100307.\
+tfMRI_LANGUAGE_RL.reduce3.ftdata.NLM_11N_hvar_5.mat')
+LR_flag = msk['LR_flag']
+LR_flag = np.squeeze(LR_flag) > 0
+data = vrest['ftdata_NLM']
+vrest = data[LR_flag]
+vrest = vrest[ind_rois, ]
+m = np.mean(vrest, 1)
+vrest = vrest - m[:, None]
+s = np.std(vrest, 1)+1e-116
+vmotor1_4 = vrest/s[:, None]
+
+vmotor1 = sp.concatenate((vmotor1_1, vmotor1_2, vmotor1_3, vmotor1_4), axis=1)
+
 #vmotor1 = vmotor1[ind_rois,]
 #vrest = nib.load('/big_disk/ajoshi/HCP5/' + sub + '/MNINonLinear/Resu\
 #lts/rfMRI_REST2_LR/rfMRI_REST2_LR_Atlas_hp2000_clean.dtseries.nii')    
-vrest = scipy.io.loadmat('/big_disk/ajoshi/with_andrew/100307/100307.rfMRI_REST1_LR.reduce3.ftdata.NLM_11N_hvar_5.mat')
+vrest = scipy.io.loadmat('/big_disk/ajoshi/with_andrew/100307/100307.\
+rfMRI_REST1_LR.reduce3.ftdata.NLM_11N_hvar_5.mat')
 LR_flag = msk['LR_flag']
 LR_flag = np.squeeze(LR_flag) > 0
 data = vrest['ftdata_NLM']
 #data = sp.squeeze(vrest.get_data()).T
 vrest = data[LR_flag]
-vrest = vrest[ind_rois,]
+vrest = vrest[ind_rois, ]
 vrest = vrest[:, :vmotor1.shape[1]]    # make their length same
 m = np.mean(vrest, 1)
 vrest = vrest - m[:, None]
-s = sp.std(vrest, axis=1) +1e-116
+s = sp.std(vrest, axis=1) + 1e-116
 vrest1 = vrest/s[:, None]
 
 rho1 = sp.sum(vrest1*vmotor1, axis=1)/vrest1.shape[1]
@@ -129,7 +167,8 @@ vmotor1, Rot = rot_sub_data(ref=vrest1, sub=vmotor1, area_weight=sp.sqrt(surf_we
 #vrest1=vrest1[:,140:157]
 #vmotor1=vmotor1[:,140:157]
 
-rho1rot = sp.sum(vrest1[:,15:32]*vmotor1[:,15:32], axis=1)/vrest1[:,15:32].shape[1]    
+rho1rot = sp.sum(vrest1*vmotor1,
+                 axis=1)/vrest1.shape[1]
 
 diffafter = vrest1 - vmotor1
 
@@ -140,31 +179,41 @@ plt.colorbar()
 plt.savefig('dist_motor_before.pdf', dpi=300)
 plt.show()
 
-diffafter = gaussian_filter(diffafter,[0,5]) 
+diffafter = gaussian_filter(diffafter, [0, 50])
 
-plt.imshow(sp.absolute(diffafter), aspect='auto', clim=(0, 2.0))
+plt.imshow(sp.absolute(diffafter), aspect='auto', clim=(0, .05))
 plt.colorbar()
 plt.savefig('dist_motor_after.pdf', dpi=300)
 plt.show()
 
-rho_full=sp.zeros((surf1.attributes.shape[0]))
+
+rho_full = sp.zeros((surf1.attributes.shape[0]))
 rho_full[ind_rois] = rho1
-dfs_left_sm.attributes = rho_full;
-dfs_left_sm=patch_color_attrib(dfs_left_sm,clim=[0,1])
-view_patch_vtk(dfs_left_sm, azimuth=90, elevation=180, roll=90, outfile='rest1motor_before_rot.png', show=1)
+dfs_left_sm.attributes = rho_full
+dfs_left_sm = patch_color_attrib(dfs_left_sm, clim=[0, 1])
+view_patch_vtk(dfs_left_sm, azimuth=90, elevation=180, roll=90,
+               outfile='rest1motor_before_rot.png', show=1)
 
    #dfs_left_sm.attributes = sp.absolute(diffafter[:,t])
 #    dfs_left_sm=patch_color_attrib(dfs_left_sm,clim=[0,1])
 #    view_patch_vtk(dfs_left_sm, azimuth=90, elevation=180, roll=90, outfile='rest1motrho_full=sp.zeros((surf1.attributes.shape[0]))
 rho_full[ind_rois] = rho1rot
-dfs_left_sm.attributes = rho_full;
-dfs_left_sm=patch_color_attrib(dfs_left_sm,clim=[0,.4])
-view_patch_vtk(dfs_left_sm, azimuth=90, elevation=180, roll=90, outfile='rest_vs_hand_after_rot1.png', show=1)
-view_patch_vtk(dfs_left_sm, azimuth=-90, elevation=180, roll=-90, outfile='rest_vs_hand_after_rot2.png', show=1)
+dfs_left_sm.attributes = rho_full
+dfs_left_sm = patch_color_attrib(dfs_left_sm, clim=[0, 1])
+view_patch_vtk(dfs_left_sm, azimuth=90, elevation=180, roll=90,
+               outfile='rest_vs_hand_after_rot1.png', show=1)
+view_patch_vtk(dfs_left_sm, azimuth=-90, elevation=180, roll=-90,
+               outfile='rest_vs_hand_after_rot2.png', show=1)
 
-for t in sp.arange(15,32):
-    dfs_left_sm.attributes = sp.absolute(diffafter[:,t])
-    dfs_left_sm = patch_color_attrib(dfs_left_sm,clim=[0,.6])
-    view_patch_vtk(dfs_left_sm, azimuth=90, elevation=180, roll=90, show=1)
-    
-    
+
+#plt.plot(rho1)
+#
+#for t in sp.arange(15,32):
+#    dfs_left_sm.attributes = sp.absolute(diffafter[:,t])
+#    dfs_left_sm = patch_color_attrib(dfs_left_sm,clim=[0,.6])
+#    view_patch_vtk(dfs_left_sm, azimuth=90, elevation=180, roll=90, show=1)
+#    
+#    
+
+plt.imshow(vrest1[ind_rois_orig,:],aspect=1)
+plt.savefig('motor.pdf')
