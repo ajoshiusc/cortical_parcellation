@@ -203,9 +203,9 @@ rho_full[ind_rois] = rho1rot
 dfs_left_sm.attributes = rho_full
 dfs_left_sm = patch_color_attrib(dfs_left_sm, clim=[0, 1])
 view_patch_vtk(dfs_left_sm, azimuth=90, elevation=180, roll=90,
-               outfile='rest_vs_hand_after_rot1.png', show=1)
+               outfile='rest_vs_motor_after_rot1.png', show=1)
 view_patch_vtk(dfs_left_sm, azimuth=-90, elevation=180, roll=-90,
-               outfile='rest_vs_hand_after_rot2.png', show=1)
+               outfile='rest_vs_motor_after_rot2.png', show=1)
 
 
 #plt.plot(rho1)
@@ -216,18 +216,18 @@ view_patch_vtk(dfs_left_sm, azimuth=-90, elevation=180, roll=-90,
 #    view_patch_vtk(dfs_left_sm, azimuth=90, elevation=180, roll=90, show=1)
 #    
 #    
-rho = vrest1*vmotor1
-rho_s = gaussian_filter(rho,[0,10])
+diff = sp.absolute(vrest1 - vmotor1)
+diff_s = gaussian_filter(diff,[0,10])
 
 
 for ind in sp.arange(vmotor1.shape[1]):
-    dfs_left_sm.attributes = rho_s[:,ind]
-    fname1 = 'rest_vs_hand_after_rot_%d_d.png' % ind
-    fname2 = 'rest_vs_hand_after_rot_%d_m.png' % ind
+    dfs_left_sm.attributes = diff_s[:,ind]
+    fname1 = 'rest_vs_motor_after_rot_%d_d.png' % ind
+    fname2 = 'rest_vs_motor_after_rot_%d_m.png' % ind
     dfs_left_sm = patch_color_attrib(dfs_left_sm, clim=[0, 1])
     view_patch_vtk(dfs_left_sm, azimuth=90, elevation=180, roll=90,
                    outfile=fname1, show=0)
-#    view_patch_vtk(dfs_left_sm, azimuth=-90, elevation=180, roll=-90,
-#                   outfile=fname2, show=1)
+    view_patch_vtk(dfs_left_sm, azimuth=-90, elevation=180, roll=-90,
+                   outfile=fname2, show=0)
     print ind, 
 

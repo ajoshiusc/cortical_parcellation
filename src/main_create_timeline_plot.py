@@ -66,7 +66,7 @@ s[t[2]:t[3]] = 3
 so = s.copy()
 
 from pylab import rcParams
-rcParams['figure.figsize'] = 10, 1
+rcParams['figure.figsize'] = 20, 2
 for ind in sp.arange(1200):
 #    plt.figure(figsize=(1200,20))
     s = so.copy()
