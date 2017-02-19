@@ -415,7 +415,7 @@ def view_patch_vtk(r, azimuth=90, elevation=0, roll=-90, outfile=0, show=1):
     if show != 0:
         iren.Start()
 
-    #close_window(iren)
+    close_window(iren)
     del renWin, iren
 
 

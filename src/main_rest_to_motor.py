@@ -134,6 +134,8 @@ vrest = vrest - m[:, None]
 s = np.std(vrest, 1)+1e-116
 vmotor1_4 = vrest/s[:, None]
 
+
+
 vmotor1 = sp.concatenate((vmotor1_1, vmotor1_2, vmotor1_3, vmotor1_4), axis=1)
 
 #vmotor1 = vmotor1[ind_rois,]
@@ -214,6 +216,18 @@ view_patch_vtk(dfs_left_sm, azimuth=-90, elevation=180, roll=-90,
 #    view_patch_vtk(dfs_left_sm, azimuth=90, elevation=180, roll=90, show=1)
 #    
 #    
+rho = vrest1*vmotor1
+rho_s = gaussian_filter(rho,[0,10])
 
-plt.imshow(vrest1[ind_rois_orig,:],aspect=1)
-plt.savefig('motor.pdf')
+
+for ind in sp.arange(vmotor1.shape[1]):
+    dfs_left_sm.attributes = rho_s[:,ind]
+    fname1 = 'rest_vs_hand_after_rot_%d_d.png' % ind
+    fname2 = 'rest_vs_hand_after_rot_%d_m.png' % ind
+    dfs_left_sm = patch_color_attrib(dfs_left_sm, clim=[0, 1])
+    view_patch_vtk(dfs_left_sm, azimuth=90, elevation=180, roll=90,
+                   outfile=fname1, show=0)
+#    view_patch_vtk(dfs_left_sm, azimuth=-90, elevation=180, roll=-90,
+#                   outfile=fname2, show=1)
+    print ind, 
+
