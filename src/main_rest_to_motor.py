@@ -134,9 +134,23 @@ vrest = vrest - m[:, None]
 s = np.std(vrest, 1)+1e-116
 vmotor1_4 = vrest/s[:, None]
 
+vrest = scipy.io.loadmat('/big_disk/ajoshi/with_andrew/100307/100307.\
+rfMRI_REST2_LR.reduce3.ftdata.NLM_11N_hvar_5.mat')
+LR_flag = msk['LR_flag']
+LR_flag = np.squeeze(LR_flag) > 0
+data = vrest['ftdata_NLM']
+#data = sp.squeeze(vrest.get_data()).T
+vrest = data[LR_flag]
+vrest = vrest[ind_rois, ]
+#vrest = vrest[:, :vmotor1.shape[1]]    # make their length same
+m = np.mean(vrest, 1)
+vrest = vrest - m[:, None]
+s = sp.std(vrest, axis=1) + 1e-116
+vmotor1 = vrest/s[:, None]
 
 
-vmotor1 = sp.concatenate((vmotor1_1, vmotor1_2, vmotor1_3, vmotor1_4), axis=1)
+
+#vmotor1 = sp.concatenate((vmotor1_1, vmotor1_2, vmotor1_3, vmotor1_4), axis=1)
 
 #vmotor1 = vmotor1[ind_rois,]
 #vrest = nib.load('/big_disk/ajoshi/HCP5/' + sub + '/MNINonLinear/Resu\
@@ -203,9 +217,9 @@ rho_full[ind_rois] = rho1rot
 dfs_left_sm.attributes = rho_full
 dfs_left_sm = patch_color_attrib(dfs_left_sm, clim=[0, 1])
 view_patch_vtk(dfs_left_sm, azimuth=90, elevation=180, roll=90,
-               outfile='rest_vs_motor_after_rot1.png', show=1)
+               outfile='rest_vs_rest_after_rot1.png', show=1)
 view_patch_vtk(dfs_left_sm, azimuth=-90, elevation=180, roll=-90,
-               outfile='rest_vs_motor_after_rot2.png', show=1)
+               outfile='rest_vs_rest_after_rot2.png', show=1)
 
 
 #plt.plot(rho1)
@@ -222,8 +236,8 @@ diff_s = gaussian_filter(diff,[0,10])
 
 for ind in sp.arange(vmotor1.shape[1]):
     dfs_left_sm.attributes = diff_s[:,ind]
-    fname1 = 'rest_vs_motor_after_rot_%d_d.png' % ind
-    fname2 = 'rest_vs_motor_after_rot_%d_m.png' % ind
+    fname1 = 'rest_vs_rest_after_rot_%d_d.png' % ind
+    fname2 = 'rest_vs_rest_after_rot_%d_m.png' % ind
     dfs_left_sm = patch_color_attrib(dfs_left_sm, clim=[0, 1])
     view_patch_vtk(dfs_left_sm, azimuth=90, elevation=180, roll=90,
                    outfile=fname1, show=0)
