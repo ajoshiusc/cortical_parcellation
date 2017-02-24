@@ -693,7 +693,7 @@ XY^{t}=U\Sigma V^{t}
 The optimal orthogonal matrix is then given by 
 \begin_inset Formula 
 \[
-O^{s}=VU^{t}.
+O^{s}=UV^{T}.
 \]
 
 \end_inset

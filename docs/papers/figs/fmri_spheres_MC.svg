@@ -10,13 +10,13 @@
    xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="231.03322mm"
-   height="64.622375mm"
-   viewBox="0 0 818.62162 228.9769"
+   width="832.39911"
+   height="246.41556"
+   viewBox="0 0 832.39909 246.41555"
    id="svg2"
    version="1.1"
-   inkscape:version="0.91 r13725"
-   sodipodi:docname="fmri_spheres_MC.svg">
+   inkscape:version="0.48.5 r10040"
+   sodipodi:docname="fmri_spheres_MC.pdf">
   <defs
      id="defs4">
     <marker
@@ -61,7 +61,7 @@
          inkscape:connector-curvature="0"
          transform="matrix(-0.8,0,0,-0.8,-10,0)"
          style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
-         d="M 0,0 5,-5 -12.5,0 5,5 0,0 Z"
+         d="M 0,0 5,-5 -12.5,0 5,5 0,0 z"
          id="path4304" />
     </marker>
     <marker
@@ -417,21 +417,21 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.979899"
-     inkscape:cx="458.95873"
-     inkscape:cy="67.609043"
+     inkscape:zoom="0.9899495"
+     inkscape:cx="25.277076"
+     inkscape:cy="141.68887"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
      inkscape:window-width="1920"
-     inkscape:window-height="1018"
-     inkscape:window-x="-8"
-     inkscape:window-y="-8"
+     inkscape:window-height="1014"
+     inkscape:window-x="0"
+     inkscape:window-y="27"
      inkscape:window-maximized="1"
-     fit-margin-left="1"
-     fit-margin-top="1"
-     fit-margin-right="1"
-     fit-margin-bottom="1"
+     fit-margin-left="0"
+     fit-margin-top="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0"
      units="mm" />
   <metadata
      id="metadata7">
@@ -449,7 +449,7 @@
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
      id="layer1"
-     transform="translate(-36.406627,-31.093801)">
+     transform="translate(-38.217434,-41.132492)">
     <image
        y="41.46925"
        x="262.53516"
@@ -476,7 +476,7 @@
        width="185.89313" />
     <text
        xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:15.97928715px;line-height:125%;font-family:'Latin Modern Roman';-inkscape-font-specification:'Latin Modern Roman, Normal';text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="font-size:15.97928715px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Latin Modern Roman;-inkscape-font-specification:'Latin Modern Roman, Normal'"
        x="303.62479"
        y="252.15242"
        id="text3388"
@@ -485,10 +485,10 @@
          id="tspan3390"
          x="303.62479"
          y="252.15242"
-         style="font-size:17.5px">(b) Subject 1            (c) Subject 2         (d) Subject 2 - Synced</tspan></text>
+         style="font-size:24px">(b) Subject 1    (c) Subject 2   (d) Subject 2 - Synced</tspan></text>
     <text
        xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:17.5px;line-height:125%;font-family:'Latin Modern Roman';-inkscape-font-specification:'Latin Modern Roman, Normal';text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="font-size:17.5px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Latin Modern Roman;-inkscape-font-specification:'Latin Modern Roman, Normal'"
        x="38.217434"
        y="252.89204"
        id="text3441"
@@ -496,7 +496,13 @@
          sodipodi:role="line"
          id="tspan3443"
          x="38.217434"
-         y="252.89204">(a) Spherical Representation</tspan></text>
+         y="252.89204"
+         style="font-size:24px">(a)  Spherical </tspan><tspan
+         sodipodi:role="line"
+         x="38.217434"
+         y="282.89203"
+         style="font-size:24px"
+         id="tspan3076">     Representation</tspan></text>
     <image
        y="42.176418"
        x="50.450527"
@@ -507,7 +513,7 @@
        width="191.53833" />
     <text
        xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:15.27941036px;line-height:125%;font-family:'Latin Modern Roman';-inkscape-font-specification:'Latin Modern Roman, ';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="font-size:15.27941036px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Latin Modern Roman;-inkscape-font-specification:'Latin Modern Roman, '"
        x="202.8266"
        y="61.295952"
        id="text5427"
@@ -516,10 +522,10 @@
          id="tspan5429"
          x="202.8266"
          y="61.295952"
-         style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Latin Modern Roman';-inkscape-font-specification:'Latin Modern Roman, Italic';font-size:17.5px">d</tspan></text>
+         style="font-size:17.5px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Latin Modern Roman;-inkscape-font-specification:'Latin Modern Roman, Italic'">d</tspan></text>
     <text
        xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:15.27941036px;line-height:125%;font-family:'Latin Modern Roman';-inkscape-font-specification:'Latin Modern Roman, ';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="font-size:15.27941036px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Latin Modern Roman;-inkscape-font-specification:'Latin Modern Roman, '"
        x="138.44386"
        y="106.72561"
        id="text5427-4"
@@ -528,10 +534,10 @@
          id="tspan5429-0"
          x="138.44386"
          y="106.72561"
-         style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Latin Modern Roman';-inkscape-font-specification:'Latin Modern Roman, Italic';font-size:20px">u</tspan></text>
+         style="font-size:20px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Latin Modern Roman;-inkscape-font-specification:'Latin Modern Roman, Italic'">x</tspan></text>
     <text
        xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:15.27941036px;line-height:125%;font-family:'Latin Modern Roman';-inkscape-font-specification:'Latin Modern Roman, ';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="font-size:15.27941036px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Latin Modern Roman;-inkscape-font-specification:'Latin Modern Roman, '"
        x="180.98424"
        y="133.55806"
        id="text5449"
@@ -540,9 +546,9 @@
          id="tspan5451"
          x="180.98424"
          y="133.55806"
-         style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:20px;font-family:'Latin Modern Roman';-inkscape-font-specification:'Latin Modern Roman, Italic'">v</tspan></text>
+         style="font-size:20px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Latin Modern Roman;-inkscape-font-specification:'Latin Modern Roman, Italic'">y</tspan></text>
     <path
-       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.683;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-start:url(#marker5357);marker-end:url(#Arrow2Lend)"
+       style="fill:none;stroke:#000000;stroke-width:0.68300003;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker-start:url(#marker5357);marker-end:url(#Arrow2Lend)"
        d="M 171.50752,49.528991 C 223.7211,89.287956 223.7211,89.287956 223.7211,89.287956"
        id="path4256"
        inkscape:connector-curvature="0" />

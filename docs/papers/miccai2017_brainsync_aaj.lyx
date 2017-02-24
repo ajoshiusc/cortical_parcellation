@@ -1,0 +1,1865 @@
+#LyX 2.1 created this file. For more info see http://www.lyx.org/
+\lyxformat 474
+\begin_document
+\begin_header
+\textclass llncs
+\begin_preamble
+\usepackage{babel}
+\end_preamble
+\use_default_options false
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding iso8859-15
+\fontencoding global
+\font_roman lmodern
+\font_sans default
+\font_typewriter default
+\font_math auto
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+\graphics default
+\default_output_format pdf2
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_package amsmath 2
+\use_package amssymb 2
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 0
+\use_package mathtools 1
+\use_package mhchem 0
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+BrainSync: An Orthogonal Transformation for Synchronization of fMRI Data
+ Across Subjects
+\end_layout
+
+\begin_layout Author
+*****
+\end_layout
+
+\begin_layout Institute
+*****
+\end_layout
+
+\begin_layout Abstract
+We describe a method that allows direct comparison of resting fMRI (rfMRI)
+ time series across subjects.
+ For this purpose, we exploit the geometry of the rfMRI signal space to
+ conjecture the existence of an orthogonal transformation that synchronizes
+ fMRI time series across sessions and subjects.
+ The method is based on the observation that rfMRI data exhibit similar
+ connectivity patterns across subjects, as reflected in the pairwise correlation
+ between different brain regions.
+ This orthogonal transformation that performs the synchronization is unique,
+ invertible, efficient to compute, and preserves the connectivity structure
+ of the original data for all subjects.
+ Similarly to image registration, where we spatially align the anatomical
+ brain images, this synchronization of brain signals across a population
+ or within subject across sessions facilitates longitudinal and cross-sectional
+ studies of rfMRI data.
+ The utility of this transformation is demonstrated by applications to quantific
+ation of fMRI variability across subjects and sessions, joint cortical clusterin
+g of a population.
+ While this method is designed for resting fMRI, we also show its utility
+ for simple task data by predicting task timing and direct comparison of
+ task and resting fMRI.
+ 
+\end_layout
+
+\begin_layout Section
+Introduction
+\end_layout
+
+\begin_layout Standard
+Resting fMRI (rfMRI) is being increasingly used to study brain connectivity
+ and functional organization 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "smith2013functional"
+
+\end_inset
+
+.
+ It is also used for longitudinal studies of brain development and as a
+ diagnostic biomarker in cross-sectional studies for various neurological
+ and psychological diseases and conditions 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "redcay2013intrinsic,posner2014connecting"
+
+\end_inset
+
+.
+ Large scale connectivity information derived from fMRI can be used to delineate
+ functional regions 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "biswal1995functional"
+
+\end_inset
+
+.
+ By extension, identification of multiple contiguous areas, each of which
+ exhibits distinct connectivity to the rest of the brain, can be used to
+ define a functional parcellation of the entire cerebral cortex 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "sporns2005human,smith2013functional"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Since rfMRI data reflect spontaneous brain activity, it is not possible
+ to directly compare signals across subjects 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "iraji2016connectivity"
+
+\end_inset
+
+.
+ Instead, comparisons make use of connectivity features, typically computed
+ from pairwise correlations of the rfMRI time series between a point of
+ interest and other locations in the brain 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "fan2015functional,craddock2012whole"
+
+\end_inset
+
+.
+ For analysis of cerebral cortex, it is common to compute a feature vector
+ at each location on a tessellated representation of the cortex as the correlati
+on from that vertex to all other vertices.
+ This is a very high dimensional feature and often requires dimensionality
+ reduction or down-sampling for use in multi-subject comparisons.
+ An alternative approach for inter-subjects comparisons is to use group
+ independent component analysis (ICA) 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "calhoun2009review"
+
+\end_inset
+
+.
+ Group ICA concatenates rfMRI data from multiple subjects and represents
+ the data as a summation of independent spatial or temporal components.
+ In this way common networks across subjects can be identified.
+\end_layout
+
+\begin_layout Standard
+Here we describe a novel method for inter-subject comparison of fMRI signals
+ in which a transformation is applied that allows direct comparison of time
+ series across subjects.
+ We use the geometry of normalized (zero mean, unit length) time series
+ to represent the rfMRI data as a set of labeled points on the hypersphere.
+ We then conjecture the existence of an orthogonal transformation, which
+ we refer to as 
+\emph on
+BrainSync
+\emph default
+, that makes the rfMRI from two subjects directly comparable.
+ BrainSync retains the original signal geometry by preserving the pairwise
+ geodesic distances between all pairs of points on the hypersphere while
+ also temporally aligning or synchronizing the two scans.
+ This synchronization results in an approximate matching of the time series
+ at homologous locations across subjects.
+ This synchronized data can then be directly pooled to facilitate large
+ scale studies involving multiple subjects from cross-sectional as well
+ as longitudinal studies.
+ While the method is primarily designed for resting fMRI, we also show its
+ application to task fMRI involving simple motor tasks.
+\end_layout
+
+\begin_layout Section
+Methods
+\end_layout
+
+\begin_layout Standard
+We assume we have rfMRI and associated structural MRI data for two subjects.
+ Our goal is to synchronize the rfMRI time series between these two subjects,
+ although the method extends directly both to multiple sessions for a single
+ subject or synchronization across multiple subjects.
+ Our analysis below assumes that the rfMRI data has been mapped on to a
+ tessellated representation of the midcortical layer of the cerebral cortex.
+ The cortical surfaces for the two subjects must also be nonrigidly aligned
+ and resampled onto a common mesh, as can be achieved using FreeSurfer 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "fischl2012freesurfer"
+
+\end_inset
+
+ or BrainSuite 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "shattuck2002brainsuite"
+
+\end_inset
+
+.
+ The data vectors in each column in 
+\begin_inset Formula $X$
+\end_inset
+
+ and 
+\begin_inset Formula $Y$
+\end_inset
+
+ are normalized to have zero mean and unit length 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "tozzi2016towards,lashkari2010discovering"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsection
+Geometry of the rfMRI signal space
+\end_layout
+
+\begin_layout Standard
+Since the time series at each vertex are of unit length, we can represent
+ each column of 
+\begin_inset Formula $X$
+\end_inset
+
+ and 
+\begin_inset Formula $Y$
+\end_inset
+
+ as a single point on the unit hypersphere 
+\begin_inset Formula $\mathbb{S}^{T-1}$
+\end_inset
+
+ of dimension 
+\begin_inset Formula $T-1$
+\end_inset
+
+, Fig.
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Correlation-Structure-of"
+
+\end_inset
+
+a, where 
+\begin_inset Formula $T$
+\end_inset
+
+ is the number of time samples .
+\end_layout
+
+\begin_layout Standard
+Let 
+\begin_inset Formula $\vec{x}$
+\end_inset
+
+ and 
+\begin_inset Formula $\vec{y}$
+\end_inset
+
+ represent time series from two points in the brain.
+ Then the dot product of 
+\begin_inset Formula $\vec{x}$
+\end_inset
+
+ and 
+\begin_inset Formula $\vec{y}$
+\end_inset
+
+ yields the Pearson correlation 
+\begin_inset Formula $\rho_{\vec{x}\vec{y}}$
+\end_inset
+
+ between them.
+ The inverse cosine of 
+\begin_inset Formula $\rho_{\vec{x}\vec{y}}$
+\end_inset
+
+ gives the geodesic distance between the points on the hypersphere.
+ The squared Euclidean distance between them is given by 
+\begin_inset Formula $\|\vec{x}-\vec{y}\|^{2}=2-2\rho_{\vec{x}\vec{y}}$
+\end_inset
+
+ and so is also solely a function of 
+\begin_inset Formula $\rho_{\vec{x}\vec{y}}$
+\end_inset
+
+.
+ Since distance on the hypersphere depends only on correlation, we expect
+ clusters of points on the hypersphere, with each cluster corresponding
+ to vertices within a functionally homogeneous region.
+ It therefore follows that if two subjects have similar connectivity patterns
+ to each other, then the clusters and the distance between these clusters
+ will be similar for both subjects.
+ With this picture in mind, we conjecture the existence of an orthogonal
+ transformation (rotation and/or reflection) that will map the data from
+ one subject onto that of the other based on the following well known result
+ 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "boutin2004reconstructing"
+
+\end_inset
+
+: 
+\end_layout
+
+\begin_layout Proposition
+Let 
+\begin_inset Formula $\vec{x}_{1},\cdots,\vec{x}_{V}$
+\end_inset
+
+ and 
+\begin_inset Formula $\vec{y}_{1},\cdots,\vec{y}_{V}$
+\end_inset
+
+ be points in 
+\begin_inset Formula $\mathbb{R}^{T}$
+\end_inset
+
+.
+ If 
+\begin_inset Formula $\|\vec{x}_{i}-\vec{x}_{j}\|=\|\vec{y}_{i}-\vec{y}_{j}\|,\forall i,j\in\{1,\cdots,V\}$
+\end_inset
+
+, then there exists a rigid motion 
+\begin_inset Formula $(O,t)$
+\end_inset
+
+ such that 
+\begin_inset Formula $\vec{x}_{i}=O\vec{y}_{i}+t,\forall i\in\{1,\cdots,V\}$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+Since in our case the points are on a hypersphere 
+\begin_inset Formula $\mathbb{S}^{T-1}$
+\end_inset
+
+, we can exclude the translation and apply a strict orthogonal transformation.
+ 
+\begin_inset Wrap figure
+lines 0
+placement o
+overhang 0col%
+width "50col%"
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename figs/fmri_spheres_MC.pdf
+	width 50text%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Illustration of the BrainSync concept: (a) the geodesic and Euclidean distances
+ between points on the hypersphere; (b),(c): data from cingulate (red),
+ motor (green) and visual (blue) cortex for two subjects after dimensionality
+ reduction to 3D; (d) data from subject 2 after application of BrainSync
+ to subject 1 followed by dimensionality reduction identical to that for
+ subject 1 in (b).
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Correlation-Structure-of"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+ In order to illustrate this concept, we performed the following illustrative
+ experiment using in vivo rfMRI data.
+ We took cortically constrained data from a pair of subjects consisting
+ of 
+\begin_inset Formula $T=1200$
+\end_inset
+
+ time samples per vertex.
+ For illustrative purposes we need to reduce dimensionality to 
+\begin_inset Formula $\mathbb{R}^{3}$
+\end_inset
+
+ so that we can plot the data on the 
+\begin_inset Formula $\mathbb{S}^{2}$
+\end_inset
+
+ sphere.
+ We consider data from only three locations: cingulate, motor cortex and
+ visual cortex.
+ We projected this data onto the 
+\begin_inset Formula $\mathbb{R}^{3}$
+\end_inset
+
+ subspace corresponding to the three largest singular values in the data
+ matrix and renormalized to unit length.
+ This data is of sufficiently low rank that we can indeed see the clustering
+ of points on the sphere (Fig.
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Correlation-Structure-of"
+
+\end_inset
+
+b, c).
+ Fig.
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Correlation-Structure-of"
+
+\end_inset
+
+d shows the result of applying the BrainSync orthogonal transformation described
+ below to the original data and then applying the same dimensionality reduction
+ as previously applied to subject 1.
+ The data for subject 2 is now very similar to that of subject 1, consistent
+ with our earlier conjecture.
+ 
+\end_layout
+
+\begin_layout Subsection
+A method for temporal synchronization 
+\end_layout
+
+\begin_layout Standard
+The orthogonal transform 
+\begin_inset Formula $O$
+\end_inset
+
+ to synchronize the two data sets, 
+\begin_inset Formula $X$
+\end_inset
+
+ and 
+\begin_inset Formula $Y$
+\end_inset
+
+, is chosen to minimize the overall squared error: 
+\begin_inset Formula $\hat{O}=\arg\min_{O\in O(T)}\|X-OY\|^{2}$
+\end_inset
+
+ where 
+\begin_inset Formula $O(T)$
+\end_inset
+
+ represents the group of 
+\begin_inset Formula $T\times T$
+\end_inset
+
+ orthogonal matrices.
+ Given the high dimensionality of the surface vertices (
+\begin_inset Formula $V\simeq32,000$
+\end_inset
+
+) relative to number of time samples (
+\begin_inset Formula $T\simeq1,200$
+\end_inset
+
+) in the data analyzed below, the problem is well-posed and can be solved
+ using the Kabsch algorithm 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "kabsch1976solution"
+
+\end_inset
+
+.
+ Following the derivation in 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "sorkine2009least"
+
+\end_inset
+
+, we first form the 
+\begin_inset Formula $T\times T$
+\end_inset
+
+ cross-correlation matrix 
+\begin_inset Formula $XY^{t}$
+\end_inset
+
+ and compute its SVD: 
+\begin_inset Formula $XY^{t}=U\Sigma V^{t}$
+\end_inset
+
+.
+ The optimal orthogonal matrix is then given by 
+\begin_inset Formula $\boxed{O^{s}=UV^{T}}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+To illustrate the behavior of BrainSync we applied this orthogonal transformatio
+n to data from a pair of rfMRI data sets from the HCP database described
+ and explored more extensively below.
+  Fig.
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Time-series-for"
+
+\end_inset
+
+ shows an example of the time series before and after BrainSync for the
+ same vertex for the two subjects.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename figs/Sync_time_series_MC.pdf
+	width 100text%
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Representative time series for two subjects for a single cortical location
+ before and after synchronization.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Time-series-for"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+To gain further insight, let 
+\begin_inset Formula $X_{T\times V}$
+\end_inset
+
+ and 
+\begin_inset Formula $Y_{T\times V}$
+\end_inset
+
+ be two data sets.
+ Let us consider SVD decomposition of 
+\begin_inset Formula $X$
+\end_inset
+
+ and 
+\begin_inset Formula $Y$
+\end_inset
+
+: 
+\begin_inset Formula $X=U_{X}\Sigma_{X}V_{X}^{T}$
+\end_inset
+
+ and 
+\begin_inset Formula $Y=U_{Y}\Sigma_{Y}V_{Y}^{T}$
+\end_inset
+
+ where 
+\begin_inset Formula $U$
+\end_inset
+
+, 
+\begin_inset Formula $\Sigma$
+\end_inset
+
+ and 
+\begin_inset Formula $V$
+\end_inset
+
+ matrices are real.
+\end_layout
+
+\begin_layout Claim
+\begin_inset Formula $X$
+\end_inset
+
+ and 
+\begin_inset Formula $Y$
+\end_inset
+
+ have identical spatial correlation estimates, 
+\begin_inset Formula $X^{T}X=Y^{T}Y$
+\end_inset
+
+ if and only if, 
+\begin_inset Formula $\Sigma_{X}=\Sigma_{Y}$
+\end_inset
+
+ and 
+\begin_inset Formula $V_{X}=V_{Y}$
+\end_inset
+
+.
+ Moreover, the orthogonal transformation produced by BrainSync 
+\begin_inset Formula $O^{s}$
+\end_inset
+
+ changes the temporal basis so that they match with the basis of target
+ brain.
+\end_layout
+
+\begin_layout Proof
+We know that 
+\begin_inset Formula $X^{T}X=Y^{T}Y=V_{X}\Sigma_{X}^{2}V_{X}^{T}=V_{Y}\Sigma_{Y}^{2}V_{Y}^{T}$
+\end_inset
+
+.
+ Since SVD decomposition is unique if there are no repeated singular values,
+ we can say 
+\begin_inset Formula $\Sigma_{X}=\Sigma_{Y}$
+\end_inset
+
+ and 
+\begin_inset Formula $V_{X}=V_{Y}$
+\end_inset
+
+.
+ Even in case of repeated singular values we can choose 
+\begin_inset Formula $V_{X}=V_{Y}$
+\end_inset
+
+.
+ So removing subscripts, we have 
+\begin_inset Formula $X=U_{X}\Sigma V^{T}$
+\end_inset
+
+ and 
+\begin_inset Formula $Y=U_{Y}\Sigma V^{T}$
+\end_inset
+
+.
+ The cross covariance estimate is given by 
+\begin_inset Formula $XY^{T}=U_{X}\Sigma V^{T}V\Sigma U_{Y}^{T}=U_{X}\Sigma^{2}U_{Y}^{T}$
+\end_inset
+
+ and therefore the optimal rotation given by BrainSync is 
+\begin_inset Formula $O=U_{X}U_{Y}^{T}$
+\end_inset
+
+, and therefore 
+\begin_inset Formula $OY=U_{X}U_{Y}^{T}U_{Y}\Sigma V=U_{X}\Sigma V=X$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+While this is true of the exact equality of sample covariance, the transformatio
+n is optimal in general case under 
+\begin_inset Formula $L^{2}$
+\end_inset
+
+ norm as shown above.
+ Therefore, the orthogonal transformation generated by BrainSync can be
+ seen as a change of temporal basis.
+\end_layout
+
+\begin_layout Section
+Applications, Experiments and Results
+\end_layout
+
+\begin_layout Subsection
+Data 
+\begin_inset CommandInset label
+LatexCommand label
+name "subsec:Data"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We used the minimally preprocessed (ICA-FIX denoised) resting fMRI data
+ from 40 unrelated subjects, which are publicly available from the Human
+ Connectome Project (HCP) 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "smith2013functional,glasser2013minimal"
+
+\end_inset
+
+.
+ In addition to this processing, we also applied the temporal non-local
+ means (tNLM) filter 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "bhushan2016temporal"
+
+\end_inset
+
+ to improve SNR.
+ Finally, we normalized the filtered resting fMRI time series at each vertex
+ to zero mean and unit length.
+\end_layout
+
+\begin_layout Subsection
+Application 1: Quantifying variability of rfMRI across population
+\end_layout
+
+\begin_layout Standard
+To compute within subject variability, we computed the correlation at each
+ vertex between two sessions in the same subject after synchronization and
+ averaged the result over all 40 subjects, Fig.
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Correlation-of-Resting"
+
+\end_inset
+
+a.
+ To compute between subject variability, we chose one reference brain and
+ synchronized the data from the other 39 brains to it.
+ We then computed the between-subject correlations at each vertex after
+ synchronization, averaging over all subjects and plotted the result as
+ the map shown in Fig.
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Correlation-of-Resting"
+
+\end_inset
+
+.
+ Across subject correlations are lower than within subject correlation,
+ as expected the brain was less synchronized across subjects, although still
+ very highly correlated in the similar regions.
+ 
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename figs/sub_session_var_miccai.pdf
+	width 100text%
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Correlation of Resting fMRI and BrainSync: (a) across two sessions for the
+ same subject, averaged over 40 subjects; (b) between subjects averaged
+ over all pairs and two sessions.
+ 
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Correlation-of-Resting"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Subsection
+Application 2: Cortical parcellation 
+\end_layout
+
+\begin_layout Standard
+In vivo imaging, specifically, rfMRI has been used for identification of
+ contiguous areas of cortex that exhibit similar functional connectivity
+ to define a functional parcellation 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "sporns2005human,smith2013functional"
+
+\end_inset
+
+.
+ One major problem in using rfMRI for single subject parcellation is that
+ the amount of data for single subject is not sufficient to reliably parcellate
+ the cerebral cortex brain into a large number of regions 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "rubinov2010complex,smith2011network"
+
+\end_inset
+
+.
+ Since BrainSync makes data across subjects directly comparable, this synchroniz
+ed data can be easily pooled and a joint parcellation of a large number
+ of subjects is possible.
+ 
+\end_layout
+
+\begin_layout Standard
+We synchronized all the subject data to a single reference brain and pooled
+ the data from 40 subjects 
+\begin_inset Formula $\times$
+\end_inset
+
+ 2 sesssions.
+ Let 
+\begin_inset Formula $B_{i,j}$
+\end_inset
+
+ represent the 
+\begin_inset Formula $T\times V$
+\end_inset
+
+ data matrix for the 
+\begin_inset Formula $i^{th}$
+\end_inset
+
+ subject and 
+\begin_inset Formula $j^{th}$
+\end_inset
+
+ scan, all synchronized to the first subject's first scan.
+ The concatenated data matrix is then 
+\begin_inset Formula $B=[B_{1,1},B_{2,1},\cdots,B_{40,1},B_{1,2},\cdots,B_{40,2}]$
+\end_inset
+
+.
+ The k-means algorithm is then applied to this data to generate simultaneous
+ parcellation into k=100 regions of all the 
+\begin_inset Formula $40\times2$
+\end_inset
+
+ brain scans.
+ Note that we do not enforce any spatial prior or topological constraint
+ on the data.
+ Sample parcellations for two subjects, two sessions each, are shown in
+ Fig.
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Individual-Parcellation-of"
+
+\end_inset
+
+ for individual clustering and joint (BrainSync) clustering.
+ For comparison, we also did individual clustering of this data independently.
+ For visualization of the individual clustering results, we used the Hungarian
+ algorithm 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "kuhn1955hungarian"
+
+\end_inset
+
+ for label matching across subjects.
+ For joint clustering, corresponding regions are automatically identified
+ through k-means clustering and no re-labelling is required.
+\end_layout
+
+\begin_layout Standard
+To quantify performance, we computed the Adjusted Rand Index (ARI) between
+ all pairs of subjects and scans and report both within-subject and across-subje
+ct similarity by averaging across subjects and sessions respectively.
+ ARIs were computed for both the individual and group parcellation.
+ 
+\begin_inset Float table
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+
+\size footnotesize
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+{}
+\end_layout
+
+\end_inset
+
+
+\size default
+
+\begin_inset Tabular
+<lyxtabular version="3" rows="4" columns="7">
+<features rotate="0" tabularvalignment="middle">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+{}
+\end_layout
+
+\end_inset
+
+Orig 
+\size default
+ 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+{}
+\end_layout
+
+\end_inset
+
+Sync
+\size default
+ 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+{}
+\end_layout
+
+\end_inset
+
+Orig
+\size default
+ 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+{}
+\end_layout
+
+\end_inset
+
+Sync
+\size default
+ 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+{}
+\end_layout
+
+\end_inset
+
+Orig
+\size default
+ 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+{}
+\end_layout
+
+\end_inset
+
+Sync
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+{}
+\end_layout
+
+\end_inset
+
+(k=30)
+\size default
+ 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+{}
+\end_layout
+
+\end_inset
+
+(k=30)
+\size default
+ 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+{}
+\end_layout
+
+\end_inset
+
+(k=100)
+\size default
+ 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+{}
+\end_layout
+
+\end_inset
+
+(k=100)
+\size default
+ 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+{}
+\end_layout
+
+\end_inset
+
+(k=200)
+\size default
+ 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+{}
+\end_layout
+
+\end_inset
+
+(k=200)
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+{}
+\end_layout
+
+\end_inset
+
+Across Subject
+\size default
+ 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+{}
+\end_layout
+
+\end_inset
+
+0.90(0.10)
+\size default
+ 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+{}
+\end_layout
+
+\end_inset
+
+0.97(0.07)
+\size default
+ 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+{}
+\end_layout
+
+\end_inset
+
+0.32(0.16)
+\size default
+ 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+{}
+\end_layout
+
+\end_inset
+
+0.89(0.07)
+\size default
+ 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+{}
+\end_layout
+
+\end_inset
+
+0.16(0.05)
+\size default
+ 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+{}
+\end_layout
+
+\end_inset
+
+0.64(0.04)
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+{}
+\end_layout
+
+\end_inset
+
+Across Sessions
+\size default
+ 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+{}
+\end_layout
+
+\end_inset
+
+0.94(0.08)
+\size default
+ 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+{}
+\end_layout
+
+\end_inset
+
+0.99(0.06)
+\size default
+ 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+{}
+\end_layout
+
+\end_inset
+
+0.42(0.12)
+\size default
+ 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+{}
+\end_layout
+
+\end_inset
+
+0.94(0.03)
+\size default
+ 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+{}
+\end_layout
+
+\end_inset
+
+0.32(0.02)
+\size default
+ 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+{}
+\end_layout
+
+\end_inset
+
+0.83(0.07)
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Adjusted Rand Indices: mean(std) for different number of classes (
+\begin_inset Formula $k$
+\end_inset
+
+) for individual (Orig) and group (Sync) parcellation.
+ 
+\begin_inset CommandInset label
+LatexCommand label
+name "tab:Adjusted-Rand-Indices"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename figs/parcellation.pdf
+	width 100text%
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Representative individual parcellation results (
+\begin_inset Formula $k=100$
+\end_inset
+
+) for two subjects, two sessions each.
+ 
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Individual-Parcellation-of"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+As expected, individual clustering results for 
+\begin_inset Formula $k=100$
+\end_inset
+
+ parcels are very variable across both sessions and subjects, Fig.
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Individual-Parcellation-of"
+
+\end_inset
+
+, because of the limited information in a single 15min rfMRI scan.
+ After synchronization results appear far more consistent across sessions.
+ They also appear more coherent across subjects, although, unsurprisingly
+ less so than the within-subject comparisons.
+ Table 1 shows that the ARI is substantially higher for synchronized joint
+ clustering vs.
+ individual clustering.
+ Table 1 also shows significantly higher across session similarity than
+ across subjects.
+ 
+\end_layout
+
+\begin_layout Subsection
+Applications to task fMRI
+\end_layout
+
+\begin_layout Subsubsection
+Predicting timing information
+\end_layout
+
+\begin_layout Standard
+To further analyze the performance of BrainSync, we considered two sessions
+ of motor task for a subject.
+ These two sessions involved performing identical motor tasks but the timing
+ blocks were different.
+ The first session was synchronized to the second and the resulting orthogonal
+ transformation 
+\begin_inset Formula $O^{s}$
+\end_inset
+
+ was applied to the timing blocks of the first session.
+ It can be seen in Fig.
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Task-data-(a)"
+
+\end_inset
+
+(a) that 
+\begin_inset Formula $O^{s}$
+\end_inset
+
+ allows us to predict the task timing of the second session from the first
+ session.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename figs/motor_task.pdf
+	width 100text%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Task data (a) red: timing blocks for session 1, black: timing blocks for
+ session 2 and blue: after applying the orthogonal transformation predicted
+ by BrainSync to timing blocks of session 1 for tongue and right hand motor
+ tasks.
+ (b) Correlation between resting and synchronized motor task time series
+ during the tongue motion block.
+ A reduced correlation can be seen in parts of default mode network such
+ as precuneus and the parts of motor cortex at the tongue region.
+ 
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Task-data-(a)"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+Contrasting task vs resting
+\end_layout
+
+\begin_layout Standard
+We show that using the BrainSync, task and resting data can be compared
+ directly.
+ For this purpose we considered the motor task and resting data from HCP
+ dataset for a subject.
+ Then the resting and task data was synchronized using BrainSync.
+ At each point on the brain, the correlation between synced task and resting
+ data was computed using samples from the tongue movement task block (Fig.
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Task-data-(a)"
+
+\end_inset
+
+ (b)).
+ It can be seen that superior temporal sulcus and the region of motor cortex
+ corresponding to the tongue show reduced correlation.
+ Additionally, precuneus which is part of the resting state network also
+ shows reduced correlation as expected.
+ 
+\end_layout
+
+\begin_layout Section
+Discussion and Conclusion
+\end_layout
+
+\begin_layout Standard
+We have described a novel method for synchronization of rfMRI data across
+ subjects and scans.
+ By exploiting similarity in correlation structure across subjects we are
+ able to transform the time series so that they become highly correlated
+ across subjects.
+ This synchronization process bears some similarity to image registration,
+ in the sense that after synchronization comparisons can be made directly
+ with respect to these time series across subjects.
+ Importantly, since the transformation is orthogonal, correlations in the
+ original data are preserved and the transform is invertible.
+ One of the implicit assumptions in this work is that the rfMRI signal is
+ stationary in the sense that correlation patterns are preserved over time.
+ Our results show good correspondence of signals over the 15min windows
+ used in this analysis.
+ However, even within a 15min period we would expect to see variations in
+ the activity of different networks, and it would be interesting to explore
+ whether BrainSync is able to enhance our ability to identify and characterize
+ these dynamic changes in network activity.
+ While the proposed method is primarily designed for resting fMRI, it has
+ potential application to task fMRI, especially for simpler tasks with focal
+ brain activations.
+ Its utility for more complex tasks will be investigated in the future.
+ 
+\begin_inset CommandInset bibtex
+LatexCommand bibtex
+bibfiles "fmri_bib"
+options "plain"
+
+\end_inset
+
+ 
+\end_layout
+
+\end_body
+\end_document
