@@ -94,20 +94,17 @@ We describe a method that allows direct comparison of resting fMRI (rfMRI)
  The method is based on the observation that rfMRI data exhibit similar
  connectivity patterns across subjects, as reflected in the pairwise correlation
  between different brain regions.
- This orthogonal transformation that performs the synchronization is unique,
+ The orthogonal transformation that performs the synchronization is unique,
  invertible, efficient to compute, and preserves the connectivity structure
  of the original data for all subjects.
  Similarly to image registration, where we spatially align the anatomical
  brain images, this synchronization of brain signals across a population
  or within subject across sessions facilitates longitudinal and cross-sectional
  studies of rfMRI data.
- The utility of this transformation is demonstrated by applications to quantific
-ation of fMRI variability across subjects and sessions, joint cortical clusterin
-g of a population.
- While this method is designed for resting fMRI, we also show its utility
- for simple task data by predicting task timing and direct comparison of
- task and resting fMRI.
- 
+ The utility of this transformation is illustrated through applications
+ to quantification of fMRI variability across subjects and sessions, joint
+ cortical clustering of a population and comparison of task-related and
+ resting fMRI.
 \end_layout
 
 \begin_layout Section
@@ -170,7 +167,7 @@ key "iraji2016connectivity"
  interest and other locations in the brain 
 \begin_inset CommandInset citation
 LatexCommand cite
-key "fan2015functional,craddock2012whole"
+key "fan2015functional"
 
 \end_inset
 
@@ -192,6 +189,22 @@ key "calhoun2009review"
  Group ICA concatenates rfMRI data from multiple subjects and represents
  the data as a summation of independent spatial or temporal components.
  In this way common networks across subjects can be identified.
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+\begin_inset CommandInset citation
+LatexCommand cite
+key "tozzi2016towards,lashkari2010discovering"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -211,9 +224,9 @@ BrainSync
  also temporally aligning or synchronizing the two scans.
  This synchronization results in an approximate matching of the time series
  at homologous locations across subjects.
- This synchronized data can then be directly pooled to facilitate large
- scale studies involving multiple subjects from cross-sectional as well
- as longitudinal studies.
+ The synchronized data can then be directly pooled to facilitate large scale
+ studies involving multiple subjects from cross-sectional as well as longitudina
+l studies.
  While the method is primarily designed for resting fMRI, we also show its
  application to task fMRI involving simple motor tasks.
 \end_layout
@@ -245,6 +258,40 @@ key "shattuck2002brainsuite"
 \end_inset
 
 .
+ 
+\end_layout
+
+\begin_layout Standard
+Denote the cortically mapped rfMRI data for the subjects as matrices 
+\begin_inset Formula $X$
+\end_inset
+
+ and 
+\begin_inset Formula $Y$
+\end_inset
+
+, each of size 
+\begin_inset Formula $T\times V$
+\end_inset
+
+, where 
+\begin_inset Formula $T$
+\end_inset
+
+ represents the number of time points and 
+\begin_inset Formula $V$
+\end_inset
+
+ is the number of vertices in the cortical mesh.
+ Corresponding columns in 
+\begin_inset Formula $X$
+\end_inset
+
+ and 
+\begin_inset Formula $Y$
+\end_inset
+
+ represent the time series at homologous locations in the two brains.
  The data vectors in each column in 
 \begin_inset Formula $X$
 \end_inset
@@ -253,14 +300,7 @@ key "shattuck2002brainsuite"
 \begin_inset Formula $Y$
 \end_inset
 
- are normalized to have zero mean and unit length 
-\begin_inset CommandInset citation
-LatexCommand cite
-key "tozzi2016towards,lashkari2010discovering"
-
-\end_inset
-
-.
+ are normalized to have zero mean and unit length.
 \end_layout
 
 \begin_layout Subsection
@@ -494,7 +534,7 @@ A method for temporal synchronization
 
 \begin_layout Standard
 The orthogonal transform 
-\begin_inset Formula $O$
+\begin_inset Formula $O^{s}$
 \end_inset
 
  to synchronize the two data sets, 
@@ -506,7 +546,7 @@ The orthogonal transform
 \end_inset
 
 , is chosen to minimize the overall squared error: 
-\begin_inset Formula $\hat{O}=\arg\min_{O\in O(T)}\|X-OY\|^{2}$
+\begin_inset Formula $O^{s}=\arg\min_{O\in O(T)}\|X-OY\|^{2}$
 \end_inset
 
  where 
@@ -556,7 +596,7 @@ key "sorkine2009least"
 
 .
  The optimal orthogonal matrix is then given by 
-\begin_inset Formula $\boxed{O^{s}=UV^{T}}$
+\begin_inset Formula $O^{s}=UV^{T}$
 \end_inset
 
 .
@@ -621,132 +661,6 @@ name "fig:Time-series-for"
 
 \end_layout
 
-\begin_layout Standard
-To gain further insight, let 
-\begin_inset Formula $X_{T\times V}$
-\end_inset
-
- and 
-\begin_inset Formula $Y_{T\times V}$
-\end_inset
-
- be two data sets.
- Let us consider SVD decomposition of 
-\begin_inset Formula $X$
-\end_inset
-
- and 
-\begin_inset Formula $Y$
-\end_inset
-
-: 
-\begin_inset Formula $X=U_{X}\Sigma_{X}V_{X}^{T}$
-\end_inset
-
- and 
-\begin_inset Formula $Y=U_{Y}\Sigma_{Y}V_{Y}^{T}$
-\end_inset
-
- where 
-\begin_inset Formula $U$
-\end_inset
-
-, 
-\begin_inset Formula $\Sigma$
-\end_inset
-
- and 
-\begin_inset Formula $V$
-\end_inset
-
- matrices are real.
-\end_layout
-
-\begin_layout Claim
-\begin_inset Formula $X$
-\end_inset
-
- and 
-\begin_inset Formula $Y$
-\end_inset
-
- have identical spatial correlation estimates, 
-\begin_inset Formula $X^{T}X=Y^{T}Y$
-\end_inset
-
- if and only if, 
-\begin_inset Formula $\Sigma_{X}=\Sigma_{Y}$
-\end_inset
-
- and 
-\begin_inset Formula $V_{X}=V_{Y}$
-\end_inset
-
-.
- Moreover, the orthogonal transformation produced by BrainSync 
-\begin_inset Formula $O^{s}$
-\end_inset
-
- changes the temporal basis so that they match with the basis of target
- brain.
-\end_layout
-
-\begin_layout Proof
-We know that 
-\begin_inset Formula $X^{T}X=Y^{T}Y=V_{X}\Sigma_{X}^{2}V_{X}^{T}=V_{Y}\Sigma_{Y}^{2}V_{Y}^{T}$
-\end_inset
-
-.
- Since SVD decomposition is unique if there are no repeated singular values,
- we can say 
-\begin_inset Formula $\Sigma_{X}=\Sigma_{Y}$
-\end_inset
-
- and 
-\begin_inset Formula $V_{X}=V_{Y}$
-\end_inset
-
-.
- Even in case of repeated singular values we can choose 
-\begin_inset Formula $V_{X}=V_{Y}$
-\end_inset
-
-.
- So removing subscripts, we have 
-\begin_inset Formula $X=U_{X}\Sigma V^{T}$
-\end_inset
-
- and 
-\begin_inset Formula $Y=U_{Y}\Sigma V^{T}$
-\end_inset
-
-.
- The cross covariance estimate is given by 
-\begin_inset Formula $XY^{T}=U_{X}\Sigma V^{T}V\Sigma U_{Y}^{T}=U_{X}\Sigma^{2}U_{Y}^{T}$
-\end_inset
-
- and therefore the optimal rotation given by BrainSync is 
-\begin_inset Formula $O=U_{X}U_{Y}^{T}$
-\end_inset
-
-, and therefore 
-\begin_inset Formula $OY=U_{X}U_{Y}^{T}U_{Y}\Sigma V=U_{X}\Sigma V=X$
-\end_inset
-
-.
-\end_layout
-
-\begin_layout Standard
-While this is true of the exact equality of sample covariance, the transformatio
-n is optimal in general case under 
-\begin_inset Formula $L^{2}$
-\end_inset
-
- norm as shown above.
- Therefore, the orthogonal transformation generated by BrainSync can be
- seen as a change of temporal basis.
-\end_layout
-
 \begin_layout Section
 Applications, Experiments and Results
 \end_layout
@@ -805,8 +719,8 @@ a.
  To compute between subject variability, we chose one reference brain and
  synchronized the data from the other 39 brains to it.
  We then computed the between-subject correlations at each vertex after
- synchronization, averaging over all subjects and plotted the result as
- the map shown in Fig.
+ synchronization, averaged over all subjects and plotted the result as the
+ map shown in Fig.
  
 \begin_inset CommandInset ref
 LatexCommand ref
@@ -815,6 +729,11 @@ reference "fig:Correlation-of-Resting"
 \end_inset
 
 .
+ Within-subject variability across sessions reveals that most of the brain
+ exhibits repeatable patterns of correlation, which lead to accurate syncing.
+ Exceptions of areas with relative less correlation including limbic cortex,
+ anterior temporal pole, insula and medial frontal cortex, but much of this
+ is probably due to low signal artifacts.
  Across subject correlations are lower than within subject correlation,
  as expected the brain was less synchronized across subjects, although still
  very highly correlated in the similar regions.
@@ -867,7 +786,17 @@ Application 2: Cortical parcellation
 \end_layout
 
 \begin_layout Standard
-In vivo imaging, specifically, rfMRI has been used for identification of
+Parcellations of the human cerebral cortex representing cyto-, myelo- or
+ chemo- architecture are helpful in understanding the structural and function
+ organization of the brain 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "von1925cytoarchitectonics,amunts2007cytoarchitecture"
+
+\end_inset
+
+.
+ In vivo imaging, specifically, rfMRI has been used for identification of
  contiguous areas of cortex that exhibit similar functional connectivity
  to define a functional parcellation 
 \begin_inset CommandInset citation
@@ -878,8 +807,8 @@ key "sporns2005human,smith2013functional"
 
 .
  One major problem in using rfMRI for single subject parcellation is that
- the amount of data for single subject is not sufficient to reliably parcellate
- the cerebral cortex brain into a large number of regions 
+ the amount of data from a single subject is usually not sufficient to reliably
+ parcellate the cerebral cortex brain into a large number of regions 
 \begin_inset CommandInset citation
 LatexCommand cite
 key "rubinov2010complex,smith2011network"
@@ -922,7 +851,7 @@ We synchronized all the subject data to a single reference brain and pooled
 \end_inset
 
 .
- The k-means algorithm is then applied to this data to generate simultaneous
+ The k-means algorithm was then applied to this data to generate simultaneous
  parcellation into k=100 regions of all the 
 \begin_inset Formula $40\times2$
 \end_inset
@@ -940,7 +869,6 @@ reference "fig:Individual-Parcellation-of"
 \end_inset
 
  for individual clustering and joint (BrainSync) clustering.
- For comparison, we also did individual clustering of this data independently.
  For visualization of the individual clustering results, we used the Hungarian
  algorithm 
 \begin_inset CommandInset citation
@@ -1722,16 +1650,16 @@ Predicting timing information
 
 \begin_layout Standard
 To further analyze the performance of BrainSync, we considered two sessions
- of motor task for a subject.
- These two sessions involved performing identical motor tasks but the timing
- blocks were different.
+ of a block motor task for a single subject.
+ These two sessions involved identical motor tasks but the timing blocks
+ were different.
  The first session was synchronized to the second and the resulting orthogonal
  transformation 
 \begin_inset Formula $O^{s}$
 \end_inset
 
  was applied to the timing blocks of the first session.
- It can be seen in Fig.
+ As shown in Fig.
  
 \begin_inset CommandInset ref
 LatexCommand ref
@@ -1739,12 +1667,12 @@ reference "fig:Task-data-(a)"
 
 \end_inset
 
-(a) that 
+(a), 
 \begin_inset Formula $O^{s}$
 \end_inset
 
- allows us to predict the task timing of the second session from the first
- session.
+ allows us to predict the task timing of the second session from the rfMRI
+ data from the first session.
 \end_layout
 
 \begin_layout Standard
@@ -1769,13 +1697,15 @@ status open
 
 \begin_layout Plain Layout
 Task data (a) red: timing blocks for session 1, black: timing blocks for
- session 2 and blue: after applying the orthogonal transformation predicted
- by BrainSync to timing blocks of session 1 for tongue and right hand motor
- tasks.
- (b) Correlation between resting and synchronized motor task time series
- during the tongue motion block.
- A reduced correlation can be seen in parts of default mode network such
- as precuneus and the parts of motor cortex at the tongue region.
+ session 2 and blue: timing for session 1 after applying the orthogonal
+ transformation predicted by BrainSync to timing blocks for (left) tongue
+ and (right) right hand motor tasks.
+ (b) Correlation between resting and synchronized motor tongue task time
+ series.
+ Strong correlation between task and resting fMRI can be seen throughout
+ the brain other than in primary motor and default mode regions where we
+ expect maximum dissimilarity between brain activity during motor and rest
+ states.
  
 \begin_inset CommandInset label
 LatexCommand label
@@ -1797,17 +1727,16 @@ name "fig:Task-data-(a)"
 \end_layout
 
 \begin_layout Subsubsection
-Contrasting task vs resting
+Contrasting task vs rest
 \end_layout
 
 \begin_layout Standard
-We show that using the BrainSync, task and resting data can be compared
- directly.
- For this purpose we considered the motor task and resting data from HCP
- dataset for a subject.
- Then the resting and task data was synchronized using BrainSync.
+We also use BrainSync to directly compare resting and motor activity.
+ For this purpose we considered motor activity (self-paced tongue movement)
+ and resting data from the HCP database for a single subject.
+ The resting and task data were synchronized using BrainSync.
  At each point on the brain, the correlation between synced task and resting
- data was computed using samples from the tongue movement task block (Fig.
+ data was computed (Fig.
  
 \begin_inset CommandInset ref
 LatexCommand ref
@@ -1816,11 +1745,22 @@ reference "fig:Task-data-(a)"
 \end_inset
 
  (b)).
- It can be seen that superior temporal sulcus and the region of motor cortex
- corresponding to the tongue show reduced correlation.
- Additionally, precuneus which is part of the resting state network also
- shows reduced correlation as expected.
- 
+ Results shown in Fig 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Task-data-(a)"
+
+\end_inset
+
+ (b) indicate that despite the fact that we are comparing task and resting
+ data, much of the brain can still be synchronized.
+ Exceptions include the facial primary motor cortex area and portions of
+ the default mode network.
+ This observation is consistent with the fact that we would expect increased
+ motor activity and decreased default mode activity during the motor task.
+ This result shows promise for the use of BrainSync to compare brain activity
+ between different states in a manner that accounts for ongoing (spontaneous)
+ brain activity in both conditions.
 \end_layout
 
 \begin_layout Section
@@ -1846,10 +1786,10 @@ We have described a novel method for synchronization of rfMRI data across
  the activity of different networks, and it would be interesting to explore
  whether BrainSync is able to enhance our ability to identify and characterize
  these dynamic changes in network activity.
- While the proposed method is primarily designed for resting fMRI, it has
- potential application to task fMRI, especially for simpler tasks with focal
- brain activations.
- Its utility for more complex tasks will be investigated in the future.
+ While the proposed method is primarily designed for resting fMRI, we also
+ show preliminary results indicating the possibility of synchronizing brain
+ activity during different forms of activity in a manner that accounts for
+ ongoing spontaneous brain activity.
  
 \begin_inset CommandInset bibtex
 LatexCommand bibtex
