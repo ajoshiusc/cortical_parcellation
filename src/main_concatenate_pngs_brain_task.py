@@ -12,9 +12,9 @@ from PIL import Image
 x_offset = 0
 for ind in range(1200):
     im1name = '/home/ajoshi/coding_ground/cortical_parcellation/src/\
-rest_vs_motor_after_rot_%d_d.png' % ind
+motor_%d_d.png' % ind
     im2name = '/home/ajoshi/coding_ground/cortical_parcellation/src/\
-rest_vs_motor_after_rot_%d_m.png' % ind
+motor_%d_m.png' % ind
     im3name = '/home/ajoshi/coding_ground/cortical_parcellation/src/\
 timing_%d.png' % ind
 
@@ -30,5 +30,5 @@ timing_%d.png' % ind
     new_im.paste(im3, (0, im1.size[1]))
 
     im1name = '/home/ajoshi/coding_ground/cortical_parcellation/src/\
-catimg3_%d.png' % ind
+catimg_motor3_%d.png' % ind
     new_im.save(im1name)
