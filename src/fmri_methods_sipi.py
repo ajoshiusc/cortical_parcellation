@@ -49,36 +49,36 @@ def reduce3_to_bci_lh(reduce3labs):
     r3.labels=np.squeeze(reduce3labs.T)
     
     '''h32k to full res FS'''
-    g_surf = nib.load('/home/ajoshi/data/HCP_data/reference/100307/MNINonLinea\
+    g_surf = nib.load('/big_disk/ajoshi/HCP_data/reference/100307/MNINonLinea\
 r/Native/100307.L.very_inflated.native.surf.gii')
     h.vertices = g_surf.darrays[0].data
     h.faces = g_surf.darrays[1].data
     h = interpolate_labels(r3, h)
     
     ''' native FS ref to native FS BCI'''
-    g_surf = nib.load('/home/ajoshi/data/HCP_data/reference/100307/MNINon\
+    g_surf = nib.load('/big_disk/ajoshi/HCP_data/reference/100307/MNINon\
 Linear/Native/100307.L.sphere.reg.native.surf.gii')
     s.vertices = g_surf.darrays[0].data
     s.faces = g_surf.darrays[1].data
     s.labels = h.labels
     
     ''' map to bc sphere'''
-    bs.vertices, bs.faces = fsio.read_geometry('/home/ajoshi/data/BCI\
+    bs.vertices, bs.faces = fsio.read_geometry('/big_disk/ajoshi/data/BCI\
 _DNI_Atlas/surf/lh.sphere.reg')
     bs = interpolate_labels(s, bs)
-    bci.vertices, bci.faces = fsio.read_geometry('/home/ajoshi/data/BCI_DNI_A\
+    bci.vertices, bci.faces = fsio.read_geometry('/big_disk/ajoshi/data/BCI_DNI_A\
 tlas/surf/lh.white')
     bci.labels = bs.labels
  #   writedfs('BCI_orig_rh.dfs', bci)
     
     
-    bci.vertices, bci.faces = fsio.read_geometry('/home/ajoshi/data/BCI_DNI_A\
+    bci.vertices, bci.faces = fsio.read_geometry('/big_disk/ajoshi/data/BCI_DNI_A\
 tlas/surf/lh.inflated')
 #    view_patch(bci, bci.labels)
     
 #    writedfs('BCI_pial_rh.dfs.', bci)
     
-    bci.vertices, bci.faces = fsio.read_geometry('/home/ajoshi/data/BCI_\
+    bci.vertices, bci.faces = fsio.read_geometry('/big_disk/ajoshi/data/BCI_\
 DNI_Atlas/surf/lh.white')
 #    writedfs('BCI_white_rh.dfs.', bci)
     
@@ -86,7 +86,7 @@ DNI_Atlas/surf/lh.white')
     bci.vertices[:, 0] += 96*0.8
     bci.vertices[:, 1] += 192*0.546875
     bci.vertices[:, 2] += 192*0.546875
-    bci_bst = readdfs('/home/ajoshi/data/BCI-DNI_brain_atlas/BCI-DNI_\
+    bci_bst = readdfs('/big_disk/ajoshi/data/BCI-DNI_brain_atlas/BCI-DNI_\
 brain.left.inner.cortex.dfs')
     bci_bst = interpolate_labels(bci, bci_bst)
     labs=bci_bst.labels
@@ -120,36 +120,36 @@ def reduce3_to_bci_rh(reduce3labs):
     r3.labels=np.squeeze(reduce3labs.T)
     
     '''h32k to full res FS'''
-    g_surf = nib.load('/home/ajoshi/data/HCP_data/reference/100307/MNINonLinea\
+    g_surf = nib.load('/big_disk/ajoshi/HCP_data/reference/100307/MNINonLinea\
 r/Native/100307.R.very_inflated.native.surf.gii')
     h.vertices = g_surf.darrays[0].data
     h.faces = g_surf.darrays[1].data
     h = interpolate_labels(r3, h)
     
     ''' native FS ref to native FS BCI'''
-    g_surf = nib.load('/home/ajoshi/data/HCP_data/reference/100307/MNINon\
+    g_surf = nib.load('/big_disk/ajoshi/HCP_data/reference/100307/MNINon\
 Linear/Native/100307.R.sphere.reg.native.surf.gii')
     s.vertices = g_surf.darrays[0].data
     s.faces = g_surf.darrays[1].data
     s.labels = h.labels
     
     ''' map to bc sphere'''
-    bs.vertices, bs.faces = fsio.read_geometry('/home/ajoshi/data/BCI\
+    bs.vertices, bs.faces = fsio.read_geometry('/big_disk/ajoshi/data/BCI\
 _DNI_Atlas/surf/rh.sphere.reg')
     bs = interpolate_labels(s, bs)
-    bci.vertices, bci.faces = fsio.read_geometry('/home/ajoshi/data/BCI_DNI_A\
+    bci.vertices, bci.faces = fsio.read_geometry('/big_disk/ajoshi/data/BCI_DNI_A\
 tlas/surf/rh.white')
     bci.labels = bs.labels
  #   writedfs('BCI_orig_rh.dfs', bci)
     
     
-    bci.vertices, bci.faces = fsio.read_geometry('/home/ajoshi/data/BCI_DNI_A\
+    bci.vertices, bci.faces = fsio.read_geometry('/big_disk/ajoshi/data/BCI_DNI_A\
 tlas/surf/rh.inflated')
 #    view_patch(bci, bci.labels)
     
 #    writedfs('BCI_pial_rh.dfs.', bci)
     
-    bci.vertices, bci.faces = fsio.read_geometry('/home/ajoshi/data/BCI_\
+    bci.vertices, bci.faces = fsio.read_geometry('/big_disk/ajoshi/data/BCI_\
 DNI_Atlas/surf/rh.white')
 #    writedfs('BCI_white_rh.dfs.', bci)
     
@@ -157,7 +157,7 @@ DNI_Atlas/surf/rh.white')
     bci.vertices[:, 0] += 96*0.8
     bci.vertices[:, 1] += 192*0.546875
     bci.vertices[:, 2] += 192*0.546875
-    bci_bst = readdfs('/home/ajoshi/data/BCI-DNI_brain_atlas/BCI-DNI_\
+    bci_bst = readdfs('/big_disk/ajoshi/data/BCI-DNI_brain_atlas/BCI-DNI_\
 brain.right.inner.cortex.dfs')
     bci_bst = interpolate_labels(bci, bci_bst)
     labs=bci_bst.labels

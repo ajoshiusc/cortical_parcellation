@@ -28,9 +28,9 @@ p_dir = '/home/sgaurav/Documents/git_sandbox/cortical_parcellation/src/\
 intensity_mode_map/'
 nSub = 40
 lst = os.listdir(p_dir)
-bci_bst = readdfs('/home/ajoshi/data/BCI-DNI_brain_atlas/BCI-DNI_brain.left.\
+bci_bst = readdfs('/big_disk/ajoshi/data/BCI-DNI_brain_atlas/BCI-DNI_brain.left.\
 mid.cortex.dfs')
-bci_bst_sm = readdfs('/home/ajoshi/data/BCI-DNI_brain_atlas/BCI-DNI_brain.\
+bci_bst_sm = readdfs('/big_disk/ajoshi/data/BCI-DNI_brain_atlas/BCI-DNI_brain.\
 left.mid.cortex_smooth10.dfs')
 bci_bst.vertices = bci_bst_sm.vertices
 
@@ -71,7 +71,7 @@ for fname in lst:
         sp.amin(freq1[(bci_labs_orig > 0) & (freq1 != 0)])
 
     freq[(bci_bst.labels == roino*10)] += freq1[(bci_bst.labels == roino*10)]
-    bci_bst.labels += bci_labs
+    bci_bst.labels += sp.uint16(bci_labs)
 
 
 freq[freq == 0] = 1
@@ -106,11 +106,11 @@ bci_bst = readdfs(sub_out)
 bci_bst = patch_color_labels(bci_bst, freq=freq, cmap='Paired')
 # bci_bst = smooth_patch(bci_bst, iterations=90, relaxation=10.8)
 view_patch_vtk(bci_bst, show=1)
-writedfs('/home/ajoshi/data/BCI-DNI_brain_atlas/BCI-DNI_brain.left.\
+writedfs('/big_disk/ajoshi/data/BCI-DNI_brain_atlas/BCI-DNI_brain.left.\
 mid.cortex_refined_labs_mod_freq.dfs', bci_bst)
 
 bci_bst = patch_color_labels(bci_bst, cmap='Paired')
 # bci_bst = smooth_patch(bci_bst, iterations=90, relaxation=10.8)
 view_patch_vtk(bci_bst, show=1)
-writedfs('/home/ajoshi/data/BCI-DNI_brain_atlas/BCI-DNI_brain.left.\
+writedfs('/big_disk/ajoshi/data/BCI-DNI_brain_atlas/BCI-DNI_brain.left.\
 mid.cortex_refined_labs.dfs', bci_bst)
