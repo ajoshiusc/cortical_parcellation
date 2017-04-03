@@ -163,6 +163,13 @@ brain.right.inner.cortex.dfs')
     labs=bci_bst.labels
     return labs
 
+def FCDM(fdata, Tc=.5, Tsnr):
+    """ Computes functional connectivity density mappingh"""
+    rho = sp.corrcoef(fdata)
+    fcdm = sp.sum(rho>Tsnr,axis=1)
+    return fcdm
+
+
 def rot_sub_data(ref,sub, area_weight=[]):
     """ref and sub matrices are of the form (vertices x time) """
     if len(area_weight) == 0:

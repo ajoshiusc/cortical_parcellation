@@ -363,7 +363,7 @@ def view_patch_vtk(r, azimuth=90, elevation=0, roll=-90, outfile=0, show=1):
 
     ren = vtkRenderer()
     renWin = vtkRenderWindow()
-    renWin.SetSize(600, 600)
+    renWin.SetSize(1600, 1600)
 #    renWin.SetDPI(200)
     if show == 0:
         renWin.SetOffScreenRendering(1)
