@@ -3,13 +3,13 @@ addpath(genpath('/big_disk/ajoshi/coding_ground/svreg-matlab/3rdParty'));
 addpath(genpath('/big_disk/ajoshi/coding_ground/svreg-matlab/MEX_Files'));
 addpath(genpath('/big_disk/ajoshi/coding_ground/svreg-matlab/src'));
 
-s = readdfs('/big_disk/ajoshi/data/BCI-DNI_brain_atlas/BCI-DNI_brain.left.mid.cortex_refined_labs_mod_freq.dfs');
+s = readdfs('/big_disk/ajoshi/data/BCI-DNI_brain_atlas/BCI-DNI_brain.right.mid.cortex_refined_labs_mod_freq.dfs');
 s = smooth_cortex_fast(s,.5,3000);
-so = readdfs('/big_disk/ajoshi/coding_ground/svreg-matlab/BCI-DNI_brain_atlas_refined/BCI-DNI_brain.left.mid.cortex.dfs');
+so = readdfs('/big_disk/ajoshi/coding_ground/svreg-matlab/BCI-DNI_brain_atlas/BCI-DNI_brain.right.mid.cortex.dfs');
 s.labels=so.labels;
 h=figure
-patch('faces',s.faces,'vertices',s.vertices,'facevertexcdata',s.attributes,'edgecolor','none','facecolor','interp');
-axis equal; axis off; material dull; view(90,0); camlight;colormap gray;caxis([0,1]);
+patch('faces',s.faces,'vertices',s.vertices,'facevertexcdata',s.attributes,'edgecolor','none','facecolor','interp','BackFaceLighting','unlit');
+axis equal; axis off; material dull; view(-90,0); camlight;colormap gray;caxis([0,1]);
 
 tri_lab = s.labels(s.faces);
 flg=max(tri_lab,[],2) == min(tri_lab,[],2);
@@ -50,6 +50,8 @@ for jj=1:length(tri_lab)
 end
 %zoom(3);
 %set (h, 'Units', 'normalized', 'Position', [0,0,1,1]);
-saveas(h,'left_freq1_2.png');
-view(-90,0);camlight;
-saveas(h,'left_freq2_2.png')
+saveas(h,'right_freq1_2_bk.pdf');
+saveas(h,'right_freq1_2_bk.png');
+view(90,0);camlight;
+saveas(h,'right_freq2_2_bk.pdf');
+saveas(h,'right_freq2_2_bk.png');
