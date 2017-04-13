@@ -34,5 +34,5 @@ s = patch_color_labels(s, freq=s.attributes, cmap='prism')
 #s = patch_color_attrib(s,cmap='gray',clim=[0,1])
 
 s.vertices = sm.vertices
-view_patch_vtk(s,outfile='mod_map_middle_frontal2.png',show=0, azimuth=-90, elevation=0, roll=90)
+view_patch_vtk(s,outfile='mod_map_middle_frontal2.png',show=1, azimuth=-90, elevation=0, roll=90)
 

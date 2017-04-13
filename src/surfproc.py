@@ -362,6 +362,7 @@ def view_patch_vtk(r, azimuth=90, elevation=0, roll=-90, outfile=0, show=1):
     mapper.SetInputData(normals.GetOutput())
 
     ren = vtkRenderer()
+    ren.TwoSidedLightingOff()
     renWin = vtkRenderWindow()
     renWin.SetSize(1600, 1600)
 #    renWin.SetDPI(200)
