@@ -37,7 +37,7 @@ count1 = 0
 #roilist = np.array([[29,69,70],[(30, 72, 9, 47)],[33,34,35,36,74],[6,7,8,9,10],[28],[(2,22,11,58,59,20,43,19,45)]])
 
 #roilist= [2,6,22] # [30, 72, 9, 47,6,7,8,9,10] #pc
-roilist= [29,9,7] 
+roilist= [29,9,7]
 #roilist=[6,7,8,9,10] #cing
 
 #ref=lst[11]
@@ -65,7 +65,7 @@ sub = sp.concatenate((sub1[msk_small_region,:], sub2[msk_small_region,:]), axis=
 pca = PCA(n_components=3)
 pca.fit(sub)
 
-sub2_rot = rot_sub_data(sub1, sub2)
+sub2_rot,_ = rot_sub_data(sub1, sub2)
 
 
 sub1_3d = pca.transform(sub1)
@@ -98,7 +98,7 @@ r = 1
 pi = np.pi
 cos = np.cos
 sin = np.sin
-phi, theta = np.mgrid[0:pi:101j, 0:2 * pi:101j]
+phi, theta = np.mgrid[0:pi:200j, 0:2 * pi:200j]
 
 x = r * sin(phi) * cos(theta)
 y = r * sin(phi) * sin(theta)
@@ -108,32 +108,34 @@ mlab.figure(1, bgcolor=(1, 1, 1), fgcolor=(0, 0, 0), size=(400, 300))
 #mlab.clf()
 clr=[[1,0,0],[0,1,0],[0,0,1],[1,1,0],[0,1,1],[1,0,1]]
 # Represent spherical harmonics on the surface of the sphere
-mlab.mesh(x, y, z, color=(0.5, 0.5, 0.5), opacity=.5)
-for ind in range(len(roilist)):    
-    msk_roi=np.in1d(dfs_left.labels, roilist[ind])    
+mlab.mesh(x, y, z, color=(0.5, 0.5, 0.5), opacity=1)
+for ind in range(len(roilist)):
+    msk_roi=np.in1d(dfs_left.labels, roilist[ind])
     mlab.points3d(sub1[msk_roi,0], sub1[msk_roi,1], sub1[msk_roi,2], scale_factor=0.05, color=tuple(clr[ind]))
 
 mlab.figure(2, bgcolor=(1, 1, 1), fgcolor=(0, 0, 0), size=(400, 300))
 ## Represent spherical harmonics on the surface of the sphere
-mlab.mesh(x, y, z, color=(0.5, 0.5, 0.5), opacity=.5)
-for ind in range(len(roilist)):    
-    msk_roi=np.in1d(dfs_left.labels, roilist[ind])    
+mlab.mesh(x, y, z, color=(0.5, 0.5, 0.5), opacity=1)
+for ind in range(len(roilist)):
+    msk_roi=np.in1d(dfs_left.labels, roilist[ind])
     mlab.points3d(sub2[msk_roi,0], sub2[msk_roi,1], sub2[msk_roi,2], scale_factor=0.05, color=tuple(clr[ind]))
 #
 # mlab.points3d(sub2[:,0], sub2[:,1], sub2[:,2], scale_factor=0.05, color=(0, 1, 0))
-mlab.show()
+#mlab.show()
 
 
 mlab.figure(3, bgcolor=(1, 1, 1), fgcolor=(0, 0, 0), size=(400, 300))
 ## Represent spherical harmonics on the surface of the sphere
-mlab.mesh(x, y, z, color=(0.5, 0.5, 0.5), opacity=.5)
-for ind in range(len(roilist)):    
-    msk_roi=np.in1d(dfs_left.labels, roilist[ind])    
+mlab.mesh(x, y, z, color=(0.5, 0.5, 0.5), opacity=1)
+for ind in range(len(roilist)):
+    msk_roi=np.in1d(dfs_left.labels, roilist[ind])
     mlab.points3d(sub2_rot[msk_roi,0], sub2_rot[msk_roi,1], sub2_rot[msk_roi,2], scale_factor=0.05, color=tuple(clr[ind]))
 #
 # mlab.points3d(sub2[:,0], sub2[:,1], sub2[:,2], scale_factor=0.05, color=(0, 1, 0))
-mlab.show()
+mlab.draw()
+mlab.savefig('sph3.png')
 
+mlab.show()
 
 #
 #

@@ -31,7 +31,7 @@ r = 1.0
 pi = np.pi
 cos = np.cos
 sin = np.sin
-phi, theta = np.mgrid[0:pi:101j, 0:2 * pi:101j]
+phi, theta = np.mgrid[0:pi:100j, 0:2 * pi:100j]
 
 x = r * sin(phi) * cos(theta)
 y = r * sin(phi) * sin(theta)
@@ -40,7 +40,7 @@ z = r * cos(phi)
 mlab.figure(1, bgcolor=(1, 1, 1), fgcolor=(0, 0, 0), size=(400, 300))
 mlab.clf()
 # Represent spherical harmonics on the surface of the sphere
-mlab.mesh(x, y, z, color=(0.5,0.5,0.5),opacity=0.5)
+mlab.mesh(x, y, z, colormap=(0.5,0.5,0.5),opacity=.5)
 
 mlab.quiver3d(0,0,0,1,1,1,mode='arrow')
 
