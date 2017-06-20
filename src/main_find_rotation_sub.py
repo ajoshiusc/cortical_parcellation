@@ -81,7 +81,8 @@ simil_mtx=sp.pi/2.0 + sp.arcsin(rho)
 
 #rho = smooth_surf_function(dfs_left_sm, rho)
 dfs_left_sm.attributes = rho
-dfs_left_sm=patch_color_attrib(dfs_left_sm, rho, clim=[-1,1])
+dfs_left_sm=patch_color_attrib(dfs_left_sm, rho, clim=[0,1])
+dfs_left_sm.vColor[sp.absolute(rho) < 1e-6,:] = 0.5
 view_patch_vtk(dfs_left_sm, azimuth=90,elevation=180, roll=90, outfile='sub1to1_view1_pc.png', show=1)
 view_patch_vtk(dfs_left_sm, azimuth=-90,elevation=-180, roll=-90, outfile='sub1to1_view2_pc.png', show=1)
 
@@ -89,7 +90,8 @@ rho = np.dot(sub_mean_pc,sub2.T)/sub_mean_pc.shape[0]
 rho[~np.isfinite(rho)] = 0
 
 dfs_left_sm.attributes = rho
-dfs_left_sm=patch_color_attrib(dfs_left_sm, rho, clim=[-1,1])
+dfs_left_sm=patch_color_attrib(dfs_left_sm, rho, clim=[0,1])
+dfs_left_sm.vColor[sp.absolute(rho) < 1e-6,:] = 0.5
 view_patch_vtk(dfs_left_sm, azimuth=90,elevation=180, roll=90, outfile='sub2to2_view1_pc.png', show=1)
 view_patch_vtk(dfs_left_sm, azimuth=-90,elevation=-180, roll=-90, outfile='sub2to2_view2_pc.png', show=1)
 
@@ -99,7 +101,8 @@ rho = np.dot(ref_mean_pc,sub2.T)/ref_mean_pc.shape[0]
 rho[~np.isfinite(rho)] = 0
 #rho = smooth_surf_function(dfs_left_sm, rho)
 dfs_left.attributes = rho
-dfs_left_sm=patch_color_attrib(dfs_left_sm, rho, clim=[-1,1])
+dfs_left_sm=patch_color_attrib(dfs_left_sm, rho, clim=[0,1])
+dfs_left_sm.vColor[sp.absolute(rho) < 1e-6,:] = 0.5
 view_patch_vtk(dfs_left_sm, azimuth=90,elevation=180, roll=90, outfile='sub1to2_view1_pc.png', show=1)
 view_patch_vtk(dfs_left_sm, azimuth=-90,elevation=-180, roll=-90, outfile='sub1to2_view2_pc.png', show=1)
 
@@ -107,14 +110,15 @@ view_patch_vtk(dfs_left_sm, azimuth=-90,elevation=-180, roll=-90, outfile='sub1t
 #view_patch(sm)
 #view_patch(dfs_left,rho)
 
-sub_rot = rot_sub_data(sub1, sub2)
+sub_rot,_ = rot_sub_data(sub1, sub2)
 
 rho = sp.dot(ref_mean_pc,sub_rot.T)/ref_mean_pc.shape[0]
 #rho=rho[0,1:]
 rho[~np.isfinite(rho)] = 0
 #rho = smooth_surf_function(dfs_left_sm, rho)
 dfs_left.attributes = rho
-dfs_left_sm=patch_color_attrib(dfs_left_sm, rho, clim=[-1,1])
+dfs_left_sm=patch_color_attrib(dfs_left_sm, rho, clim=[0,1])
+dfs_left_sm.vColor[sp.absolute(rho) < 1e-6,:] = 0.5
 view_patch_vtk(dfs_left_sm, azimuth=90,elevation=180, roll=90, outfile='sub1to2_view1_pc_rot.png', show=1)
 view_patch_vtk(dfs_left_sm, azimuth=-90,elevation=-180, roll=-90, outfile='sub1to2_view2_pc_rot.png', show=1)
 

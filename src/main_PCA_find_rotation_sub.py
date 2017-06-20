@@ -37,9 +37,10 @@ count1 = 0
 #roilist = np.array([[29,69,70],[(30, 72, 9, 47)],[33,34,35,36,74],[6,7,8,9,10],[28],[(2,22,11,58,59,20,43,19,45)]])
 
 #roilist= [2,6,22] # [30, 72, 9, 47,6,7,8,9,10] #pc
-roilist= [29,9,7]
+roilist= [29,9,7] ##This is in the paper
 #roilist=[6,7,8,9,10] #cing
 
+#roilist = np.array([[29],[7,8],[(22,45)]]) used this for
 #ref=lst[11]
 datasub = scipy.io.loadmat(os.path.join(p_dir, sub, sub + '.rfMRI_REST1_LR.reduce3.ftdata.NLM_11N_hvar_25.mat'))
 dataref = scipy.io.loadmat(os.path.join(p_dir, ref, ref + '.rfMRI_REST1_RL.reduce3.ftdata.NLM_11N_hvar_25.mat'))
@@ -136,6 +137,13 @@ mlab.draw()
 mlab.savefig('sph3.png')
 
 mlab.show()
+
+dfs_left_sm.vColor = sp.zeros(dfs_left_sm.vertices.shape)+0.5
+view_patch(dfs_left_sm, close=0)
+sub_vert = dfs_left_sm.vertices
+for ind in range(len(roilist)):
+    msk_roi=np.in1d(dfs_left.labels, roilist[ind])
+    mlab.points3d(sub_vert[msk_roi,0], sub_vert[msk_roi,1], sub_vert[msk_roi,2], scale_factor=5, color=tuple(clr[ind]))
 
 #
 #
