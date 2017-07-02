@@ -24,7 +24,7 @@ nClusters=2
 
 ref = '100307'
 sub = '100307' #'101309' #lst[25]
-print sub, ref
+print(sub, ref)
 print(ref + '.reduce' + str(r_factor) + '.LR_mask.mat')
 fn1 = ref + '.reduce' + str(r_factor) + '.LR_mask.mat'
 fname1 = os.path.join(ref_dir, fn1)
@@ -73,13 +73,13 @@ sub1_3d = pca.transform(sub1)
 sub2_3d = pca.transform(sub2)
 sub2_rot_3d = pca.transform(sub2_rot)
 
-print sub1.shape
+print (sub1.shape)
 sub1 = sub1_3d
 sub2 = sub2_3d
 sub2_rot = sub2_rot_3d
 #sub1=sp.random.rand(sub1.shape[0],sub1.shape[1])-.5
 #sub2=sp.random.rand(sub2.shape[0],sub2.shape[1])-.5
-print sub1.shape
+print (sub1.shape)
 #
 m = np.mean(sub1, 1)
 #sub1 = sub1 - m[:, None]
