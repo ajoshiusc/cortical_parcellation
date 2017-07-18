@@ -96,7 +96,7 @@ vrest = vrest[ind_rois, ]
 m = np.mean(vrest, 1)
 vrest = vrest - m[:, None]
 s = np.std(vrest, 1)+1e-116
-vmotor1_1 = vrest/s[:, None]
+vtongue1_1 = vrest/s[:, None]
 
 vrest = scipy.io.loadmat('/big_disk/ajoshi/with_andrew/100307/100307.\
 tfMRI_MOTOR_RL.reduce3.ftdata.NLM_11N_hvar_5.mat')
@@ -108,7 +108,7 @@ vrest = vrest[ind_rois, ]
 m = np.mean(vrest, 1)
 vrest = vrest - m[:, None]
 s = np.std(vrest, 1)+1e-116
-vmotor1_2 = vrest/s[:, None]
+vtongue1_2 = vrest/s[:, None]
 
 vrest = scipy.io.loadmat('/big_disk/ajoshi/with_andrew/100307/100307.\
 tfMRI_LANGUAGE_LR.reduce3.ftdata.NLM_11N_hvar_5.mat')
@@ -120,7 +120,7 @@ vrest = vrest[ind_rois, ]
 m = np.mean(vrest, 1)
 vrest = vrest - m[:, None]
 s = np.std(vrest, 1)+1e-116
-vmotor1_3 = vrest/s[:, None]
+vtongue1_3 = vrest/s[:, None]
 
 vrest = scipy.io.loadmat('/big_disk/ajoshi/with_andrew/100307/100307.\
 tfMRI_LANGUAGE_RL.reduce3.ftdata.NLM_11N_hvar_5.mat')
@@ -132,16 +132,16 @@ vrest = vrest[ind_rois, ]
 m = np.mean(vrest, 1)
 vrest = vrest - m[:, None]
 s = np.std(vrest, 1)+1e-116
-vmotor1_4 = vrest/s[:, None]
+vtongue1_4 = vrest/s[:, None]
 
 
-vmotor1 = sp.concatenate((vmotor1_1, vmotor1_2, vmotor1_3, vmotor1_4), axis=1)
-#vmotor1 = sp.concatenate((vmotor1_1, vmotor1_2), axis=1)
+vtongue1 = sp.concatenate((vtongue1_1, vtongue1_2, vtongue1_3, vtongue1_4), axis=1)
+#vtongue1 = sp.concatenate((vtongue1_1, vtongue1_2), axis=1)
 
 
-#vmotor1 = vmotor1[ind_rois,]
+#vtongue1 = vtongue1[ind_rois,]
 #vrest = nib.load('/big_disk/ajoshi/HCP5/' + sub + '/MNINonLinear/Resu\
-#lts/rfMRI_REST2_LR/rfMRI_REST2_LR_Atlas_hp2000_clean.dtseries.nii')    
+#lts/rfMRI_REST2_LR/rfMRI_REST2_LR_Atlas_hp2000_clean.dtseries.nii')
 vrest = scipy.io.loadmat('/big_disk/ajoshi/with_andrew/100307/100307.\
 rfMRI_REST1_LR.reduce3.ftdata.NLM_11N_hvar_5.mat')
 LR_flag = msk['LR_flag']
@@ -150,44 +150,44 @@ data = vrest['ftdata_NLM']
 #data = sp.squeeze(vrest.get_data()).T
 vrest = data[LR_flag]
 vrest = vrest[ind_rois, ]
-vrest = vrest[:, :vmotor1.shape[1]]    # make their length same
+vrest = vrest[:, :vtongue1.shape[1]]    # make their length same
 m = np.mean(vrest, 1)
 vrest = vrest - m[:, None]
 s = sp.std(vrest, axis=1) + 1e-116
 vrest1 = vrest/s[:, None]
 
-rho1 = sp.sum(vrest1*vmotor1, axis=1)/vrest1.shape[1]
-diffbefore = vrest1 - vmotor1
+rho1 = sp.sum(vrest1*vtongue1, axis=1)/vrest1.shape[1]
+diffbefore = vrest1 - vtongue1
 
-vmotor1, Rot = rot_sub_data(ref=vrest1, sub=vmotor1,
+vtongue1, Rot = rot_sub_data(ref=vrest1, sub=vtongue1,
                             area_weight=sp.sqrt(surf_weight[ind_rois]))
-#vrest1 = gaussian_filter(vrest1,[0,2]) 
-#vmotor1 = gaussian_filter(vmotor1,[0,2]) 
+#vrest1 = gaussian_filter(vrest1,[0,2])
+#vtongue1 = gaussian_filter(vtongue1,[0,2])
 #vrest1=vrest1[:,78:95]
-#vmotor1=vmotor1[:,78:95]
+#vtongue1=vtongue1[:,78:95]
 #vrest1=vrest1[:,57:74]
-#vmotor1=vmotor1[:,57:74]
+#vtongue1=vtongue1[:,57:74]
 
-#vrest1=vrest1[:,140:157]
-#vmotor1=vmotor1[:,140:157]
+vrest1=vrest1[:,568:884]
+vtongue1=vtongue1[:,568:884] # Language task
 
-rho1rot = sp.sum(vrest1*vmotor1,
+rho1rot = sp.sum(vrest1*vtongue1,
                  axis=1)/vrest1.shape[1]
 
-diffafter = vrest1 - vmotor1
+diffafter = vrest1 - vtongue1
 
-#diffbefore = gaussian_filter(diffbefore,[0,5]) 
+#diffbefore = gaussian_filter(diffbefore,[0,5])
 
 plt.imshow(sp.absolute(diffbefore), aspect='auto', clim=(0, 2.0))
 plt.colorbar()
-plt.savefig('dist_motor_before.pdf', dpi=300)
+plt.savefig('dist_tongue_before.pdf', dpi=300)
 plt.show()
 
 diffafter = gaussian_filter(diffafter, [0, 50])
 
 plt.imshow(sp.absolute(diffafter), aspect='auto', clim=(0, .05))
 plt.colorbar()
-plt.savefig('dist_motor_after.pdf', dpi=300)
+plt.savefig('dist_lang_after.pdf', dpi=300)
 plt.show()
 
 
@@ -196,18 +196,18 @@ rho_full[ind_rois] = rho1
 dfs_left_sm.attributes = rho_full
 dfs_left_sm = patch_color_attrib(dfs_left_sm, clim=[0, 1])
 view_patch_vtk(dfs_left_sm, azimuth=90, elevation=180, roll=90,
-               outfile='rest1motor_before_rot.png', show=1)
+               outfile='rest1lang_before_rot.png', show=1)
 
    #dfs_left_sm.attributes = sp.absolute(diffafter[:,t])
 #    dfs_left_sm=patch_color_attrib(dfs_left_sm,clim=[0,1])
 #    view_patch_vtk(dfs_left_sm, azimuth=90, elevation=180, roll=90, outfile='rest1motrho_full=sp.zeros((surf1.attributes.shape[0]))
 rho_full[ind_rois] = rho1rot
 dfs_left_sm.attributes = rho_full
-dfs_left_sm = patch_color_attrib(dfs_left_sm, clim=[0, 1])
+dfs_left_sm = patch_color_attrib(dfs_left_sm, clim=[0.4, 1])
 view_patch_vtk(dfs_left_sm, azimuth=90, elevation=180, roll=90,
-               outfile='rest_vs_motor_after_rot1.png', show=1)
+               outfile='rest_vs_lang_after_rot1.png', show=1)
 view_patch_vtk(dfs_left_sm, azimuth=-90, elevation=180, roll=-90,
-               outfile='rest_vs_motor_after_rot2.png', show=1)
+               outfile='rest_vs_lang_after_rot2.png', show=1)
 
 
 #plt.plot(rho1)
@@ -216,20 +216,20 @@ view_patch_vtk(dfs_left_sm, azimuth=-90, elevation=180, roll=-90,
 #    dfs_left_sm.attributes = sp.absolute(diffafter[:,t])
 #    dfs_left_sm = patch_color_attrib(dfs_left_sm,clim=[0,.6])
 #    view_patch_vtk(dfs_left_sm, azimuth=90, elevation=180, roll=90, show=1)
-#    
-#    
-diff = sp.absolute(vrest1 - vmotor1)
+#
+#
+diff = sp.absolute(vrest1 - vtongue1)
 diff_s = gaussian_filter(diff,[0,10])
 
-
-for ind in sp.arange(vmotor1.shape[1]):
-    dfs_left_sm.attributes = diff_s[:,ind]
-    fname1 = 'rest_vs_motor_after_rot_%d_d.png' % ind
-    fname2 = 'rest_vs_motor_after_rot_%d_m.png' % ind
-    dfs_left_sm = patch_color_attrib(dfs_left_sm, clim=[0, 1])
-    view_patch_vtk(dfs_left_sm, azimuth=90, elevation=180, roll=90,
-                   outfile=fname1, show=0)
-    view_patch_vtk(dfs_left_sm, azimuth=-90, elevation=180, roll=-90,
-                   outfile=fname2, show=0)
-    print ind, 
-
+#
+#for ind in sp.arange(vtongue1.shape[1]):
+#    dfs_left_sm.attributes = diff_s[:,ind]
+#    fname1 = 'rest_vs_tongue_after_rot_%d_d.png' % ind
+#    fname2 = 'rest_vs_tongue_after_rot_%d_m.png' % ind
+#    dfs_left_sm = patch_color_attrib(dfs_left_sm, clim=[0, 1])
+#    view_patch_vtk(dfs_left_sm, azimuth=90, elevation=180, roll=90,
+#                   outfile=fname1, show=0)
+#    view_patch_vtk(dfs_left_sm, azimuth=-90, elevation=180, roll=-90,
+#                   outfile=fname2, show=0)
+#    print ind,
+#

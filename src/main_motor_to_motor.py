@@ -21,7 +21,7 @@ r_factor = 3
 ref_dir = os.path.join(p_dir_ref, 'reference')
 nClusters = 3
 
-ref = '100307'
+ref = '196750'
 print(ref + '.reduce' + str(r_factor) + '.LR_mask.mat')
 fn1 = ref + '.reduce' + str(r_factor) + '.LR_mask.mat'
 fname1 = os.path.join(ref_dir, fn1)
@@ -42,7 +42,7 @@ ind_rois = sp.nonzero(ind_rois)[0]
 surf1 = dfs_left_sm
 
 surf1.attributes = sp.zeros(surf1.vertices.shape[0])
-surf1.attributes[ind_rois] = 1 
+surf1.attributes[ind_rois] = 1
 surf1 = patch_color_attrib(surf1)
 view_patch_vtk(surf1, show=1, azimuth=90, elevation=180, roll=90, outfile='motor_region.png')
 
@@ -75,7 +75,7 @@ tval = sp.squeeze(vtscore['ftdata'][LR_flag])
 tval[sp.isnan(tval)] = 0
 surf1.attributes = sp.zeros(surf1.vertices.shape[0])
 surf1.attributes[ind_rois] = tval[ind_rois]
-                 
+
 ind_max_t = sp.argmax(surf1.attributes[ind_rois])
 #ind_max_t = ind_rois[ind_max_t]
 surf1 = patch_color_attrib(surf1)
@@ -83,7 +83,7 @@ view_patch_vtk(surf1, show=1, azimuth=90, elevation=180, roll=90, outfile='motor
 
 #vmotor1 = vmotor1[ind_rois,]
 #vrest = nib.load('/big_disk/ajoshi/HCP5/' + sub + '/MNINonLinear/Resu\
-#lts/rfMRI_REST2_LR/rfMRI_REST2_LR_Atlas_hp2000_clean.dtseries.nii')    
+#lts/rfMRI_REST2_LR/rfMRI_REST2_LR_Atlas_hp2000_clean.dtseries.nii')
 vrest = scipy.io.loadmat('/big_disk/ajoshi/with_andrew/100307/100307.tfMRI_MOTOR_LR.reduce3.ftdata.NLM_11N_hvar_5.mat')
 LR_flag = msk['LR_flag']
 LR_flag = np.squeeze(LR_flag) > 0
@@ -102,18 +102,18 @@ diffbefore = vmotor2 - vmotor1
 
 vmotor1orig=vmotor1.copy()
 vmotor1, Rot = rot_sub_data(ref=vmotor2, sub=vmotor1) #, area_weight=sp.sqrt(surf_weight[ind_rois]))
-rho1rot = sp.sum(vmotor2*vmotor1, axis=1)/vmotor2.shape[1]    
+rho1rot = sp.sum(vmotor2*vmotor1, axis=1)/vmotor2.shape[1]
 
 diffafter = vmotor2 - vmotor1
 
-#diffbefore = gaussian_filter(diffbefore,[0,5]) 
+#diffbefore = gaussian_filter(diffbefore,[0,5])
 
 plt.imshow(sp.absolute(diffbefore), aspect='auto', clim=(0, 2.0))
 plt.colorbar()
 plt.savefig('dist_motor_before.png', dpi=300)
 plt.show()
 
-diffafter = gaussian_filter(diffafter,[0,5]) 
+diffafter = gaussian_filter(diffafter,[0,5])
 
 plt.imshow(sp.absolute(diffafter), aspect='auto', clim=(0, 2.0))
 plt.colorbar()
@@ -135,24 +135,24 @@ dfs_left_sm=patch_color_attrib(dfs_left_sm,clim=[0,1])
 view_patch_vtk(dfs_left_sm, azimuth=90, elevation=180, roll=90, outfile='motor2motor_after_rot.png', show=1)
 #view_patch_vtk(dfs_left_sm, azimuth=-90, elevation=180, roll=-90, outfile='hand_vs_hand_after_rot2.png', show=1)
 
-aaa = vmotor1[ind_max_t,:]    
-aaaorig = vmotor1orig[ind_max_t,:]    
+aaa = vmotor1[ind_max_t,:]
+aaaorig = vmotor1orig[ind_max_t,:]
 
 bbb = vmotor2[ind_max_t,:]
 
 import matplotlib.pyplot as plt
 
-plt.plot(aaa,'r') 
+plt.plot(aaa,'r')
 plt.plot(aaaorig,'k')
-plt.plot(bbb,'b') 
-plt.show()  
+plt.plot(bbb,'b')
+plt.show()
 
 # Tongue
 tblock1 = sp.zeros(vmotor1.shape[1])
 tblock2 = sp.zeros(vmotor2.shape[1])
 tblock1[57:74] = 1
 tblock1[140:157] = 1
-       
+
 tblock2[78:95] = 1
 tblock2[183:200] = 1
 
@@ -166,21 +166,21 @@ tblock2 = tblock2 - m
 s = sp.std(tblock2) +1e-116
 tblock2 = tblock2/s
 
-       
+
 plt.plot(tblock2,'r')
 plt.plot(tblock1,'k')
-blksynced = gaussian_filter(sp.dot(Rot,tblock2),[2]) 
+blksynced = gaussian_filter(sp.dot(Rot,tblock2),[2])
 
 plt.plot(blksynced,'b')
 plt.savefig('synced_blocks_tongue2.png',dpi=300)
-plt.show()       
+plt.show()
 
 # Right foot
 tblock1 = sp.zeros(vmotor1.shape[1])
 tblock2 = sp.zeros(vmotor2.shape[1])
 tblock1[78:95] = 1
 tblock1[246:263] = 1
-       
+
 tblock2[36:53] = 1
 tblock2[204:221] = 1
 
@@ -195,21 +195,21 @@ s = sp.std(tblock2) +1e-116
 tblock2 = tblock2/s
 #tblock1=gaussian_filter(tblock1,10)
 #tblock2=gaussian_filter(tblock2,10)
-       
+
 plt.plot(tblock2,'r')
 plt.plot(tblock1,'k')
-blksynced = gaussian_filter(sp.dot(Rot,tblock2),[2]) 
+blksynced = gaussian_filter(sp.dot(Rot,tblock2),[2])
 
 plt.plot(blksynced,'b')
 plt.savefig('synced_blocks_right_foot2.png',dpi=300)
-plt.show()       
+plt.show()
 
 #righthand
 tblock1 = sp.zeros(vmotor1.shape[1])
 tblock2 = sp.zeros(vmotor2.shape[1])
 tblock1[15:32] = 1
 tblock1[182:199] = 1
-       
+
 tblock2[121:138] = 1
 tblock2[225:242] = 1
 
@@ -224,14 +224,14 @@ s = sp.std(tblock2) +1e-116
 tblock2 = tblock2/s
 #tblock1=gaussian_filter(tblock1,10)
 #tblock2=gaussian_filter(tblock2,10)
-       
+
 plt.plot(tblock2,'r')
 plt.plot(tblock1,'k')
-blksynced = gaussian_filter(sp.dot(Rot,tblock2),[2]) 
+blksynced = gaussian_filter(sp.dot(Rot,tblock2),[2])
 
 plt.plot(blksynced,'b')
 plt.savefig('synced_blocks_right_hand2.png',dpi=300)
-plt.show()       
+plt.show()
 
 
 #lefthand
@@ -239,7 +239,7 @@ tblock1 = sp.zeros(vmotor1.shape[1])
 tblock2 = sp.zeros(vmotor2.shape[1])
 tblock1[99:116] = 1
 tblock1[225:242] = 1
-       
+
 tblock2[15:32] = 1
 tblock2[162:179] = 1
 
@@ -254,11 +254,11 @@ s = sp.std(tblock2) +1e-116
 tblock2 = tblock2/s
 #tblock1=gaussian_filter(tblock1,10)
 #tblock2=gaussian_filter(tblock2,10)
-       
+
 plt.plot(tblock2,'r')
 plt.plot(tblock1,'k')
-blksynced = gaussian_filter(sp.dot(Rot,tblock2),[2]) 
+blksynced = gaussian_filter(sp.dot(Rot,tblock2),[2])
 
 plt.plot(blksynced,'b')
 plt.savefig('synced_blocks_left_hand2.png',dpi=300)
-plt.show()       
+plt.show()

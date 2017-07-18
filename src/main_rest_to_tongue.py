@@ -22,7 +22,7 @@ r_factor = 3
 ref_dir = os.path.join(p_dir_ref, 'reference')
 nClusters = 3
 
-ref = '100307'
+ref = '196750'#'100307'
 print(ref + '.reduce' + str(r_factor) + '.LR_mask.mat')
 fn1 = ref + '.reduce' + str(r_factor) + '.LR_mask.mat'
 fname1 = os.path.join(ref_dir, fn1)
@@ -141,7 +141,7 @@ vtongue1 = sp.concatenate((vtongue1_1, vtongue1_2, vtongue1_3, vtongue1_4), axis
 
 #vtongue1 = vtongue1[ind_rois,]
 #vrest = nib.load('/big_disk/ajoshi/HCP5/' + sub + '/MNINonLinear/Resu\
-#lts/rfMRI_REST2_LR/rfMRI_REST2_LR_Atlas_hp2000_clean.dtseries.nii')    
+#lts/rfMRI_REST2_LR/rfMRI_REST2_LR_Atlas_hp2000_clean.dtseries.nii')
 vrest = scipy.io.loadmat('/big_disk/ajoshi/with_andrew/100307/100307.\
 rfMRI_REST1_LR.reduce3.ftdata.NLM_11N_hvar_5.mat')
 LR_flag = msk['LR_flag']
@@ -161,22 +161,22 @@ diffbefore = vrest1 - vtongue1
 
 vtongue1, Rot = rot_sub_data(ref=vrest1, sub=vtongue1,
                             area_weight=sp.sqrt(surf_weight[ind_rois]))
-#vrest1 = gaussian_filter(vrest1,[0,2]) 
-#vtongue1 = gaussian_filter(vtongue1,[0,2]) 
+#vrest1 = gaussian_filter(vrest1,[0,2])
+#vtongue1 = gaussian_filter(vtongue1,[0,2])
 #vrest1=vrest1[:,78:95]
 #vtongue1=vtongue1[:,78:95]
-vrest1=vrest1[:,57:74]
-vtongue1=vtongue1[:,57:74]
+#vrest1=vrest1[:,57:74]
+#vtongue1=vtongue1[:,57:74]
 
-#vrest1=vrest1[:,140:157]
-#vtongue1=vtongue1[:,140:157]
+vrest1=vrest1[:,568:884]
+vtongue1=vtongue1[:,568:884] # Language task
 
 rho1rot = sp.sum(vrest1*vtongue1,
                  axis=1)/vrest1.shape[1]
 
 diffafter = vrest1 - vtongue1
 
-#diffbefore = gaussian_filter(diffbefore,[0,5]) 
+#diffbefore = gaussian_filter(diffbefore,[0,5])
 
 plt.imshow(sp.absolute(diffbefore), aspect='auto', clim=(0, 2.0))
 plt.colorbar()
@@ -203,7 +203,7 @@ view_patch_vtk(dfs_left_sm, azimuth=90, elevation=180, roll=90,
 #    view_patch_vtk(dfs_left_sm, azimuth=90, elevation=180, roll=90, outfile='rest1motrho_full=sp.zeros((surf1.attributes.shape[0]))
 rho_full[ind_rois] = rho1rot
 dfs_left_sm.attributes = rho_full
-dfs_left_sm = patch_color_attrib(dfs_left_sm, clim=[0, 1])
+dfs_left_sm = patch_color_attrib(dfs_left_sm, clim=[0.5, 1])
 view_patch_vtk(dfs_left_sm, azimuth=90, elevation=180, roll=90,
                outfile='rest_vs_tongue_after_rot1.png', show=1)
 view_patch_vtk(dfs_left_sm, azimuth=-90, elevation=180, roll=-90,
@@ -216,8 +216,8 @@ view_patch_vtk(dfs_left_sm, azimuth=-90, elevation=180, roll=-90,
 #    dfs_left_sm.attributes = sp.absolute(diffafter[:,t])
 #    dfs_left_sm = patch_color_attrib(dfs_left_sm,clim=[0,.6])
 #    view_patch_vtk(dfs_left_sm, azimuth=90, elevation=180, roll=90, show=1)
-#    
-#    
+#
+#
 diff = sp.absolute(vrest1 - vtongue1)
 diff_s = gaussian_filter(diff,[0,10])
 
@@ -231,5 +231,5 @@ diff_s = gaussian_filter(diff,[0,10])
 #                   outfile=fname1, show=0)
 #    view_patch_vtk(dfs_left_sm, azimuth=-90, elevation=180, roll=-90,
 #                   outfile=fname2, show=0)
-#    print ind, 
+#    print ind,
 #
