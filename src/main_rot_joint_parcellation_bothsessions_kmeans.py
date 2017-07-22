@@ -7,14 +7,14 @@ from dfsio import readdfs
 import os
 from sklearn.cluster import KMeans
 
-p_dir = '/home/ajoshi/data/HCP_data/data'
-p_dir_ref='/home/ajoshi/data/HCP_data'
+p_dir = '/big_disk/ajoshi/HCP_data/data'
+p_dir_ref = '/big_disk/ajoshi/HCP_data'
 lst = os.listdir(p_dir)
 r_factor = 3
 ref_dir = os.path.join(p_dir_ref, 'reference')
-nClusters=17
+nClusters = 17
 
-ref = '100307'
+ref = '196750' # chosen by taking smallest distance to every other subject
 print(ref + '.reduce' + str(r_factor) + '.LR_mask.mat')
 fn1 = ref + '.reduce' + str(r_factor) + '.LR_mask.mat'
 fname1 = os.path.join(ref_dir, fn1)
@@ -64,15 +64,21 @@ nSub=sub_data1.shape[2]
 cat_data=sp.zeros((2*nSub*sub_data1.shape[0],sub_data1.shape[1]))
 
 for ind in range(nSub):
-    sub_data1[:,:,ind] = rot_sub_data(ref=sub_data1[:,:,0],sub=sub_data1[:,:,ind])
-    sub_data2[:,:,ind] = rot_sub_data(ref=sub_data1[:,:,0],sub=sub_data2[:,:,ind])
+    sub_data1[:,:,ind],_ = rot_sub_data(ref=sub_data1[:,:,0],sub=sub_data1[:,:,ind])
+    sub_data2[:,:,ind],_ = rot_sub_data(ref=sub_data1[:,:,0],sub=sub_data2[:,:,ind])
     
     cat_data[sub_data1.shape[0]*ind:sub_data1.shape[0]*(ind+1),:] = sub_data1[:,:,ind]
     ind1=nSub+ind    
     cat_data[sub_data1.shape[0]*ind1:sub_data1.shape[0]*(ind1+1),:] = sub_data2[:,:,ind]    
 
     print ind, sub_data1.shape, cat_data.shape
-#sp.savez_compressed('data_bothsessions', cat_data=cat_data)
+#sp.savez_compressed('data_bothsessions', cat_data=cat_data, lst=lst, nClusters=nClusters)
+######
+
+a = sp.load('data_bothsessions.npz')
+cat_data = a['cat_data']
+lst = a['lst']
+nClusters = a['nClusters']
 
 SC = KMeans(n_clusters=nClusters,random_state=5324)
 labs_all = SC.fit_predict(cat_data)
