@@ -6,6 +6,8 @@ from fmri_methods_sipi import rot_sub_data
 from surfproc import view_patch_vtk, patch_color_attrib
 from dfsio import readdfs
 import os
+from sklearn.manifold import MDS
+import matplotlib.pyplot as plt
 
 p_dir = '/big_disk/ajoshi/HCP_data/data'
 p_dir_ref = '/big_disk/ajoshi/HCP_data'
@@ -15,7 +17,7 @@ r_factor = 3
 ref_dir = os.path.join(p_dir_ref, 'reference')
 nClusters = 30
 
-ref = '100307'
+ref = '196750'#'100307'
 print(ref + '.reduce' + str(r_factor) + '.LR_mask.mat')
 fn1 = ref + '.reduce' + str(r_factor) + '.LR_mask.mat'
 fname1 = os.path.join(ref_dir, fn1)
@@ -56,16 +58,27 @@ dist_all_rot = dist_all_orig.copy()
 #sub_data[:,:,1]=sub_data[rperm,:,1]
 sub_data_orig = sub_data.copy()
 
-for ind1 in range(1, nSub):
-    for ind2 in range(1, nSub):
-        dist_all_orig = sp.mean((sub_data_orig[:, :, ind1] -
-                                 sub_data_orig[:, :, ind2])**2.0, axis=(1))
+for ind1 in range(nSub):
+    for ind2 in range(nSub):
+        dist_all_orig[ind1, ind2] = sp.linalg.norm(sub_data_orig[:, :, ind1] -
+                                                   sub_data_orig[:, :, ind2])
         sub_data_rot, _ = rot_sub_data(ref=sub_data[:, :, ind1],
                                        sub=sub_data[:, :, ind2])
-        dist_all_rot[ind1, ind2] = sp.mean((sub_data[:, :, ind1] -
-                                            sub_data_rot)**2.0, axis=(1))
+        dist_all_rot[ind1, ind2] = sp.linalg.norm(sub_data[:, :, ind1] -
+                                                  sub_data_rot)
         print ind1, ind2
 
 
 sp.savez('rot_pairwise_dist_all_sub_by_sub.npz', dist_all_rot=dist_all_rot,
-         dist_all_orig=dist_all_orig)
+         dist_all_orig=dist_all_orig, lst=lst)
+######
+
+a = sp.load('rot_pairwise_dist_all_sub_by_sub.npz')
+q = sp.argmin(a['dist_all_rot'].sum(1))
+m=MDS(n_components=3,dissimilarity='precomputed')
+e=m.fit_transform(a['dist_all_rot'])
+print(e)
+fig, ax = plt.subplots()
+ax.scatter(e[:,0],e[:,1])
+for i in range(e.shape[0]):
+    ax.annotate(lst[i], (e[i,0],e[i,1]))

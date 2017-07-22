@@ -20,7 +20,7 @@ r_factor = 3
 ref_dir = os.path.join(p_dir_ref, 'reference')
 nClusters=3
 
-ref = '100307'
+ref = '196750'#'100307'
 print(ref + '.reduce' + str(r_factor) + '.LR_mask.mat')
 fn1 = ref + '.reduce' + str(r_factor) + '.LR_mask.mat'
 fname1 = os.path.join(ref_dir, fn1)
@@ -92,8 +92,8 @@ lts/tfMRI_LANGUAGE_RL/tfMRI_LANGUAGE_RL_Atlas.dtseries.nii')
     rho1 += sp.sum(vrest1*vlang1, axis=1)/vrest1.shape[1]
     rho2 += sp.sum(vrest2*vlang2, axis=1)/vlang1.shape[1]
 
-    vlang1 = rot_sub_data(ref=vrest1, sub=vlang1)
-    vlang2 = rot_sub_data(ref=vrest2, sub=vlang2)
+    vlang1, _ = rot_sub_data(ref=vrest1, sub=vlang1)
+    vlang2, _ = rot_sub_data(ref=vrest2, sub=vlang2)
 
     rho1rot += sp.sum(vrest1*vlang1, axis=1)/vrest1.shape[1]
     rho2rot += sp.sum(vrest2*vlang2, axis=1)/vlang1.shape[1]
@@ -102,15 +102,15 @@ lts/tfMRI_LANGUAGE_RL/tfMRI_LANGUAGE_RL_Atlas.dtseries.nii')
 rho1 = smooth_surf_function(dfs_left_sm, rho1, a1=0, a2=1)
 rho1rot = smooth_surf_function(dfs_left_sm, rho1rot, a1=0, a2=1)
 
-view_patch(dfs_left_sm, rho1/len(lst), clim=[0, 1],
+view_patch(dfs_left_sm, rho1/len(lst), clim=[0, 0.75],
            outfile='rest1lang_before_rot.png', show=0)
-view_patch(dfs_left_sm, rho1rot/len(lst), clim=[0, 1],
+view_patch(dfs_left_sm, rho1rot/len(lst), clim=[0, 0.75],
            outfile='rest1lang_after_rot.png', show=0)
 
-rho2 = smooth_surf_function(dfs_left_sm, rho2, a1=0, a2=1)
-rho2rot = smooth_surf_function(dfs_left_sm, rho2rot)
+#rho2 = smooth_surf_function(dfs_left_sm, rho2, a1=0, a2=1)
+#rho2rot = smooth_surf_function(dfs_left_sm, rho2rot)
 
-view_patch(dfs_left_sm, rho2/len(lst), clim=[0,1],
+view_patch(dfs_left_sm, rho2/len(lst), clim=[0,0.75],
            outfile='rest2lang_before_rot.png', show=0)
 view_patch(dfs_left_sm, rho2rot/len(lst),
-           clim=[0,1], outfile='rest2lang_after_rot.png', show=0)
+           clim=[0,0.75], outfile='rest2lang_after_rot.png', show=0)
