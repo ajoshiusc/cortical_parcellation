@@ -1,28 +1,26 @@
 """ This module implements file reading and writing functions for the dfs format for BrainSuite
-    Also see http://brainsuite.bmap.ucla.edu for the software
+    Also see http://brainsuite.org for the software
 """
 
-"""Copyright (C) Brandon Ayers, Shantanu H. Joshi, David Shattuck,
-Brain Mapping Center, University of California Los Angeles
+"""BrainSuite Statistics Toolbox (bss)
+Copyright (C) 2017 The Regents of the University of California
+Creator: Shantanu H. Joshi, Department of Neurology, Ahmanson Lovelace Brain Mapping Center, UCLA
 
-Bss is free software; you can redistribute it and/or
-modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation; either version 2
-of the License, or (at your option) any later version.
+This program is free software; you can redistribute it and/or modify it under the terms
+of the GNU General Public License as published by the Free Software Foundation; version 2.
 
-Bss is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+See the GNU General Public License version 2 for more details.
 
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA."""
+You should have received a copy of the GNU General Public License along with this program;
+if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA."""
 
-__author__ = "Brandon Ayers"
-__copyright__ = "Copyright 2013, Brandon Ayers, Ahmanson-Lovelace Brain Mapping Center, \
-                 University of California Los Angeles"
-__email__ = "ayersb@ucla.edu"
+
+__author__ = "Brandon Ayers, Anand A Joshi"
+__copyright__ = "Copyright (C) 2017 The Regents of the University of California"
+__maintainer__ = "Shantanu H. Joshi"
+__email__ = "shjoshi@ieee.org"
 
 import numpy as np
 import struct
@@ -41,20 +39,21 @@ def readdfs(fname):
 
     fid = open(fname, 'rb')
     hdr.ftype_header = np.array(struct.unpack('c' * 12, fid.read(12)), dtype='S1')
-    if 'DFS' not in ''.join(hdr.ftype_header):
+#    print(((hdr.ftype_header).tostring()))
+    if b'DFS' not in (hdr.ftype_header).tostring():
         raise ValueError('Invalid dfs file' + fname)  # TODO: Change this to a custom exception in future
-    hdr.hdrsize = np.array(struct.unpack('i', fid.read(4)), dtype='int32')  # size(int32) = 4 bytes
-    hdr.mdoffset = np.array(struct.unpack('i', fid.read(4)), dtype='int32')
-    hdr.pdoffset = np.array(struct.unpack('i', fid.read(4)), dtype='int32')
+    hdr.hdrsize = np.array(struct.unpack('i', fid.read(4)), dtype='int32')[0]  # size(int32) = 4 bytes
+    hdr.mdoffset = np.array(struct.unpack('i', fid.read(4)), dtype='int32')[0]
+    hdr.pdoffset = np.array(struct.unpack('i', fid.read(4)), dtype='int32')[0]
     hdr.nTriangles = np.array(struct.unpack('i', fid.read(4)), dtype='int32')
     hdr.nVertices = np.array(struct.unpack('i', fid.read(4)), dtype='int32')
-    hdr.nStrips = np.array(struct.unpack('i', fid.read(4)), dtype='int32')
-    hdr.stripSize = np.array(struct.unpack('i', fid.read(4)), dtype='int32')
-    hdr.normals = np.array(struct.unpack('i', fid.read(4)), dtype='int32')
-    hdr.uvStart = np.array(struct.unpack('i', fid.read(4)), dtype='int32')
-    hdr.vcoffset = np.array(struct.unpack('i', fid.read(4)), dtype='int32')
-    hdr.labelOffset = np.array(struct.unpack('i', fid.read(4)), dtype='int32')
-    hdr.vertexAttributes = np.array(struct.unpack('i', fid.read(4)), dtype='int32')
+    hdr.nStrips = np.array(struct.unpack('i', fid.read(4)), dtype='int32')[0]
+    hdr.stripSize = np.array(struct.unpack('i', fid.read(4)), dtype='int32')[0]
+    hdr.normals = np.array(struct.unpack('i', fid.read(4)), dtype='int32')[0]
+    hdr.uvStart = np.array(struct.unpack('i', fid.read(4)), dtype='int32')[0]
+    hdr.vcoffset = np.array(struct.unpack('i', fid.read(4)), dtype='int32')[0]
+    hdr.labelOffset = np.array(struct.unpack('i', fid.read(4)), dtype='int32')[0]
+    hdr.vertexAttributes = np.array(struct.unpack('i', fid.read(4)), dtype='int32')[0]
     fid.seek(hdr.hdrsize)
 
     if hdr.nTriangles > 0 :
