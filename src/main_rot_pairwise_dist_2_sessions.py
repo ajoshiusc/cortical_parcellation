@@ -15,7 +15,7 @@ r_factor = 3
 ref_dir = os.path.join(p_dir_ref, 'reference')
 nClusters = 30
 
-ref = '100307'
+ref = '196750'
 print(ref + '.reduce' + str(r_factor) + '.LR_mask.mat')
 fn1 = ref + '.reduce' + str(r_factor) + '.LR_mask.mat'
 fname1 = os.path.join(ref_dir, fn1)
