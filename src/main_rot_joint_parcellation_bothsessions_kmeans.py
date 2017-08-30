@@ -80,7 +80,7 @@ cat_data = a['cat_data']
 lst = a['lst']
 nClusters = a['nClusters']
 
-SC = KMeans(n_clusters=nClusters,random_state=5324)
+SC = KMeans(n_clusters=nClusters,random_state=5324,n_jobs=-1)
 labs_all = SC.fit_predict(cat_data)
 
 lab_sub=labs_all.reshape((sub_data1.shape[0],2*nSub),order='F')

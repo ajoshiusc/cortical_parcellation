@@ -62,6 +62,7 @@ d2 = temp
 sub_data1 = d1
 sub_data2 = d2
 
+ind1 = s>1e-10
 
 dist_all_orig = sp.zeros(len(dfs_left_sm.vertices))
 dist_all_rot = dist_all_orig.copy()
@@ -73,13 +74,13 @@ sub_data2, _ = rot_sub_data(ref=sub_data1, sub=sub_data2)
 dist_all_rot = sub_data1-sub_data2
 
 plt.figure()
-plt.imshow(sp.absolute(dist_all_orig), aspect='auto', clim=(-3.0, 3.0))
+plt.imshow(sp.absolute(dist_all_orig[ind1,:]), aspect='auto', clim=(0, 5.0))
 plt.colorbar()
 plt.savefig('dist_before.pdf', dpi=300)
 plt.show()
 plt.figure()
 
-plt.imshow(sp.absolute(dist_all_rot), aspect='auto', clim=(-3.0, 3.0))
+plt.imshow(sp.absolute(dist_all_rot[ind1,:]), aspect='auto', clim=(0, 5.0))
 plt.colorbar()
 plt.savefig('dist_after.pdf', dpi=300)
 plt.show()
