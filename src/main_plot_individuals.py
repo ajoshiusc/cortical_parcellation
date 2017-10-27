@@ -19,9 +19,9 @@ p_dir_ref = '/home/ajoshi/data/HCP_data'
 lst = os.listdir(p_dir)
 r_factor = 3
 ref_dir = os.path.join(p_dir_ref, 'reference')
-nClusters = 30
+nClusters = 100
 
-ref = '100307'
+ref = '196750'
 print(ref + '.reduce' + str(r_factor) + '.LR_mask.mat')
 fn1 = ref + '.reduce' + str(r_factor) + '.LR_mask.mat'
 fname1 = os.path.join(ref_dir, fn1)
@@ -34,19 +34,38 @@ count1 = 0
 rho_rho = []
 rho_all = []
 
-s1 = sp.load('labs_all_data1_rot_individual_nclusters60_sub5.npz')
-l12 = s1['lab_sub']
-print sp.sum(sp.absolute(l12[:, 1] - l12[:, 0]))
-l12 = reorder_labels(l12)
 
-print sp.sum(sp.absolute(l12[:, 1] - l12[:, 0]))
-perm1 = sp.mod(17*sp.arange(max(l12.flatten())+1), max(l12.flatten())+1)
 
-cat_data = s1['cat_data']
-# lab_sub2=s1['lab_sub2']
-nVert = l12.shape[0]
+
+s1 = sp.load('labs_concat_data_100_clusters.npz')
+
+catlab = s1['labs_cat']
+
+tlab = sp.zeros((catlab.shape[0], 2))
+
+tlab[:, 0] = catlab
+
+
+s1 = sp.load('labs_all_data1_rot_individual_nclusters100_sub5.npz')
+l = s1['lab_sub']
+l1 = sp.reshape(l[:, :40], (l.shape[0]*40), order='F')
+
+l2 = sp.reshape(l[:, 40:80], (l.shape[0]*40), order='F')
+
+l12 = sp.concatenate((l1[:, None], l2[:, None]), axis=1)
+
+print sp.sum(sp.absolute(l12[:, 1]-l12[:, 0]))
+
+print sp.sum(sp.absolute(l12[:, 1]-l12[:, 0]))
+
+l1 = sp.reshape(l12[:, 0], (l.shape[0], 40), order='F')
+l2 = sp.reshape(l12[:, 1], (l.shape[0], 40), order='F')
+
 #
 for ind in range(l12.shape[1]):
+
+
+
     lab1 = sp.int32(l12[:, ind])
     dfs_left_sm.labels = lab1
     s = silhouette_samples(cat_data[nVert*(ind):nVert*(ind+1), :],
