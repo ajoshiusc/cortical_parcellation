@@ -22,8 +22,8 @@ r_factor = 3
 ref_dir = os.path.join(p_dir_ref, 'reference')
 nClusters=2
 
-ref = '100307'
-sub = '100307' #'101309' #lst[25]
+ref = '196750'
+sub = '131217' #'101309' #lst[25]
 print(sub, ref)
 print(ref + '.reduce' + str(r_factor) + '.LR_mask.mat')
 fn1 = ref + '.reduce' + str(r_factor) + '.LR_mask.mat'
@@ -31,6 +31,8 @@ fname1 = os.path.join(ref_dir, fn1)
 msk = scipy.io.loadmat(fname1)  # h5py.File(fname1);
 dfs_left = readdfs(os.path.join(p_dir_ref, 'reference', ref + '.aparc.a2009s.32k_fs.reduce3.left.dfs'))
 dfs_left_sm = readdfs(os.path.join(p_dir_ref, 'reference', ref + '.aparc.a2009s.32k_fs.reduce3.very_smooth.left.dfs'))
+
+ref='101309'
 count1 = 0
 #roiregion=['motor','precuneus','temporal','cingulate','semato','visual']
 
@@ -115,7 +117,6 @@ for ind in range(len(roilist)):
     mlab.points3d(sub1[msk_roi,0], sub1[msk_roi,1], sub1[msk_roi,2], scale_factor=0.05, color=tuple(clr[ind]))
 
 mlab.figure(2, bgcolor=(1, 1, 1), fgcolor=(0, 0, 0), size=(400, 300))
-## Represent spherical harmonics on the surface of the sphere
 mlab.mesh(x, y, z, color=(0.5, 0.5, 0.5), opacity=1)
 for ind in range(len(roilist)):
     msk_roi=np.in1d(dfs_left.labels, roilist[ind])

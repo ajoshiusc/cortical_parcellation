@@ -47,7 +47,8 @@ s = np.std(temp, 1)+1e-16
 temp = temp/s[:, None]
 d1 = temp
 
-data = scipy.io.loadmat(os.path.join(p_dir, sub, sub + '.rfMRI_REST2_LR.\
+sub = lst[1]
+data = scipy.io.loadmat(os.path.join(p_dir, sub, sub + '.rfMRI_REST1_LR.\
 reduce3.ftdata.NLM_11N_hvar_25.mat'))
 LR_flag = msk['LR_flag']
 LR_flag = np.squeeze(LR_flag) != 0
