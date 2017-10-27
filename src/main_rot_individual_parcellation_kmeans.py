@@ -13,7 +13,7 @@ lst = os.listdir(p_dir)
 #lst=lst[:5]
 r_factor = 3
 ref_dir = os.path.join(p_dir_ref, 'reference')
-nClusters=17
+nClusters=100
 
 ref = '196750'#'100307'
 print(ref + '.reduce' + str(r_factor) + '.LR_mask.mat')
@@ -28,7 +28,7 @@ rho_rho=[];rho_all=[]
 labs_all=sp.zeros((len(dfs_left.labels),len(lst)))
 
 for sub in lst:
-    data = scipy.io.loadmat(os.path.join(p_dir, sub, sub + '.rfMRI_REST1_RL.reduce3.ftdata.NLM_11N_hvar_25.mat'))
+    data = scipy.io.loadmat(os.path.join(p_dir, sub, sub + '.rfMRI_REST1_LR.reduce3.ftdata.NLM_11N_hvar_25.mat'))
     LR_flag = msk['LR_flag']
     LR_flag = np.squeeze(LR_flag) > 0
     data = data['ftdata_NLM']
@@ -37,17 +37,30 @@ for sub in lst:
     temp = temp - m[:,None]
     s = np.std(temp, 1)+1e-16
     temp = temp/s[:,None]
-    d = temp
+    d1 = temp
+
+    data = scipy.io.loadmat(os.path.join(p_dir, sub, sub + '.rfMRI_REST2_LR.reduce3.ftdata.NLM_11N_hvar_25.mat'))
+    LR_flag = msk['LR_flag']
+    LR_flag = np.squeeze(LR_flag) > 0
+    data = data['ftdata_NLM']
+    temp = data[LR_flag, :]
+    m = np.mean(temp, 1)
+    temp = temp - m[:,None]
+    s = np.std(temp, 1)+1e-16
+    temp = temp/s[:,None]
+    d2 = temp
     
     if count1==0:        
-        sub_data = sp.zeros((d.shape[0],d.shape[1],len(lst)))
+        sub_data1 = sp.zeros((d1.shape[0],d1.shape[1],len(lst)))
+        sub_data2 = sp.zeros((d2.shape[0],d2.shape[1],len(lst)))
 
-    sub_data[:,:,count1] = d
+    sub_data1[:,:,count1] = d1
+    sub_data2[:,:,count1] = d2
 
     count1+=1
     print count1,
     
-nSub=sub_data.shape[2]
+nSub=sub_data1.shape[2]
 #
 #cat_data=sp.zeros((nSub*sub_data.shape[0],sub_data.shape[1]))
 #
@@ -58,11 +71,13 @@ nSub=sub_data.shape[2]
 
  
 SC = KMeans(n_clusters=nClusters,random_state=5324)
-lab_sub=sp.zeros((sub_data.shape[0],nSub))
+lab_sub1=sp.zeros((sub_data1.shape[0],nSub))
+lab_sub2=sp.zeros((sub_data2.shape[0],nSub))
 for ind in range(nSub):
-    lab_sub[:,ind]=SC.fit_predict(sub_data[:,:,ind])    
+    lab_sub1[:,ind]=SC.fit_predict(sub_data1[:,:,ind])    
+    lab_sub2[:,ind]=SC.fit_predict(sub_data2[:,:,ind])    
     print ind
 #labs_all = SC.fit_predict(cat_data)
 
 #lab_sub=labs_all.reshape((sub_data.shape[0],nSub),order='F')
-sp.savez_compressed('labs_all_data_rot_individual_nclusters17', lab_sub=lab_sub, lst=lst)
+sp.savez_compressed('labs_all_data_rot_individual_nclusters100', lab_sub1=lab_sub1, lab_sub2=lab_sub2, lst=lst)

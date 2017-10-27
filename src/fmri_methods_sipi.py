@@ -220,7 +220,7 @@ def reorder_labels(labels):
         ind1 = linear_assignment(D)
         labels[:, i] = ind1[sp.int16(labels[:, i]), 1]
 
-    return labels
+    return labels, ind1
 
 
 def region_growing_fmri(seeds, affinity, conn):
