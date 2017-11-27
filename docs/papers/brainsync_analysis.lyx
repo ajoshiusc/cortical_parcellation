@@ -16,7 +16,7 @@ figs-within-sections
 \language_package default
 \inputencoding auto
 \fontencoding global
-\font_roman "default" "default"
+\font_roman "lmodern" "default"
 \font_sans "default" "default"
 \font_typewriter "default" "default"
 \font_math "auto" "auto"
@@ -77,11 +77,7 @@ figs-within-sections
 \begin_body
 
 \begin_layout Section*
-Analysis of the Brain Synchronization
-\end_layout
-
-\begin_layout Problem*
-How does the brain synchronization algorithm work?
+BrainSync in case of exact equality of sample correlations, or white noise
 \end_layout
 
 \begin_layout Standard
@@ -268,14 +264,12 @@ We have proven:
 \end_layout
 
 \begin_layout Claim*
-\begin_inset Formula $X$
+
+\emph on
+\begin_inset Formula $XX^{T}=YY^{T}$
 \end_inset
 
- and 
-\begin_inset Formula $Y$
-\end_inset
-
- have same spatial correlation 
+ 
 \begin_inset Formula $\iff$
 \end_inset
 
@@ -288,18 +282,16 @@ We have proven:
 \end_inset
 
 .
- By orthogonal transformation, we are changing temporal basis so that they
- match with the basis of target brain under the exact identity 
-\begin_inset Formula $XX^{T}=YY^{T}$
-\end_inset
-
-.
  
 \end_layout
 
-\begin_layout Remark*
+\begin_layout Enumerate
 Similar analysis can be done by ICA.
- All the information about 
+ 
+\end_layout
+
+\begin_layout Enumerate
+All the information about 
 \begin_inset Formula $XX^{T}$
 \end_inset
 
@@ -313,8 +305,12 @@ Similar analysis can be done by ICA.
 
 .
  So for brain network analysis in the resting state, we should just keep
- those two.For the task data spatial basis and singular values represent
- brain networks.
+ those two.
+ 
+\end_layout
+
+\begin_layout Enumerate
+For the task data spatial basis and singular values represent brain networks.
  Does the temporal basis represent driving processes such as thoughts or
  motor actions? It would be interesting to check correlation of spatial
  basis and block design process in task data.
@@ -323,6 +319,128 @@ Similar analysis can be done by ICA.
  This will give us brain data that is driven by the task and remove the
  one that is driven by physiological processes.
  
+\end_layout
+
+\begin_layout Enumerate
+
+\emph on
+In noisy case, wlog, we can say that 
+\begin_inset Formula $XX^{T}=YY^{T}+D$
+\end_inset
+
+ where 
+\begin_inset Formula $D$
+\end_inset
+
+ is some diagonal matrix.
+ We can see that the orthogonal matrix we get is still the same 
+\begin_inset Formula $O=U_{X}U_{Y}^{T}$
+\end_inset
+
+, 
+\begin_inset Formula $\Sigma_{X}=\Sigma_{Y}+D$
+\end_inset
+
+, 
+\begin_inset Formula $V_{X}=V_{Y}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsection*
+Choosing an Atlas
+\end_layout
+
+\begin_layout Standard
+Let's consider 3 subjects, with 
+\begin_inset Formula $XX^{T}=YY^{T}=ZZ^{T}$
+\end_inset
+
+, and 
+\begin_inset Formula $Z=U_{Z}\Sigma V$
+\end_inset
+
+ as above.
+ The orthogonal matrix 
+\begin_inset Formula $O_{XY}$
+\end_inset
+
+ that synchronizes 
+\begin_inset Formula $X$
+\end_inset
+
+ to 
+\begin_inset Formula $Y$
+\end_inset
+
+ is given by 
+\begin_inset Formula $O_{XY}=U_{X}U_{Y}^{T}$
+\end_inset
+
+.
+ Also, the orthogonal matrix 
+\begin_inset Formula $O_{YZ}$
+\end_inset
+
+ that synchronizes 
+\begin_inset Formula $Y$
+\end_inset
+
+ to 
+\begin_inset Formula $Z$
+\end_inset
+
+ is given by 
+\begin_inset Formula $O_{YZ}=U_{Y}U_{Z}^{T}$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+The orthogonal matrix 
+\begin_inset Formula $O_{XZ}$
+\end_inset
+
+ that synchronizes 
+\begin_inset Formula $X$
+\end_inset
+
+ to 
+\begin_inset Formula $Z$
+\end_inset
+
+ is given by 
+\begin_inset Formula $O_{XZ}=U_{X}U_{Z}^{T}=U_{X}U_{Y}^{T}U_{Y}U_{Z}^{T}=O_{XY}O_{YZ}$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+The transitivity property 
+\begin_inset Formula $\boxed{O_{XZ}=O_{XY}O_{YZ}}$
+\end_inset
+
+ implies that, if we synchronize multiple subjects to one single representative
+ subject, then it is equivalent to synchronizing them to each other, and
+ then synchronizing them to the representative subject with a common transform.
+ 
+\end_layout
+
+\begin_layout Standard
+This still holds true in case of white noise.
+\end_layout
+
+\begin_layout Standard
+
+\emph on
+Therefore, for the case of exact equality of sample correlation, or white
+ noise, choosing one subject as 'atlas' and aligning all the subjects to
+ that atlas minimizes the joint cost function of pairwise synchronizations.
 \end_layout
 
 \end_body
