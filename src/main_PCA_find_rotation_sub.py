@@ -23,7 +23,8 @@ ref_dir = os.path.join(p_dir_ref, 'reference')
 nClusters=2
 
 ref = '196750'
-sub = '131217' #'101309' #lst[25]
+sub = '131217' #
+sub= lst[9]
 print(sub, ref)
 print(ref + '.reduce' + str(r_factor) + '.LR_mask.mat')
 fn1 = ref + '.reduce' + str(r_factor) + '.LR_mask.mat'
@@ -32,7 +33,7 @@ msk = scipy.io.loadmat(fname1)  # h5py.File(fname1);
 dfs_left = readdfs(os.path.join(p_dir_ref, 'reference', ref + '.aparc.a2009s.32k_fs.reduce3.left.dfs'))
 dfs_left_sm = readdfs(os.path.join(p_dir_ref, 'reference', ref + '.aparc.a2009s.32k_fs.reduce3.very_smooth.left.dfs'))
 
-ref='101309'
+#ref='101309'
 count1 = 0
 #roiregion=['motor','precuneus','temporal','cingulate','semato','visual']
 
@@ -44,7 +45,7 @@ roilist= [29,9,7] ##This is in the paper
 
 #roilist = np.array([[29],[7,8],[(22,45)]]) used this for
 #ref=lst[11]
-datasub = scipy.io.loadmat(os.path.join(p_dir, sub, sub + '.rfMRI_REST1_LR.reduce3.ftdata.NLM_11N_hvar_25.mat'))
+datasub = scipy.io.loadmat(os.path.join(p_dir, sub, sub + '.rfMRI_REST1_RL.reduce3.ftdata.NLM_11N_hvar_25.mat'))
 dataref = scipy.io.loadmat(os.path.join(p_dir, ref, ref + '.rfMRI_REST1_RL.reduce3.ftdata.NLM_11N_hvar_25.mat'))
 
 LR_flag = msk['LR_flag']
