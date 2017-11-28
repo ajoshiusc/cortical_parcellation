@@ -89,21 +89,13 @@ Let
 \begin_inset Formula $Y_{T\times V}$
 \end_inset
 
- be the data sets.
+ be the normalized data sets.
  In general 
 \begin_inset Formula $V\gg T$
 \end_inset
 
 .
- Let the rank of 
-\begin_inset Formula $X$
-\end_inset
-
- is 
-\begin_inset Formula $r$
-\end_inset
-
-.
+ 
 \end_layout
 
 \begin_layout Standard
@@ -338,7 +330,7 @@ In noisy case, wlog, we can say that
 \end_inset
 
 , 
-\begin_inset Formula $\Sigma_{X}=\Sigma_{Y}+D$
+\begin_inset Formula $\Sigma_{X}=\Sigma_{Y}+\sqrt{D}$
 \end_inset
 
 , 
